@@ -4,15 +4,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TradeLab Crypto</title>
+<title>TradeLab Crypto Pro</title>
 <script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
 <style>
-:root{--bg:#080d18;--panel:#111a2d;--line:#26334d;--muted:#93a4bf;--green:#46e0b0;--red:#ff7185}
+:root{--bg:#080d18;--panel:#111a2d;--line:#26334d;--muted:#93a4bf;--green:#46e0b0;--red:#ff7185;--blue:#79aaff}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:#edf2ff;font-family:Arial,sans-serif}
 header{padding:18px;background:#10182a;border-bottom:1px solid var(--line)}
-.logo{color:var(--green);font-size:24px;font-weight:bold}
-header p,.muted,small{color:var(--muted);font-size:12px}
+.logo{font-size:24px;font-weight:bold;color:var(--green)}
+header p,small,.muted,.notice{color:var(--muted)}
+header p{font-size:12px}
 main{max-width:1100px;margin:auto;padding:14px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;min-width:0}
 h2{font-size:17px;margin:0 0 14px}
@@ -24,47 +25,42 @@ h2{font-size:17px;margin:0 0 14px}
 .stat strong{display:block;font-size:17px;margin-top:7px;overflow-wrap:anywhere}
 nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:3px}
 button{background:var(--green);color:#07130f;font-weight:bold;border:0;border-radius:8px;padding:11px 13px;cursor:pointer}
-nav button{white-space:nowrap;background:#26334d;color:#eaf0ff}
-nav button.active{background:var(--green);color:#07130f;box-shadow:0 0 0 2px #46e0b033}
-button.secondary,.tf{background:#26334d;color:white}
-button.sell{background:var(--red)}
+nav button,.secondary,.tf{background:#26334d;color:#eaf0ff}
+nav button{white-space:nowrap}
+nav button.active,.tf.active{background:var(--green);color:#07130f}
 input,select{width:100%;background:#0a1120;color:white;border:1px solid #34415a;border-radius:8px;padding:12px;margin:7px 0 13px}
 label{font-size:13px;color:var(--muted)}
 .actions{display:flex;gap:8px}.actions button{flex:1}
-.full{width:100%}
+.full{width:100%}.sell{background:var(--red)}
 .coin{padding:12px 0;border-bottom:1px solid var(--line)}
 .coin:last-child{border:0}
 .bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:8px 0 14px}
 .fill{height:100%;background:var(--green)}
 table{width:100%;border-collapse:collapse;font-size:12px}
 td,th{text-align:left;padding:10px 5px;border-bottom:1px solid var(--line);white-space:nowrap}
-.notice{font-size:12px;color:var(--muted);line-height:1.5}
+.notice{font-size:12px;line-height:1.5}
 [hidden]{display:none!important}
-.searchrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
-.searchrow input{margin:0}
-.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .tfrow{display:flex;gap:5px;flex-wrap:wrap}
 .tf{padding:8px 10px;font-size:12px}
-.tf.active{background:var(--green);color:#07130f}
-#chart{height:360px;width:100%;position:relative}
+#chart{height:330px;width:100%}
 #chartStatus{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
-#coinSearch{margin-bottom:12px}
 .tag{font-size:11px;color:var(--muted)}
+.pill{font-size:11px;padding:4px 7px;border-radius:6px;background:#26334d}
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}main{padding:20px}}
-@media(max-width:420px){#chart{height:300px}.balance{font-size:25px}.card{padding:12px}}
+@media(max-width:420px){#chart{height:270px}.balance{font-size:25px}.card{padding:12px}}
 </style>
 </head>
 <body>
 <header>
- <div class="logo">TradeLab Crypto</div>
- <p>Research. Learn. Paper Trade.</p>
+ <div class="logo">TradeLab Crypto <span class="pill">PRO</span></div>
+ <p>Research · Technical Analysis · Paper Trading</p>
 </header>
 <main>
  <div class="card">
   <div class="muted">TOTAL PORTFOLIO VALUE</div>
   <div class="balance" id="portfolio">$10,000.00</div>
   <div class="grid">
-   <div class="stat"><span class="muted">Available Cash</span><strong id="cash">$10,000</strong></div>
+   <div class="stat"><span class="muted">Virtual Cash</span><strong id="cash">$10,000</strong></div>
    <div class="stat"><span class="muted">Unrealized P&L</span><strong id="unrealized">$0</strong></div>
    <div class="stat"><span class="muted">Realized P&L</span><strong id="realized">$0</strong></div>
    <div class="stat"><span class="muted">Total P&L</span><strong id="totalPnl">$0</strong></div>
@@ -77,160 +73,152 @@ td,th{text-align:left;padding:10px 5px;border-bottom:1px solid var(--line);white
   <button data-tab="trade" onclick="show('trade')">Trade</button>
   <button data-tab="positions" onclick="show('positions')">Positions</button>
   <button data-tab="history" onclick="show('history')">History</button>
+  <button data-tab="tools" onclick="show('tools')">Pro Tools</button>
  </nav>
 
  <section id="dashboard">
   <div class="card">
-   <h2>Portfolio Performance</h2>
+   <h2>Portfolio Overview</h2>
    <div class="row"><span class="muted">Starting balance</span><b>$10,000.00</b></div>
-   <div class="row" style="margin-top:14px"><span class="muted">Net return</span><b id="return">0.00%</b></div>
-   <div class="row" style="margin-top:14px"><span class="muted">Invested in open positions</span><b id="invested">$0.00</b></div>
-   <p class="notice">Unrealized P&L estimates the value of open holdings. Realized P&L records gains/losses from paper sells.</p>
+   <div class="row" style="margin-top:13px"><span class="muted">Net return</span><b id="return">0.00%</b></div>
+   <div class="row" style="margin-top:13px"><span class="muted">Invested cost</span><b id="invested">$0</b></div>
   </div>
   <div class="card"><h2>Portfolio Allocation</h2><div id="allocation"></div></div>
-  <div class="card">
-   <h2>Market Snapshot</h2><div id="snapshot"></div>
-   <button class="secondary full" onclick="loadPrices()">Refresh market prices</button>
-   <p class="notice" id="priceStatus">Loading prices...</p>
-  </div>
+  <div class="card"><h2>Watchlist</h2><div id="watchDash"></div><button class="secondary full" onclick="show('tools')">Manage watchlist and alerts</button></div>
+  <div class="card"><h2>Market Snapshot</h2><div id="snapshot"></div><button class="secondary full" onclick="loadPrices()">Refresh prices</button><p class="notice" id="priceStatus">Loading prices...</p></div>
  </section>
 
  <section id="market" hidden>
-  <div class="card">
-   <h2>Crypto Market</h2>
+  <div class="card"><h2>Crypto Market</h2>
    <input id="coinSearch" placeholder="Search BTC, Ethereum, Solana..." oninput="renderCoins()">
    <div id="coins"></div>
-   <button class="secondary full" onclick="loadPrices()">Refresh prices</button>
-   <p class="notice">Prices are from a public exchange API when available.</p>
+   <button class="secondary full" onclick="loadPrices()">Refresh market</button>
   </div>
  </section>
 
  <section id="trade" hidden>
-  <div class="card">
-   <h2>Paper Trade</h2>
+  <div class="card"><h2>Paper Trading</h2>
    <label>Cryptocurrency</label>
    <select id="asset" onchange="estimate()">
-    <option value="BTC">Bitcoin (BTC)</option>
-    <option value="ETH">Ethereum (ETH)</option>
-    <option value="SOL">Solana (SOL)</option>
-    <option value="BNB">BNB</option>
+    <option value="BTC">Bitcoin (BTC)</option><option value="ETH">Ethereum (ETH)</option><option value="SOL">Solana (SOL)</option><option value="BNB">BNB</option>
    </select>
-   <label>Trade amount (USD)</label>
+   <label>Amount in USD</label>
    <input id="amount" type="number" min="1" step="any" value="100" oninput="estimate()">
    <p class="muted" id="estimate">Estimated quantity: --</p>
    <div class="actions"><button onclick="executeTrade('buy')">Buy</button><button class="sell" onclick="executeTrade('sell')">Sell</button></div>
    <p id="message" aria-live="polite"></p>
-   <p class="notice">Simulation only. No real orders or money are involved.</p>
+   <p class="notice">Simulated trades only. No real orders or money are used.</p>
   </div>
  </section>
 
- <section id="positions" hidden>
-  <div class="card"><h2>Open Positions</h2><div id="positionsList"></div></div>
- </section>
-
+ <section id="positions" hidden><div class="card"><h2>Open Positions</h2><div id="positionsList"></div></div></section>
  <section id="history" hidden>
   <div class="card"><h2>Trade History</h2><div id="historyList"></div>
-   <button class="secondary full" onclick="resetAccount()">Reset paper account</button>
+   <button class="full" onclick="exportCSV()">Export history as CSV</button>
+   <button class="secondary full" style="margin-top:8px" onclick="resetAccount()">Reset paper account</button>
   </div>
  </section>
 
- <section id="chartSection">
+ <section id="tools" hidden>
   <div class="card">
-   <div class="chart-head">
-    <div><h2 style="margin-bottom:5px">Advanced Chart</h2><div class="tag">CANDLESTICKS · MARKET DATA</div></div>
-    <select id="chartAsset" style="width:auto;margin:0" onchange="loadChart()">
-     <option value="BTCUSDT">BTC / USDT</option>
-     <option value="ETHUSDT">ETH / USDT</option>
-     <option value="SOLUSDT">SOL / USDT</option>
-     <option value="BNBUSDT">BNB / USDT</option>
-    </select>
+   <h2>Watchlist</h2>
+   <p class="notice">Choose coins to keep them on your personal watchlist.</p>
+   <div id="watchManage"></div>
+  </div>
+  <div class="card">
+   <h2>Price Alerts</h2>
+   <label>Coin</label>
+   <select id="alertAsset"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="SOL">SOL</option><option value="BNB">BNB</option></select>
+   <label>Alert condition</label>
+   <select id="alertCondition"><option value="above">Price goes above</option><option value="below">Price goes below</option></select>
+   <label>Target price (USD)</label>
+   <input id="alertTarget" type="number" min="0.000001" step="any" placeholder="e.g. 70000">
+   <button class="full" onclick="addAlert()">Create price alert</button>
+   <div id="alertsList" style="margin-top:12px"></div>
+   <p class="notice">Alerts are checked while this page is open. Browser notification permission may be required. This is not a guaranteed 24/7 alert service.</p>
+  </div>
+  <div class="card">
+   <h2>Technical Indicators</h2>
+   <label>Chart coin</label>
+   <select id="chartAsset" onchange="loadChart()"><option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option><option value="SOLUSDT">SOL / USDT</option><option value="BNBUSDT">BNB / USDT</option></select>
+   <label>Timeframe</label>
+   <div class="tfrow" style="margin:8px 0 14px">
+    <button class="tf active" data-tf="15m" onclick="chooseTf('15m')">15m</button>
+    <button class="tf" data-tf="1h" onclick="chooseTf('1h')">1H</button>
+    <button class="tf" data-tf="4h" onclick="chooseTf('4h')">4H</button>
+    <button class="tf" data-tf="1d" onclick="chooseTf('1d')">1D</button>
+    <button class="tf" data-tf="1w" onclick="chooseTf('1w')">1W</button>
    </div>
-   <div class="chart-head">
-    <div class="tfrow" id="timeframes">
-     <button class="tf active" data-tf="15m" onclick="chooseTf('15m')">15m</button>
-     <button class="tf" data-tf="1h" onclick="chooseTf('1h')">1H</button>
-     <button class="tf" data-tf="4h" onclick="chooseTf('4h')">4H</button>
-     <button class="tf" data-tf="1d" onclick="chooseTf('1d')">1D</button>
-     <button class="tf" data-tf="1w" onclick="chooseTf('1w')">1W</button>
-    </div>
-    <button class="secondary" onclick="loadChart()">Refresh chart</button>
+   <div id="indicatorControls" class="row" style="justify-content:flex-start;flex-wrap:wrap">
+    <label><input type="checkbox" id="showMA" checked style="width:auto;margin:0 4px" onchange="loadChart()"> Moving Average (20)</label>
+    <label><input type="checkbox" id="showMA50" style="width:auto;margin:0 4px" onchange="loadChart()"> Moving Average (50)</label>
    </div>
-   <div id="ohlc" class="muted">Select a coin to view OHLC data.</div>
+   <div id="ohlc" class="muted" style="margin:12px 0">Loading chart data...</div>
    <div id="chart"></div>
-   <div id="chartStatus">Loading candlestick chart...</div>
-   <p class="notice">Candles use public exchange historical data. This chart is for research and education, not financial advice. Internet access and the chart library are required.</p>
+   <div id="chartStatus" style="margin:10px 0">Loading chart...</div>
+   <div class="grid">
+    <div class="stat"><span class="muted">RSI (14)</span><strong id="rsi">--</strong><small id="rsiNote">Waiting for candles</small></div>
+    <div class="stat"><span class="muted">MACD (12,26,9)</span><strong id="macd">--</strong><small id="macdNote">Waiting for candles</small></div>
+    <div class="stat"><span class="muted">SMA 20</span><strong id="sma20">--</strong></div>
+    <div class="stat"><span class="muted">SMA 50</span><strong id="sma50">--</strong></div>
+   </div>
+   <p class="notice">Indicators are calculated from fetched candle closes. RSI/MACD are educational signals, not predictions or financial advice.</p>
   </div>
  </section>
 </main>
 
 <script>
 const START=10000;
-const assets={
- BTC:{name:"Bitcoin",price:67000},
- ETH:{name:"Ethereum",price:2500},
- SOL:{name:"Solana",price:150},
- BNB:{name:"BNB",price:600}
-};
+const assets={BTC:{name:"Bitcoin",price:67000},ETH:{name:"Ethereum",price:2500},SOL:{name:"Solana",price:150},BNB:{name:"BNB",price:600}};
 let prices={},live=false;
 let account={cash:START,holdings:{},realized:0,history:[]};
-let chart=null,candleSeries=null,volumeSeries=null;
-let chartReady=false,currentTf="15m",chartRequest=0,resizeObserver=null;
+let watchlist=["BTC","ETH"],alerts=[];
+let chart=null,candleSeries=null,ma20Series=null,ma50Series=null,chartReady=false,currentTf="15m",chartRequest=0,resizeObserver=null;
+let lastAlertChecks={};
 
 function loadSaved(){
  try{
-  const s=JSON.parse(localStorage.getItem("tradelab_v2"));
-  if(s&&typeof s.cash==="number"&&s.holdings){
-   account={cash:s.cash,holdings:s.holdings,realized:Number(s.realized)||0,history:Array.isArray(s.history)?s.history:[]};
-  }else{
-   const old=JSON.parse(localStorage.getItem("tradelab_account")||"null");
-   if(old&&typeof old.cash==="number"){
-    account.cash=old.cash;
-    Object.keys(old.holdings||{}).forEach(a=>{
-     const q=Number(old.holdings[a])||0;
-     if(q>0&&assets[a])account.holdings[a]={qty:q,cost:q*assets[a].price};
-    });
-    account.history=old.history||[];
-   }
+  const s=JSON.parse(localStorage.getItem("tradelab_pro"));
+  if(s){
+   if(s.account&&typeof s.account.cash==="number")account=s.account;
+   if(Array.isArray(s.watchlist))watchlist=s.watchlist.filter(a=>assets[a]);
+   if(Array.isArray(s.alerts))alerts=s.alerts;
+   return;
   }
+  const old=JSON.parse(localStorage.getItem("tradelab_v2")||"null");
+  if(old&&typeof old.cash==="number")account={cash:old.cash,holdings:old.holdings||{},realized:Number(old.realized)||0,history:Array.isArray(old.history)?old.history:[]};
  }catch(e){}
 }
-function save(){try{localStorage.setItem("tradelab_v2",JSON.stringify(account))}catch(e){}}
+function save(){
+ try{localStorage.setItem("tradelab_pro",JSON.stringify({account,watchlist,alerts}))}catch(e){}
+ try{localStorage.setItem("tradelab_v2",JSON.stringify(account))}catch(e){}
+}
 function price(a){return prices[a]||assets[a].price}
-function money(n){return (n<0?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
 function qty(a){return Number(account.holdings[a]?.qty)||0}
 function cost(a){return Number(account.holdings[a]?.cost)||0}
 function marketValue(a){return qty(a)*price(a)}
 function unrealized(a){return marketValue(a)-cost(a)}
+function money(n){return (n<0?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
 function totals(){
  let value=account.cash,invested=0,unreal=0;
  Object.keys(assets).forEach(a=>{value+=marketValue(a);invested+=cost(a);unreal+=unrealized(a)});
  return {value,invested,unreal,realized:account.realized,total:account.realized+unreal};
 }
 function setPnl(id,n){
- const el=document.getElementById(id);
- el.textContent=money(n);el.className=n>0?"green":n<0?"red":"";
+ const el=document.getElementById(id);el.textContent=money(n);el.className=n>0?"green":n<0?"red":"";
 }
 function show(id){
- ["dashboard","market","trade","positions","history"].forEach(s=>{
-  document.getElementById(s).hidden=s!==id;
- });
- document.querySelectorAll("nav button").forEach(btn=>{
-  const active=btn.dataset.tab===id;
-  btn.classList.toggle("active",active);
-  btn.classList.toggle("secondary",!active);
- });
- if(id==="market"&&chartReady)setTimeout(resizeChart,50);
+ ["dashboard","market","trade","positions","history","tools"].forEach(s=>document.getElementById(s).hidden=s!==id);
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
  renderAll();
+ if(id==="tools")setTimeout(resizeChart,50);
 }
 function estimate(){
- const a=document.getElementById("asset").value;
- const amount=Number(document.getElementById("amount").value);
+ const a=document.getElementById("asset").value,amount=Number(document.getElementById("amount").value);
  document.getElementById("estimate").textContent="Estimated quantity: "+(amount>0?(amount/price(a)).toFixed(8):"--")+" "+a;
 }
 function executeTrade(side){
- const a=document.getElementById("asset").value;
- const amount=Number(document.getElementById("amount").value);
- const p=price(a),msg=document.getElementById("message");
+ const a=document.getElementById("asset").value,amount=Number(document.getElementById("amount").value),p=price(a),msg=document.getElementById("message");
  if(!Number.isFinite(amount)||amount<=0){msg.textContent="Enter a valid amount.";return}
  if(side==="buy"){
   if(amount>account.cash){msg.textContent="Insufficient virtual cash.";return}
@@ -245,16 +233,13 @@ function executeTrade(side){
   account.holdings[a]=left<1e-12?{qty:0,cost:0}:{qty:left,cost:old.cost-allocated};
  }
  account.history.unshift({side,asset:a,amount,price:p,time:new Date().toLocaleString()});
- save();renderAll();
- msg.textContent=side.toUpperCase()+" simulated successfully: "+money(amount)+" of "+a;
+ save();renderAll();msg.textContent=side.toUpperCase()+" simulated: "+money(amount)+" of "+a;
 }
 function renderAccount(){
- const t=totals();
- document.getElementById("portfolio").textContent=money(t.value);
- document.getElementById("cash").textContent=money(account.cash);
+ const t=totals();document.getElementById("portfolio").textContent=money(t.value);document.getElementById("cash").textContent=money(account.cash);
  setPnl("unrealized",t.unreal);setPnl("realized",t.realized);setPnl("totalPnl",t.total);
- const r=(t.value-START)/START*100,el=document.getElementById("return");
- el.textContent=(r>0?"+":"")+r.toFixed(2)+"%";el.className=r>0?"green":r<0?"red":"";
+ const r=(t.value-START)/START*100,e=document.getElementById("return");
+ e.textContent=(r>0?"+":"")+r.toFixed(2)+"%";e.className=r>0?"green":r<0?"red":"";
  document.getElementById("invested").textContent=money(t.invested);
 }
 function renderAllocation(){
@@ -262,130 +247,176 @@ function renderAllocation(){
  document.getElementById("allocation").innerHTML=rows.length?rows.map(a=>{
   const pct=t.value>0?marketValue(a)/t.value*100:0;
   return `<div class="row"><b>${a}</b><span>${money(marketValue(a))} (${pct.toFixed(1)}%)</span></div><div class="bar"><div class="fill" style="width:${Math.min(100,pct)}%"></div></div>`;
- }).join(""):"<p class='muted'>Buy a paper position to see allocation.</p>";
+ }).join(""):"<p class='muted'>Your allocation will appear here after a paper buy.</p>";
 }
 function renderCoins(){
- const q=(document.getElementById("coinSearch")?.value||"").trim().toLowerCase();
+ const q=(document.getElementById("coinSearch")?.value||"").toLowerCase();
  const rows=Object.keys(assets).filter(a=>(a+" "+assets[a].name).toLowerCase().includes(q));
- document.getElementById("coins").innerHTML=rows.length?rows.map(a=>
- `<div class="coin row"><div><b>${assets[a].name} (${a})</b><br><small>${live?"Market quote":"Reference price"}</small></div><b>${money(price(a))}</b><button onclick="selectAsset('${a}')">Trade</button></div>`
- ).join(""):"<p class='muted'>No matching coin found.</p>";
- document.getElementById("snapshot").innerHTML=Object.keys(assets).map(a=>
- `<div class="coin row"><b>${a}</b><b>${money(price(a))}</b></div>`).join("");
+ document.getElementById("coins").innerHTML=rows.length?rows.map(a=>`<div class="coin row"><div><b>${assets[a].name} (${a})</b><br><small>${live?"Market quote":"Reference price"}</small></div><b>${money(price(a))}</b><button onclick="selectAsset('${a}')">Trade</button></div>`).join(""):"<p class='muted'>No matching coin.</p>";
+ document.getElementById("snapshot").innerHTML=Object.keys(assets).map(a=>`<div class="coin row"><b>${a}</b><b>${money(price(a))}</b></div>`).join("");
 }
 function selectAsset(a){document.getElementById("asset").value=a;show("trade");estimate()}
 function renderPositions(){
  const rows=Object.keys(assets).filter(a=>qty(a)>0);
- document.getElementById("positionsList").innerHTML=rows.length?rows.map(a=>
- `<div class="coin"><div class="row"><b>${assets[a].name} (${a})</b><b>${money(marketValue(a))}</b></div><p class="muted">Quantity: ${qty(a).toFixed(8)}</p><div class="row"><span class="muted">Invested cost</span><span>${money(cost(a))}</span></div><div class="row"><span class="muted">Unrealized P&L</span><b class="${unrealized(a)>=0?'green':'red'}">${money(unrealized(a))}</b></div><div class="row"><span class="muted">Average buy price</span><span>${money(qty(a)?cost(a)/qty(a):0)}</span></div></div>`
- ).join(""):"<p class='muted'>No open positions. Visit Trade to buy a paper position.</p>";
+ document.getElementById("positionsList").innerHTML=rows.length?rows.map(a=>`<div class="coin"><div class="row"><b>${assets[a].name} (${a})</b><b>${money(marketValue(a))}</b></div><p class="muted">Quantity: ${qty(a).toFixed(8)}</p><div class="row"><span class="muted">Cost</span><span>${money(cost(a))}</span></div><div class="row"><span class="muted">Unrealized P&L</span><b class="${unrealized(a)>=0?'green':'red'}">${money(unrealized(a))}</b></div><div class="row"><span class="muted">Average buy price</span><span>${money(cost(a)/qty(a))}</span></div></div>`).join(""):"<p class='muted'>No open positions.</p>";
 }
 function renderHistory(){
- document.getElementById("historyList").innerHTML=account.history.length?
- "<div style='overflow-x:auto'><table><thead><tr><th>Trade</th><th>Amount</th><th>Price</th></tr></thead><tbody>"+
- account.history.map(t=>`<tr><td><b class="${t.side==='buy'?'green':'red'}">${t.side.toUpperCase()} ${t.asset}</b><br><small>${t.time}</small></td><td>${money(t.amount)}</td><td>${money(t.price)}</td></tr>`).join("")+
- "</tbody></table></div>":"<p class='muted'>No trades yet.</p>";
+ document.getElementById("historyList").innerHTML=account.history.length?"<div style='overflow-x:auto'><table><thead><tr><th>Trade</th><th>Amount</th><th>Price</th></tr></thead><tbody>"+account.history.map(t=>`<tr><td><b class="${t.side==='buy'?'green':'red'}">${String(t.side).toUpperCase()} ${t.asset}</b><br><small>${t.time}</small></td><td>${money(t.amount)}</td><td>${money(t.price)}</td></tr>`).join("")+"</tbody></table></div>":"<p class='muted'>No trades yet.</p>";
 }
-function renderAll(){renderAccount();renderAllocation();renderCoins();renderPositions();renderHistory();estimate()}
+function renderWatchlist(){
+ const html=watchlist.map(a=>`<div class="coin row"><div><b>${a}</b><br><small>${assets[a].name}</small></div><b>${money(price(a))}</b><button class="secondary" onclick="toggleWatch('${a}')">Remove</button></div>`).join("")||"<p class='muted'>No coins in watchlist.</p>";
+ document.getElementById("watchDash").innerHTML=html;
+ document.getElementById("watchManage").innerHTML=Object.keys(assets).map(a=>`<div class="coin row"><div><b>${a}</b> <small>${assets[a].name}</small><br>${money(price(a))}</div><button class="${watchlist.includes(a)?'secondary':''}" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"Remove":"Add to watchlist"}</button></div>`).join("");
+}
+function toggleWatch(a){
+ watchlist=watchlist.includes(a)?watchlist.filter(x=>x!==a):[...watchlist,a];save();renderWatchlist();
+}
+function renderAlerts(){
+ document.getElementById("alertsList").innerHTML=alerts.length?alerts.map(a=>`<div class="coin row"><div><b>${a.asset} ${a.condition} ${money(a.target)}</b><br><small>${a.triggered?"Triggered":"Waiting"} · Current: ${money(price(a.asset))}</small></div><button class="secondary" onclick="removeAlert('${a.id}')">Delete</button></div>`).join(""):"<p class='muted'>No alerts set.</p>";
+}
+function addAlert(){
+ const asset=document.getElementById("alertAsset").value,condition=document.getElementById("alertCondition").value,target=Number(document.getElementById("alertTarget").value);
+ if(!Number.isFinite(target)||target<=0){alert("Enter a target price above zero.");return}
+ alerts.push({id:Date.now().toString()+Math.random().toString(16).slice(2),asset,condition,target,triggered:false,created:Date.now()});
+ save();renderAlerts();document.getElementById("alertTarget").value="";
+}
+function removeAlert(id){alerts=alerts.filter(a=>a.id!==id);save();renderAlerts()}
+function checkAlerts(){
+ let changed=false;
+ alerts.forEach(a=>{
+  if(a.triggered)return;
+  const p=price(a.asset),hit=a.condition==="above"?p>=a.target:p<=a.target;
+  if(hit){
+   a.triggered=true;changed=true;
+   const msg=`TradeLab alert: ${a.asset} is ${a.condition} ${money(a.target)}. Current price: ${money(p)}.`;
+   if("Notification" in window&&Notification.permission==="granted"){try{new Notification("TradeLab Crypto",{body:msg})}catch(e){}}
+   else alert(msg);
+  }
+ });
+ if(changed){save();renderAlerts()}
+}
+async function requestNotifications(){
+ if(!("Notification" in window)){alert("Browser notifications are not supported here.");return}
+ try{const p=await Notification.requestPermission();alert("Notification permission: "+p)}catch(e){alert("Could not request notification permission.")}
+}
 async function loadPrices(){
  document.getElementById("priceStatus").textContent="Fetching market prices...";
  try{
-  const symbols=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"];
-  const data=await Promise.all(symbols.map(s=>fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s).then(r=>{if(!r.ok)throw Error();return r.json()})));
+  const syms=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"];
+  const data=await Promise.all(syms.map(s=>fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()})));
   ["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(data[i].price));
-  live=true;document.getElementById("priceStatus").textContent="Market prices loaded. Quotes can change.";
- }catch(e){
-  document.getElementById("priceStatus").textContent="Live prices unavailable. Reference prices are being used.";
- }
- renderAll();
+  live=true;document.getElementById("priceStatus").textContent="Live market quotes loaded.";
+ }catch(e){document.getElementById("priceStatus").textContent="Live prices unavailable. Showing reference prices."}
+ renderAll();checkAlerts();
+}
+function exportCSV(){
+ const rows=[["Side","Asset","Amount USD","Execution Price","Time"],...account.history.map(t=>[t.side,t.asset,t.amount,t.price,t.time])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="tradelab-trade-history.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function resetAccount(){
+ if(!confirm("Reset the virtual account to $10,000 and erase positions and history?"))return;
+ account={cash:START,holdings:{},realized:0,history:[]};save();renderAll();
+}
+function renderAll(){
+ renderAccount();renderAllocation();renderCoins();renderPositions();renderHistory();renderWatchlist();renderAlerts();estimate();
 }
 
 function initChart(){
  const host=document.getElementById("chart");
- if(!window.LightweightCharts){document.getElementById("chartStatus").textContent="Chart library failed to load. Check your internet connection and refresh.";return false}
+ if(!window.LightweightCharts){document.getElementById("chartStatus").textContent="Chart library did not load. Check internet and refresh.";return false}
  try{
   chart=LightweightCharts.createChart(host,{
-   width:Math.max(300,host.clientWidth),height:host.clientHeight||360,
+   width:Math.max(300,host.clientWidth),height:host.clientHeight||300,
    layout:{background:{type:"solid",color:"#111a2d"},textColor:"#aebbd0",fontFamily:"Arial",fontSize:11},
    grid:{vertLines:{color:"#1e2a40"},horzLines:{color:"#1e2a40"}},
    rightPriceScale:{borderColor:"#34415a"},
    timeScale:{borderColor:"#34415a",timeVisible:true,secondsVisible:false},
-   crosshair:{mode:LightweightCharts.CrosshairMode.Normal},
-   handleScroll:true,handleScale:true
+   crosshair:{mode:LightweightCharts.CrosshairMode.Normal},handleScroll:true,handleScale:true
   });
-  candleSeries=chart.addCandlestickSeries({
-   upColor:"#46e0b0",downColor:"#ff7185",
-   borderUpColor:"#46e0b0",borderDownColor:"#ff7185",
-   wickUpColor:"#46e0b0",wickDownColor:"#ff7185",
-   priceLineVisible:true
-  });
-  volumeSeries=chart.addHistogramSeries({
-   priceFormat:{type:"volume"},priceScaleId:"volume",
-   scaleMargins:{top:.82,bottom:0}
-  });
-  chart.priceScale("volume").applyOptions({scaleMargins:{top:.82,bottom:0}});
+  candleSeries=chart.addCandlestickSeries({upColor:"#46e0b0",downColor:"#ff7185",borderUpColor:"#46e0b0",borderDownColor:"#ff7185",wickUpColor:"#46e0b0",wickDownColor:"#ff7185"});
+  ma20Series=chart.addLineSeries({color:"#79aaff",lineWidth:2,priceLineVisible:false,lastValueVisible:true});
+  ma50Series=chart.addLineSeries({color:"#e2bc65",lineWidth:2,priceLineVisible:false,lastValueVisible:true});
   chartReady=true;
-  if(resizeObserver)resizeObserver.disconnect();
-  if(window.ResizeObserver){
-   resizeObserver=new ResizeObserver(resizeChart);
-   resizeObserver.observe(host);
-  }else{
-   window.addEventListener("resize",resizeChart);
-  }
+  if(window.ResizeObserver){resizeObserver=new ResizeObserver(resizeChart);resizeObserver.observe(host)}else window.addEventListener("resize",resizeChart);
   return true;
- }catch(e){
-  document.getElementById("chartStatus").textContent="Could not initialize chart: "+e.message;
-  return false;
- }
+ }catch(e){document.getElementById("chartStatus").textContent="Chart initialization failed: "+e.message;return false}
 }
-function resizeChart(){
- if(chart&&document.getElementById("chart").clientWidth>0){
-  chart.applyOptions({width:document.getElementById("chart").clientWidth,height:document.getElementById("chart").clientHeight||360});
+function resizeChart(){if(chart&&document.getElementById("chart").clientWidth>0)chart.applyOptions({width:document.getElementById("chart").clientWidth,height:document.getElementById("chart").clientHeight||300})}
+function chooseTf(tf){currentTf=tf;document.querySelectorAll(".tf").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));loadChart()}
+function sma(values,period){
+ const out=[];let sum=0;
+ for(let i=0;i<values.length;i++){
+  sum+=values[i];if(i>=period)sum-=values[i-period];
+  if(i>=period-1)out.push({index:i,value:sum/period});
  }
+ return out;
 }
-function chooseTf(tf){
- currentTf=tf;
- document.querySelectorAll(".tf").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));
- loadChart();
+function ema(values,period){
+ const out=[];if(values.length<period)return out;
+ let sum=0;for(let i=0;i<period;i++)sum+=values[i];
+ let prev=sum/period;out[period-1]=prev;
+ const k=2/(period+1);
+ for(let i=period;i<values.length;i++){prev=values[i]*k+prev*(1-k);out[i]=prev}
+ return out;
+}
+function calcRSI(values,period=14){
+ if(values.length<=period)return null;
+ let gain=0,loss=0;
+ for(let i=1;i<=period;i++){const d=values[i]-values[i-1];if(d>0)gain+=d;else loss-=d}
+ let avgG=gain/period,avgL=loss/period;
+ for(let i=period+1;i<values.length;i++){const d=values[i]-values[i-1];avgG=(avgG*(period-1)+Math.max(d,0))/period;avgL=(avgL*(period-1)+Math.max(-d,0))/period}
+ if(avgL===0)return 100;
+ return 100-(100/(1+avgG/avgL));
+}
+function seriesPoints(items,candles){return items.map(x=>({time:candles[x.index].time,value:x.value}))}
+function renderIndicators(candles){
+ const closes=candles.map(c=>c.close),rsi=calcRSI(closes);
+ const e12=ema(closes,12),e26=ema(closes,26);
+ let macdValue=null,signalValue=null;
+ if(e26.length){
+  const macdLine=closes.map((_,i)=>e12[i]!==undefined&&e26[i]!==undefined?e12[i]-e26[i]:null);
+  const valid=macdLine.filter(v=>v!==null),sig=ema(valid,9);
+  if(valid.length&&sig.length){macdValue=valid[valid.length-1];signalValue=sig[sig.length-1]}
+ }
+ document.getElementById("rsi").textContent=rsi===null?"Need more data":rsi.toFixed(2);
+ document.getElementById("rsiNote").textContent=rsi===null?"":rsi>=70?"Potentially overbought":rsi<=30?"Potentially oversold":"Middle range";
+ document.getElementById("macd").textContent=macdValue===null||signalValue===null?"Need more data":macdValue.toFixed(3);
+ document.getElementById("macdNote").textContent=macdValue===null||signalValue===null?"":macdValue>signalValue?"MACD above signal":"MACD below signal";
+ const s20=sma(closes,20),s50=sma(closes,50);
+ document.getElementById("sma20").textContent=s20.length?money(s20[s20.length-1].value):"--";
+ document.getElementById("sma50").textContent=s50.length?money(s50[s50.length-1].value):"--";
+ ma20Series.setData(document.getElementById("showMA").checked?seriesPoints(s20,candles):[]);
+ ma50Series.setData(document.getElementById("showMA50").checked?seriesPoints(s50,candles):[]);
 }
 async function loadChart(){
- const request=++chartRequest;
- const symbol=document.getElementById("chartAsset").value;
- const host=document.getElementById("chart");
- document.getElementById("chartStatus").textContent="Loading "+symbol+" candles ("+currentTf+")...";
+ const request=++chartRequest,symbol=document.getElementById("chartAsset").value;
+ document.getElementById("chartStatus").textContent="Loading candle data...";
  document.getElementById("ohlc").textContent="Loading OHLC...";
  if(!chartReady&&!initChart())return;
- const url="https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(currentTf)+"&limit=150";
  try{
-  const r=await fetch(url);
-  if(!r.ok)throw Error("Exchange API returned HTTP "+r.status);
-  const raw=await r.json();
-  if(!Array.isArray(raw)||!raw.length)throw Error("No candle data returned");
+  const url="https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(currentTf)+"&limit=200";
+  const r=await fetch(url);if(!r.ok)throw Error("Exchange API HTTP "+r.status);
+  const raw=await r.json();if(!Array.isArray(raw)||!raw.length)throw Error("No candle data");
   if(request!==chartRequest)return;
-  const candles=raw.map(k=>({time:Math.floor(Number(k[0])/1000),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4])}));
-  const volumes=raw.map(k=>({time:Math.floor(Number(k[0])/1000),value:Number(k[5]),color:Number(k[4])>=Number(k[1])?"#46e0b077":"#ff718577"}));
-  candleSeries.setData(candles);
-  volumeSeries.setData(volumes);
-  chart.timeScale().fitContent();
-  const last=candles[candles.length-1];
-  const delta=last.close-last.open,pct=last.open?(delta/last.open*100):0;
-  document.getElementById("ohlc").innerHTML=
-   "<b>"+symbol.replace("USDT"," / USDT")+"</b> &nbsp; <span class='"+(delta>=0?"green":"red")+"'>"+last.close.toLocaleString("en-US",{maximumFractionDigits:8})+" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)</span><br><small>O "+last.open+" &nbsp; H "+last.high+" &nbsp; L "+last.low+" &nbsp; C "+last.close+"</small>";
-  document.getElementById("chartStatus").textContent="Loaded "+candles.length+" candles. Timeframe: "+currentTf+". Data may be delayed.";
+  const candles=raw.map(k=>({time:Math.floor(Number(k[0])/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4]}));
+  candleSeries.setData(candles);renderIndicators(candles);chart.timeScale().fitContent();
+  const last=candles[candles.length-1],delta=last.close-last.open,pct=last.open?delta/last.open*100:0;
+  document.getElementById("ohlc").innerHTML="<b>"+symbol.replace("USDT"," / USDT")+"</b> <span class='"+(delta>=0?"green":"red")+"'>"+last.close.toLocaleString("en-US",{maximumFractionDigits:8})+" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)</span><br><small>O "+last.open+" · H "+last.high+" · L "+last.low+" · C "+last.close+"</small>";
+  document.getElementById("chartStatus").textContent="Loaded "+candles.length+" candles · "+currentTf+" timeframe.";
   const a=symbol.replace("USDT","");
   if(assets[a]){prices[a]=last.close;live=true;renderAll()}
   resizeChart();
  }catch(e){
   if(request!==chartRequest)return;
-  document.getElementById("chartStatus").textContent="Chart data unavailable: "+e.message+". Check internet access and try Refresh chart.";
-  document.getElementById("ohlc").textContent="No current OHLC data.";
+  document.getElementById("chartStatus").textContent="Chart unavailable: "+e.message+". Check internet and try again.";
+  document.getElementById("ohlc").textContent="OHLC data unavailable.";
  }
 }
-function resetAccount(){
- if(!confirm("Reset virtual balance to $10,000 and erase positions and history?"))return;
- account={cash:START,holdings:{},realized:0,history:[]};save();renderAll();
-}
 loadSaved();renderAll();loadPrices();loadChart();
+setInterval(()=>{if(live){checkAlerts()}},30000);
 </script>
 </body>
 </html>
