@@ -3,36 +3,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TradeLab Crypto</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080d18;color:#edf2ff;font-family:Arial,sans-serif}
 header{padding:20px;background:#10182a;border-bottom:1px solid #26324a}
 .logo{color:#46e0b0;font-size:24px;font-weight:bold}
-header p{color:#94a3b8;font-size:13px}
+header p,.muted,small{color:#93a4bf;font-size:13px}
 main{max-width:850px;margin:auto;padding:16px}
 .card{background:#111a2d;border:1px solid #26334d;border-radius:15px;padding:17px;margin-bottom:15px}
-.muted{color:#93a4bf;font-size:13px}
-.balance{font-size:30px;font-weight:bold;margin:10px 0}
-.green{color:#46e0b0}.red{color:#ff7185}
 h2{font-size:17px;margin-top:0}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.balance{font-size:29px;font-weight:bold;margin:10px 0}
+.green{color:#46e0b0}.red{color:#ff7185}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#0b1324;padding:13px;border-radius:10px;min-width:0}
+.stat strong{display:block;font-size:18px;margin-top:7px;overflow-wrap:anywhere}
+nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:15px}
+button{background:#46e0b0;color:#07130f;font-weight:bold;border:0;border-radius:8px;padding:12px;cursor:pointer}
+nav button{white-space:nowrap}
+button.secondary{background:#26334d;color:white}
+button.sell{background:#ff7185}
+input,select{width:100%;background:#0a1120;color:white;border:1px solid #34415a;border-radius:8px;padding:12px;margin:7px 0 13px}
+.actions{display:flex;gap:8px}.actions button{flex:1}
+.full{width:100%}
 .coin{padding:13px 0;border-bottom:1px solid #26334d}
 .coin:last-child{border:0}
-select,input{background:#0a1120;color:white;border:1px solid #34415a;border-radius:8px;padding:12px;width:100%;margin:6px 0 12px}
-button{background:#46e0b0;color:#07130f;font-weight:bold;border:0;border-radius:8px;padding:12px;cursor:pointer}
-button.sell{background:#ff7185}
-button.secondary{background:#26334d;color:white}
-.actions{display:flex;gap:8px}
-.actions button{flex:1}
-.full{width:100%}
-nav{display:flex;gap:8px;overflow:auto;margin-bottom:15px}
-nav button{white-space:nowrap}
+.bar{height:9px;background:#26334d;border-radius:8px;overflow:hidden;margin:8px 0 14px}
+.fill{height:100%;background:#46e0b0}
 table{width:100%;border-collapse:collapse;font-size:13px}
 td,th{text-align:left;padding:10px 5px;border-bottom:1px solid #26334d}
-small{color:#93a4bf}
 .notice{font-size:12px;color:#93a4bf;line-height:1.5}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -42,26 +45,49 @@ small{color:#93a4bf}
 </header>
 <main>
  <div class="card">
-  <div class="muted">YOUR VIRTUAL BALANCE</div>
-  <div class="balance" id="balance">$10,000.00</div>
-  <div class="row">
-   <div><div class="muted">Portfolio Value</div><b id="portfolio">$10,000.00</b></div>
-   <div><div class="muted">Open Positions</div><b id="positionCount">0</b></div>
+  <div class="muted">TOTAL PORTFOLIO VALUE</div>
+  <div class="balance" id="portfolio">$10,000.00</div>
+  <div class="grid">
+   <div class="stat"><span class="muted">Available Cash</span><strong id="cash">$10,000</strong></div>
+   <div class="stat"><span class="muted">Unrealized P&L</span><strong id="unrealized">$0</strong></div>
+   <div class="stat"><span class="muted">Realized P&L</span><strong id="realized">$0</strong></div>
+   <div class="stat"><span class="muted">Total P&L</span><strong id="totalPnl">$0</strong></div>
   </div>
  </div>
 
  <nav>
-  <button onclick="showSection('market')">Market</button>
-  <button class="secondary" onclick="showSection('trade')">Trade</button>
-  <button class="secondary" onclick="showSection('positions')">Positions</button>
-  <button class="secondary" onclick="showSection('history')">History</button>
+  <button onclick="show('dashboard')">Dashboard</button>
+  <button class="secondary" onclick="show('market')">Market</button>
+  <button class="secondary" onclick="show('trade')">Trade</button>
+  <button class="secondary" onclick="show('positions')">Positions</button>
+  <button class="secondary" onclick="show('history')">History</button>
  </nav>
 
- <section id="market">
+ <section id="dashboard">
   <div class="card">
-   <div class="row"><h2>Crypto Market</h2><button class="secondary" onclick="loadPrices()">Refresh</button></div>
-   <p class="notice" id="priceStatus">Loading market prices...</p>
+   <h2>Portfolio Performance</h2>
+   <div class="row"><span class="muted">Starting balance</span><b>$10,000.00</b></div>
+   <div class="row" style="margin-top:14px"><span class="muted">Net return</span><b id="return">0.00%</b></div>
+   <div class="row" style="margin-top:14px"><span class="muted">Invested in open positions</span><b id="invested">$0.00</b></div>
+   <p class="notice">P&L includes realized gains/losses and the current estimated value of open positions. Fees and taxes are not included.</p>
+  </div>
+  <div class="card">
+   <h2>Portfolio Allocation</h2>
+   <div id="allocation"></div>
+  </div>
+  <div class="card">
+   <h2>Market Snapshot</h2>
+   <div id="snapshot"></div>
+   <button class="secondary full" onclick="loadPrices()">Refresh market prices</button>
+   <p class="notice" id="priceStatus">Loading prices...</p>
+  </div>
+ </section>
+
+ <section id="market" hidden>
+  <div class="card">
+   <h2>Crypto Market</h2>
    <div id="coins"></div>
+   <button class="secondary full" onclick="loadPrices()">Refresh prices</button>
   </div>
  </section>
 
@@ -69,21 +95,21 @@ small{color:#93a4bf}
   <div class="card">
    <h2>Paper Trade</h2>
    <label>Cryptocurrency</label>
-   <select id="asset" onchange="updateEstimate()">
+   <select id="asset" onchange="estimate()">
     <option value="BTC">Bitcoin (BTC)</option>
     <option value="ETH">Ethereum (ETH)</option>
     <option value="SOL">Solana (SOL)</option>
     <option value="BNB">BNB</option>
    </select>
-   <label>Amount in USD</label>
-   <input id="amount" type="number" min="1" step="any" value="100" oninput="updateEstimate()">
+   <label>Trade amount (USD)</label>
+   <input id="amount" type="number" min="1" step="any" value="100" oninput="estimate()">
    <p class="muted" id="estimate">Estimated quantity: --</p>
    <div class="actions">
-    <button onclick="trade('buy')">Buy</button>
-    <button class="sell" onclick="trade('sell')">Sell</button>
+    <button onclick="executeTrade('buy')">Buy</button>
+    <button class="sell" onclick="executeTrade('sell')">Sell</button>
    </div>
-   <p class="notice">Simulated trades only. No real orders are placed.</p>
    <p id="message" aria-live="polite"></p>
+   <p class="notice">Simulation only. No real orders or money are involved.</p>
   </div>
  </section>
 
@@ -93,13 +119,14 @@ small{color:#93a4bf}
 
  <section id="history" hidden>
   <div class="card"><h2>Trade History</h2><div id="historyList"></div>
-   <button class="secondary full" onclick="resetApp()">Reset paper account</button>
+   <button class="secondary full" onclick="resetAccount()">Reset paper account</button>
   </div>
  </section>
- <p class="notice">Educational paper-trading simulator. Prices may be delayed or unavailable. This is not financial advice.</p>
+ <p class="notice">Educational simulator only. Prices may be delayed or unavailable. Not financial advice.</p>
 </main>
+
 <script>
-const initialBalance=10000;
+const START=10000;
 const assets={
  BTC:{name:"Bitcoin",price:67000},
  ETH:{name:"Ethereum",price:2500},
@@ -107,99 +134,146 @@ const assets={
  BNB:{name:"BNB",price:600}
 };
 let prices={};
-let cash=initialBalance;
-let holdings={BTC:0,ETH:0,SOL:0,BNB:0};
-let history=[];
 let live=false;
-try{
- const saved=JSON.parse(localStorage.getItem("tradelab_account")||"null");
- if(saved){cash=saved.cash;holdings=saved.holdings;history=saved.history||[]}
-}catch(e){}
-function money(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function price(a){return prices[a]||assets[a].price}
+let account={cash:START,holdings:{},realized:0,history:[]};
+
+function loadSaved(){
+ try{
+  const s=JSON.parse(localStorage.getItem("tradelab_v2"));
+  if(s&&typeof s.cash==="number"&&s.holdings&&typeof s.holdings==="object"){
+   account={cash:s.cash,holdings:s.holdings,realized:Number(s.realized)||0,history:Array.isArray(s.history)?s.history:[]};
+  }else{
+   const old=JSON.parse(localStorage.getItem("tradelab_account")||"null");
+   if(old&&typeof old.cash==="number"){
+    account.cash=old.cash;
+    Object.keys(old.holdings||{}).forEach(a=>{
+     const q=Number(old.holdings[a])||0;
+     if(q>0)account.holdings[a]={qty:q,cost:q*(assets[a]?.price||0)};
+    });
+    account.history=old.history||[];
+   }
+  }
+ }catch(e){}
+}
 function save(){
- try{localStorage.setItem("tradelab_account",JSON.stringify({cash,holdings,history}))}catch(e){}
+ try{localStorage.setItem("tradelab_v2",JSON.stringify(account))}catch(e){}
 }
-function showSection(id){
- ["market","trade","positions","history"].forEach(s=>document.getElementById(s).hidden=s!==id);
- if(id==="positions")renderPositions();
- if(id==="history")renderHistory();
- if(id==="trade")updateEstimate();
+function price(a){return prices[a]||assets[a].price}
+function money(n){return (n<0?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function qty(a){return Number(account.holdings[a]?.qty)||0}
+function cost(a){return Number(account.holdings[a]?.cost)||0}
+function marketValue(a){return qty(a)*price(a)}
+function unrealized(a){return marketValue(a)-cost(a)}
+function totals(){
+ let value=account.cash,invested=0,unreal=0;
+ Object.keys(assets).forEach(a=>{
+  value+=marketValue(a);invested+=cost(a);unreal+=unrealized(a);
+ });
+ return {value,invested,unreal,realized:account.realized,total:account.realized+unreal};
 }
-function renderCoins(){
- document.getElementById("coins").innerHTML=Object.keys(assets).map(a=>
- `<div class="coin row"><div><b>${assets[a].name} (${a})</b><br><small>${live?"Live market quote":"Reference price"}</small></div><div><b>${money(price(a))}</b><br><small>${a}</small></div><button onclick="selectAsset('${a}')">Trade</button></div>`
- ).join("");
+function setPnl(id,n){
+ const el=document.getElementById(id);
+ el.textContent=money(n);
+ el.className=n>0?"green":n<0?"red":"";
 }
-function selectAsset(a){
- document.getElementById("asset").value=a;
- showSection("trade");
+function show(id){
+ ["dashboard","market","trade","positions","history"].forEach(s=>document.getElementById(s).hidden=s!==id);
+ renderAll();
 }
-function updateEstimate(){
+function estimate(){
  const a=document.getElementById("asset").value;
  const amount=Number(document.getElementById("amount").value);
- document.getElementById("estimate").textContent=
- "Estimated quantity: "+(amount>0?(amount/price(a)).toFixed(8):"--")+" "+a;
+ document.getElementById("estimate").textContent="Estimated quantity: "+(amount>0?(amount/price(a)).toFixed(8):"--")+" "+a;
+}
+function executeTrade(side){
+ const a=document.getElementById("asset").value;
+ const amount=Number(document.getElementById("amount").value);
+ const p=price(a),msg=document.getElementById("message");
+ if(!Number.isFinite(amount)||amount<=0){msg.textContent="Enter a valid amount.";return}
+ if(side==="buy"){
+  if(amount>account.cash){msg.textContent="Insufficient virtual cash.";return}
+  const q=amount/p;
+  const old=account.holdings[a]||{qty:0,cost:0};
+  account.cash-=amount;
+  account.holdings[a]={qty:old.qty+q,cost:old.cost+amount};
+ }else{
+  const q=amount/p,old=account.holdings[a]||{qty:0,cost:0};
+  if(q>old.qty+1e-12){msg.textContent="Not enough "+a+" to sell.";return}
+  const soldQty=Math.min(q,old.qty);
+  const allocatedCost=old.cost*(soldQty/old.qty);
+  account.realized+=(soldQty*p)-allocatedCost;
+  account.cash+=soldQty*p;
+  const left=old.qty-soldQty;
+  account.holdings[a]=left<1e-12?{qty:0,cost:0}:{qty:left,cost:old.cost-allocatedCost};
+ }
+ account.history.unshift({side,asset:a,amount:amount,price:p,time:new Date().toLocaleString()});
+ save();renderAll();
+ msg.textContent=side.toUpperCase()+" simulated successfully: "+money(amount)+" of "+a;
+}
+function renderAccount(){
+ const t=totals();
+ document.getElementById("portfolio").textContent=money(t.value);
+ document.getElementById("cash").textContent=money(account.cash);
+ setPnl("unrealized",t.unreal);
+ setPnl("realized",t.realized);
+ setPnl("totalPnl",t.total);
+ const r=(t.value-START)/START*100;
+ const ret=document.getElementById("return");
+ ret.textContent=(r>0?"+":"")+r.toFixed(2)+"%";
+ ret.className=r>0?"green":r<0?"red":"";
+ document.getElementById("invested").textContent=money(t.invested);
+}
+function renderAllocation(){
+ const t=totals();
+ const rows=Object.keys(assets).filter(a=>qty(a)>0);
+ document.getElementById("allocation").innerHTML=rows.length?rows.map(a=>{
+  const pct=t.value>0?marketValue(a)/t.value*100:0;
+  return `<div class="row"><b>${a}</b><span>${money(marketValue(a))} (${pct.toFixed(1)}%)</span></div><div class="bar"><div class="fill" style="width:${Math.min(100,pct)}%"></div></div>`;
+ }).join(""):"<p class='muted'>Buy a paper position to see your portfolio allocation.</p>";
+}
+function renderCoins(){
+ const html=Object.keys(assets).map(a=>
+ `<div class="coin row"><div><b>${assets[a].name} (${a})</b><br><small>${live?"Market quote":"Reference price"}</small></div><div><b>${money(price(a))}</b></div><button onclick="selectAsset('${a}')">Trade</button></div>`
+ ).join("");
+ document.getElementById("coins").innerHTML=html;
+ document.getElementById("snapshot").innerHTML=Object.keys(assets).map(a=>
+ `<div class="coin row"><span><b>${a}</b></span><b>${money(price(a))}</b></div>`).join("");
+}
+function selectAsset(a){document.getElementById("asset").value=a;show("trade");estimate()}
+function renderPositions(){
+ const rows=Object.keys(assets).filter(a=>qty(a)>0);
+ document.getElementById("positionsList").innerHTML=rows.length?rows.map(a=>
+ `<div class="coin"><div class="row"><b>${assets[a].name} (${a})</b><b>${money(marketValue(a))}</b></div><p class="muted">Quantity: ${qty(a).toFixed(8)}</p><div class="row"><span class="muted">Invested cost</span><span>${money(cost(a))}</span></div><div class="row"><span class="muted">Unrealized P&L</span><b class="${unrealized(a)>=0?'green':'red'}">${money(unrealized(a))}</b></div><div class="row"><span class="muted">Average buy price</span><span>${money(qty(a)?cost(a)/qty(a):0)}</span></div></div>`
+ ).join(""):"<p class='muted'>No open positions. Visit Trade to buy a paper position.</p>";
+}
+function renderHistory(){
+ document.getElementById("historyList").innerHTML=account.history.length?
+ "<div style='overflow-x:auto'><table><thead><tr><th>Trade</th><th>Amount</th><th>Price</th></tr></thead><tbody>"+
+ account.history.map(t=>`<tr><td><b class="${t.side==='buy'?'green':'red'}">${t.side.toUpperCase()} ${t.asset}</b><br><small>${t.time}</small></td><td>${money(t.amount)}</td><td>${money(t.price)}</td></tr>`).join("")+
+ "</tbody></table></div>":"<p class='muted'>No trades yet.</p>";
+}
+function renderAll(){
+ renderAccount();renderAllocation();renderCoins();renderPositions();renderHistory();estimate();
 }
 async function loadPrices(){
  document.getElementById("priceStatus").textContent="Fetching market prices...";
  try{
-  const ids=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"];
-  const responses=await Promise.all(ids.map(s=>
-   fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s)
-   .then(r=>{if(!r.ok)throw Error("Market unavailable");return r.json()})
-  ));
-  ["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(responses[i].price));
+  const symbols=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"];
+  const data=await Promise.all(symbols.map(s=>fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s).then(r=>{if(!r.ok)throw Error();return r.json()})));
+  ["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(data[i].price));
   live=true;
   document.getElementById("priceStatus").textContent="Market prices loaded. Quotes can change.";
  }catch(e){
-  document.getElementById("priceStatus").textContent="Live prices unavailable. Showing reference prices instead.";
+  document.getElementById("priceStatus").textContent="Live prices unavailable. Reference prices are being used.";
  }
- renderCoins();renderAccount();updateEstimate();
+ renderAll();
 }
-function renderAccount(){
- let value=cash;
- Object.keys(holdings).forEach(a=>value+=holdings[a]*price(a));
- document.getElementById("balance").textContent=money(cash);
- document.getElementById("portfolio").textContent=money(value);
- document.getElementById("positionCount").textContent=Object.values(holdings).filter(q=>q>0).length;
+function resetAccount(){
+ if(!confirm("Reset virtual balance to $10,000 and delete positions and history?"))return;
+ account={cash:START,holdings:{},realized:0,history:[]};
+ save();renderAll();
 }
-function trade(side){
- const a=document.getElementById("asset").value;
- const amount=Number(document.getElementById("amount").value);
- const p=price(a);
- const msg=document.getElementById("message");
- if(!Number.isFinite(amount)||amount<=0){msg.textContent="Enter a valid amount.";return}
- if(side==="buy"){
-  if(amount>cash){msg.textContent="Insufficient virtual balance.";return}
-  cash-=amount;holdings[a]+=amount/p;
- }else{
-  const qty=amount/p;
-  if(qty>holdings[a]){msg.textContent="Not enough "+a+" in your position.";return}
-  holdings[a]-=qty;cash+=amount;
- }
- history.unshift({side,asset:a,amount,price:p,time:new Date().toLocaleString()});
- save();renderAccount();renderPositions();renderHistory();updateEstimate();
- msg.textContent=side.toUpperCase()+" simulated successfully: "+money(amount)+" of "+a;
-}
-function renderPositions(){
- const rows=Object.keys(holdings).filter(a=>holdings[a]>0);
- document.getElementById("positionsList").innerHTML=rows.length?rows.map(a=>
- `<div class="coin row"><div><b>${a}</b><br><small>${holdings[a].toFixed(8)} units</small></div><div><b>${money(holdings[a]*price(a))}</b><br><small>Current value</small></div></div>`
- ).join(""):"<p class='muted'>No open positions yet. Place a paper buy trade first.</p>";
-}
-function renderHistory(){
- document.getElementById("historyList").innerHTML=history.length?
- "<table><thead><tr><th>Trade</th><th>Amount</th><th>Price</th></tr></thead><tbody>"+
- history.map(t=>`<tr><td><b class="${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()} ${t.asset}</b><br><small>${t.time}</small></td><td>${money(t.amount)}</td><td>${money(t.price)}</td></tr>`).join("")+
- "</tbody></table>":"<p class='muted'>Your trades will appear here.</p>";
-}
-function resetApp(){
- if(!confirm("Reset your virtual balance and erase trade history?"))return;
- cash=initialBalance;holdings={BTC:0,ETH:0,SOL:0,BNB:0};history=[];
- save();renderAccount();renderPositions();renderHistory();
-}
-renderCoins();renderAccount();renderPositions();renderHistory();updateEstimate();loadPrices();
+loadSaved();renderAll();loadPrices();
 </script>
 </body>
 </html>
