@@ -5,38 +5,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TradeLab Crypto</title>
+<script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
 <style>
+:root{--bg:#080d18;--panel:#111a2d;--line:#26334d;--muted:#93a4bf;--green:#46e0b0;--red:#ff7185}
 *{box-sizing:border-box}
-body{margin:0;background:#080d18;color:#edf2ff;font-family:Arial,sans-serif}
-header{padding:20px;background:#10182a;border-bottom:1px solid #26324a}
-.logo{color:#46e0b0;font-size:24px;font-weight:bold}
-header p,.muted,small{color:#93a4bf;font-size:13px}
-main{max-width:850px;margin:auto;padding:16px}
-.card{background:#111a2d;border:1px solid #26334d;border-radius:15px;padding:17px;margin-bottom:15px}
-h2{font-size:17px;margin-top:0}
+body{margin:0;background:var(--bg);color:#edf2ff;font-family:Arial,sans-serif}
+header{padding:18px;background:#10182a;border-bottom:1px solid var(--line)}
+.logo{color:var(--green);font-size:24px;font-weight:bold}
+header p,.muted,small{color:var(--muted);font-size:12px}
+main{max-width:1100px;margin:auto;padding:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;min-width:0}
+h2{font-size:17px;margin:0 0 14px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.balance{font-size:29px;font-weight:bold;margin:10px 0}
-.green{color:#46e0b0}.red{color:#ff7185}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:#0b1324;padding:13px;border-radius:10px;min-width:0}
-.stat strong{display:block;font-size:18px;margin-top:7px;overflow-wrap:anywhere}
-nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:15px}
-button{background:#46e0b0;color:#07130f;font-weight:bold;border:0;border-radius:8px;padding:12px;cursor:pointer}
-nav button{white-space:nowrap;background:#26334d;color:white}
-nav button.active{background:#46e0b0;color:#07130f;box-shadow:0 0 0 2px rgba(70,224,176,.2)}
-button.secondary{background:#26334d;color:white}
-button.sell{background:#ff7185}
+.balance{font-size:28px;font-weight:bold;margin:9px 0 16px;overflow-wrap:anywhere}
+.green{color:var(--green)}.red{color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.stat{background:#0b1324;padding:12px;border-radius:9px;min-width:0}
+.stat strong{display:block;font-size:17px;margin-top:7px;overflow-wrap:anywhere}
+nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:3px}
+button{background:var(--green);color:#07130f;font-weight:bold;border:0;border-radius:8px;padding:11px 13px;cursor:pointer}
+nav button{white-space:nowrap;background:#26334d;color:#eaf0ff}
+nav button.active{background:var(--green);color:#07130f;box-shadow:0 0 0 2px #46e0b033}
+button.secondary,.tf{background:#26334d;color:white}
+button.sell{background:var(--red)}
 input,select{width:100%;background:#0a1120;color:white;border:1px solid #34415a;border-radius:8px;padding:12px;margin:7px 0 13px}
+label{font-size:13px;color:var(--muted)}
 .actions{display:flex;gap:8px}.actions button{flex:1}
 .full{width:100%}
-.coin{padding:13px 0;border-bottom:1px solid #26334d}
+.coin{padding:12px 0;border-bottom:1px solid var(--line)}
 .coin:last-child{border:0}
-.bar{height:9px;background:#26334d;border-radius:8px;overflow:hidden;margin:8px 0 14px}
-.fill{height:100%;background:#46e0b0}
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{text-align:left;padding:10px 5px;border-bottom:1px solid #26334d}
-.notice{font-size:12px;color:#93a4bf;line-height:1.5}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:8px 0 14px}
+.fill{height:100%;background:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+td,th{text-align:left;padding:10px 5px;border-bottom:1px solid var(--line);white-space:nowrap}
+.notice{font-size:12px;color:var(--muted);line-height:1.5}
 [hidden]{display:none!important}
+.searchrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.searchrow input{margin:0}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tfrow{display:flex;gap:5px;flex-wrap:wrap}
+.tf{padding:8px 10px;font-size:12px}
+.tf.active{background:var(--green);color:#07130f}
+#chart{height:360px;width:100%;position:relative}
+#chartStatus{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
+#coinSearch{margin-bottom:12px}
+.tag{font-size:11px;color:var(--muted)}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}main{padding:20px}}
+@media(max-width:420px){#chart{height:300px}.balance{font-size:25px}.card{padding:12px}}
 </style>
 </head>
 <body>
@@ -70,20 +85,23 @@ td,th{text-align:left;padding:10px 5px;border-bottom:1px solid #26334d}
    <div class="row"><span class="muted">Starting balance</span><b>$10,000.00</b></div>
    <div class="row" style="margin-top:14px"><span class="muted">Net return</span><b id="return">0.00%</b></div>
    <div class="row" style="margin-top:14px"><span class="muted">Invested in open positions</span><b id="invested">$0.00</b></div>
-   <p class="notice">P&L includes realized gains/losses and the current estimated value of open positions. Fees and taxes are not included.</p>
+   <p class="notice">Unrealized P&L estimates the value of open holdings. Realized P&L records gains/losses from paper sells.</p>
   </div>
   <div class="card"><h2>Portfolio Allocation</h2><div id="allocation"></div></div>
   <div class="card">
-   <h2>Market Snapshot</h2>
-   <div id="snapshot"></div>
+   <h2>Market Snapshot</h2><div id="snapshot"></div>
    <button class="secondary full" onclick="loadPrices()">Refresh market prices</button>
    <p class="notice" id="priceStatus">Loading prices...</p>
   </div>
  </section>
 
  <section id="market" hidden>
-  <div class="card"><h2>Crypto Market</h2><div id="coins"></div>
+  <div class="card">
+   <h2>Crypto Market</h2>
+   <input id="coinSearch" placeholder="Search BTC, Ethereum, Solana..." oninput="renderCoins()">
+   <div id="coins"></div>
    <button class="secondary full" onclick="loadPrices()">Refresh prices</button>
+   <p class="notice">Prices are from a public exchange API when available.</p>
   </div>
  </section>
 
@@ -115,7 +133,34 @@ td,th{text-align:left;padding:10px 5px;border-bottom:1px solid #26334d}
    <button class="secondary full" onclick="resetAccount()">Reset paper account</button>
   </div>
  </section>
- <p class="notice">Educational simulator only. Prices may be delayed or unavailable. Not financial advice.</p>
+
+ <section id="chartSection">
+  <div class="card">
+   <div class="chart-head">
+    <div><h2 style="margin-bottom:5px">Advanced Chart</h2><div class="tag">CANDLESTICKS · MARKET DATA</div></div>
+    <select id="chartAsset" style="width:auto;margin:0" onchange="loadChart()">
+     <option value="BTCUSDT">BTC / USDT</option>
+     <option value="ETHUSDT">ETH / USDT</option>
+     <option value="SOLUSDT">SOL / USDT</option>
+     <option value="BNBUSDT">BNB / USDT</option>
+    </select>
+   </div>
+   <div class="chart-head">
+    <div class="tfrow" id="timeframes">
+     <button class="tf active" data-tf="15m" onclick="chooseTf('15m')">15m</button>
+     <button class="tf" data-tf="1h" onclick="chooseTf('1h')">1H</button>
+     <button class="tf" data-tf="4h" onclick="chooseTf('4h')">4H</button>
+     <button class="tf" data-tf="1d" onclick="chooseTf('1d')">1D</button>
+     <button class="tf" data-tf="1w" onclick="chooseTf('1w')">1W</button>
+    </div>
+    <button class="secondary" onclick="loadChart()">Refresh chart</button>
+   </div>
+   <div id="ohlc" class="muted">Select a coin to view OHLC data.</div>
+   <div id="chart"></div>
+   <div id="chartStatus">Loading candlestick chart...</div>
+   <p class="notice">Candles use public exchange historical data. This chart is for research and education, not financial advice. Internet access and the chart library are required.</p>
+  </div>
+ </section>
 </main>
 
 <script>
@@ -128,6 +173,8 @@ const assets={
 };
 let prices={},live=false;
 let account={cash:START,holdings:{},realized:0,history:[]};
+let chart=null,candleSeries=null,volumeSeries=null;
+let chartReady=false,currentTf="15m",chartRequest=0,resizeObserver=null;
 
 function loadSaved(){
  try{
@@ -147,9 +194,7 @@ function loadSaved(){
   }
  }catch(e){}
 }
-function save(){
- try{localStorage.setItem("tradelab_v2",JSON.stringify(account))}catch(e){}
-}
+function save(){try{localStorage.setItem("tradelab_v2",JSON.stringify(account))}catch(e){}}
 function price(a){return prices[a]||assets[a].price}
 function money(n){return (n<0?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
 function qty(a){return Number(account.holdings[a]?.qty)||0}
@@ -174,6 +219,7 @@ function show(id){
   btn.classList.toggle("active",active);
   btn.classList.toggle("secondary",!active);
  });
+ if(id==="market"&&chartReady)setTimeout(resizeChart,50);
  renderAll();
 }
 function estimate(){
@@ -219,9 +265,11 @@ function renderAllocation(){
  }).join(""):"<p class='muted'>Buy a paper position to see allocation.</p>";
 }
 function renderCoins(){
- document.getElementById("coins").innerHTML=Object.keys(assets).map(a=>
+ const q=(document.getElementById("coinSearch")?.value||"").trim().toLowerCase();
+ const rows=Object.keys(assets).filter(a=>(a+" "+assets[a].name).toLowerCase().includes(q));
+ document.getElementById("coins").innerHTML=rows.length?rows.map(a=>
  `<div class="coin row"><div><b>${assets[a].name} (${a})</b><br><small>${live?"Market quote":"Reference price"}</small></div><b>${money(price(a))}</b><button onclick="selectAsset('${a}')">Trade</button></div>`
- ).join("");
+ ).join(""):"<p class='muted'>No matching coin found.</p>";
  document.getElementById("snapshot").innerHTML=Object.keys(assets).map(a=>
  `<div class="coin row"><b>${a}</b><b>${money(price(a))}</b></div>`).join("");
 }
@@ -251,11 +299,93 @@ async function loadPrices(){
  }
  renderAll();
 }
+
+function initChart(){
+ const host=document.getElementById("chart");
+ if(!window.LightweightCharts){document.getElementById("chartStatus").textContent="Chart library failed to load. Check your internet connection and refresh.";return false}
+ try{
+  chart=LightweightCharts.createChart(host,{
+   width:Math.max(300,host.clientWidth),height:host.clientHeight||360,
+   layout:{background:{type:"solid",color:"#111a2d"},textColor:"#aebbd0",fontFamily:"Arial",fontSize:11},
+   grid:{vertLines:{color:"#1e2a40"},horzLines:{color:"#1e2a40"}},
+   rightPriceScale:{borderColor:"#34415a"},
+   timeScale:{borderColor:"#34415a",timeVisible:true,secondsVisible:false},
+   crosshair:{mode:LightweightCharts.CrosshairMode.Normal},
+   handleScroll:true,handleScale:true
+  });
+  candleSeries=chart.addCandlestickSeries({
+   upColor:"#46e0b0",downColor:"#ff7185",
+   borderUpColor:"#46e0b0",borderDownColor:"#ff7185",
+   wickUpColor:"#46e0b0",wickDownColor:"#ff7185",
+   priceLineVisible:true
+  });
+  volumeSeries=chart.addHistogramSeries({
+   priceFormat:{type:"volume"},priceScaleId:"volume",
+   scaleMargins:{top:.82,bottom:0}
+  });
+  chart.priceScale("volume").applyOptions({scaleMargins:{top:.82,bottom:0}});
+  chartReady=true;
+  if(resizeObserver)resizeObserver.disconnect();
+  if(window.ResizeObserver){
+   resizeObserver=new ResizeObserver(resizeChart);
+   resizeObserver.observe(host);
+  }else{
+   window.addEventListener("resize",resizeChart);
+  }
+  return true;
+ }catch(e){
+  document.getElementById("chartStatus").textContent="Could not initialize chart: "+e.message;
+  return false;
+ }
+}
+function resizeChart(){
+ if(chart&&document.getElementById("chart").clientWidth>0){
+  chart.applyOptions({width:document.getElementById("chart").clientWidth,height:document.getElementById("chart").clientHeight||360});
+ }
+}
+function chooseTf(tf){
+ currentTf=tf;
+ document.querySelectorAll(".tf").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));
+ loadChart();
+}
+async function loadChart(){
+ const request=++chartRequest;
+ const symbol=document.getElementById("chartAsset").value;
+ const host=document.getElementById("chart");
+ document.getElementById("chartStatus").textContent="Loading "+symbol+" candles ("+currentTf+")...";
+ document.getElementById("ohlc").textContent="Loading OHLC...";
+ if(!chartReady&&!initChart())return;
+ const url="https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(currentTf)+"&limit=150";
+ try{
+  const r=await fetch(url);
+  if(!r.ok)throw Error("Exchange API returned HTTP "+r.status);
+  const raw=await r.json();
+  if(!Array.isArray(raw)||!raw.length)throw Error("No candle data returned");
+  if(request!==chartRequest)return;
+  const candles=raw.map(k=>({time:Math.floor(Number(k[0])/1000),open:Number(k[1]),high:Number(k[2]),low:Number(k[3]),close:Number(k[4])}));
+  const volumes=raw.map(k=>({time:Math.floor(Number(k[0])/1000),value:Number(k[5]),color:Number(k[4])>=Number(k[1])?"#46e0b077":"#ff718577"}));
+  candleSeries.setData(candles);
+  volumeSeries.setData(volumes);
+  chart.timeScale().fitContent();
+  const last=candles[candles.length-1];
+  const delta=last.close-last.open,pct=last.open?(delta/last.open*100):0;
+  document.getElementById("ohlc").innerHTML=
+   "<b>"+symbol.replace("USDT"," / USDT")+"</b> &nbsp; <span class='"+(delta>=0?"green":"red")+"'>"+last.close.toLocaleString("en-US",{maximumFractionDigits:8})+" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)</span><br><small>O "+last.open+" &nbsp; H "+last.high+" &nbsp; L "+last.low+" &nbsp; C "+last.close+"</small>";
+  document.getElementById("chartStatus").textContent="Loaded "+candles.length+" candles. Timeframe: "+currentTf+". Data may be delayed.";
+  const a=symbol.replace("USDT","");
+  if(assets[a]){prices[a]=last.close;live=true;renderAll()}
+  resizeChart();
+ }catch(e){
+  if(request!==chartRequest)return;
+  document.getElementById("chartStatus").textContent="Chart data unavailable: "+e.message+". Check internet access and try Refresh chart.";
+  document.getElementById("ohlc").textContent="No current OHLC data.";
+ }
+}
 function resetAccount(){
  if(!confirm("Reset virtual balance to $10,000 and erase positions and history?"))return;
  account={cash:START,holdings:{},realized:0,history:[]};save();renderAll();
 }
-loadSaved();renderAll();loadPrices();
+loadSaved();renderAll();loadPrices();loadChart();
 </script>
 </body>
 </html>
