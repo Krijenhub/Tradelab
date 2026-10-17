@@ -9,465 +9,189 @@
 <script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root{--bg:#080c14;--panel:#0f1725;--panel2:#131e30;--line:#243148;--muted:#8b9bb5;--text:#edf3ff;--green:#37e6ad;--red:#ff6f83;--blue:#7da9ff;--gold:#eac778}
-*{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 65% 0%,#142340 0%,#080c14 52%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
-button,input,select{font:inherit}
-button{cursor:pointer;transition:transform .18s,background .2s,border-color .2s}
-button:hover{transform:translateY(-2px);filter:brightness(1.13)}
-button:active{transform:scale(.97)}
-header{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#080c14dd;position:sticky;top:0;z-index:10;backdrop-filter:blur(16px)}
-.brand{font-weight:900;font-size:20px;letter-spacing:-.7px}.brand span{color:var(--green)}
-.logoMark{display:inline-grid;place-items:center;background:var(--green);color:#07120e;border-radius:9px;width:32px;height:32px;margin-right:9px;font-weight:900}
-.headerRight{display:flex;gap:10px;align-items:center}
-.pill{border:1px solid var(--line);border-radius:30px;padding:7px 11px;font-size:11px;color:var(--muted)}
-.liveDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;box-shadow:0 0 12px var(--green);animation:pulse 1.8s infinite}
-.layout{display:grid;grid-template-columns:205px minmax(0,1fr);max-width:1600px;margin:auto;min-height:calc(100vh - 68px)}
-.sidebar{border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:6px}
-.navlabel{color:#65758f;font-size:10px;font-weight:800;letter-spacing:1.4px;padding:15px 10px 7px}
-.navbtn{background:transparent;color:#a6b5cc;border:1px solid transparent;text-align:left;padding:12px;border-radius:10px;font-size:13px;display:flex;gap:10px;align-items:center}
-.navbtn.active{color:var(--green);background:#37e6ad12;border-color:#37e6ad30}
-.navbtn .ico{width:18px;text-align:center}
-.sidebarBottom{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:13px;font-size:11px;line-height:1.6;color:var(--muted)}
-main{padding:22px;min-width:0}
-.page{display:none;animation:fadeUp .3s ease}.page.active{display:block}
-.pageTitle{font-size:24px;font-weight:850;letter-spacing:-.8px;margin:0}
-.sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
-.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.btn{border:1px solid var(--line);border-radius:9px;padding:10px 13px;background:var(--panel2);color:var(--text);font-size:12px;font-weight:700}
-.btn.primary{background:var(--green);color:#06130f;border-color:var(--green)}
-.btn.danger{background:#ff6f8316;color:var(--red);border-color:#ff6f8340}
-.btn.full{width:100%}
-.card{border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#121d2eeb,#0d1523f5);padding:17px;min-width:0;box-shadow:0 8px 28px #00000013;transition:border-color .2s,transform .2s}
-.card:hover{border-color:#3a506e}
-.cards4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:15px}
-.metricLabel{font-size:11px;color:var(--muted)}.metricValue{font-size:23px;font-weight:800;margin:10px 0 7px;letter-spacing:-.6px;overflow-wrap:anywhere}
-.metricFoot{font-size:11px;color:var(--muted)}
-.green{color:var(--green)!important}.red{color:var(--red)!important}.blue{color:var(--blue)!important}
-.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
-.sectionHead h2{font-size:14px;margin:0;font-weight:800}
-.twoCol{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,1fr);gap:14px;margin-bottom:14px}
-.threeCol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.chartCard{min-width:0}
-.chartTop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-select,input{background:#0a1220;color:var(--text);border:1px solid #2b3a54;border-radius:9px;padding:10px;outline:none;max-width:100%}
-input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px #37e6ad16}
-select{font-size:12px}
-#chart{width:100%;height:340px}
-.tfrow{display:flex;gap:4px;flex-wrap:wrap}
-.tf{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:6px;padding:7px 9px;font-size:11px}
-.tf.active{background:#37e6ad19;color:var(--green);border-color:#37e6ad35}
-.chartStats{font-size:11px;color:var(--muted);line-height:1.8;overflow-wrap:anywhere}
-.watchrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #243148a8}
-.watchrow:last-child{border:0}
-.coinname{font-weight:750;font-size:12px}.coinmeta{font-size:10px;color:var(--muted);margin-top:5px}
-.coinprice{text-align:right;font-weight:750;font-size:12px}
-.smallbtn{font-size:10px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:#1a263a;color:var(--text);margin-top:6px}
-.signalBadge{display:inline-block;border:1px solid #eac7784c;color:var(--gold);background:#eac77810;padding:6px 9px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.5px}
-.signalHero{background:linear-gradient(135deg,#162b35,#111b2b 65%,#1b2439);border:1px solid #2d564f;border-radius:14px;padding:18px;margin-bottom:13px}
-.signalName{font-size:22px;font-weight:900;margin:10px 0 5px}
-.signalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
-.signalStat{background:#07111c80;border:1px solid #2d4353;border-radius:9px;padding:10px;min-width:0}
-.signalStat span{display:block;color:var(--muted);font-size:10px;margin-bottom:6px}
-.signalStat b{font-size:13px;overflow-wrap:anywhere}
-.progress{height:5px;background:#29364a;border-radius:10px;overflow:hidden;margin:8px 0}
-.progress div{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .6s}
-.field{margin-bottom:12px}.field label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
-.field input,.field select{width:100%}
-.strategyGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.strategy{border:1px solid var(--line);background:#0b1321;border-radius:12px;padding:13px;text-align:left;color:var(--text)}
-.strategy.active{border-color:var(--green);background:#37e6ad0d;box-shadow:inset 0 0 0 1px #37e6ad18}
-.strategy b{display:block;font-size:12px;margin-bottom:6px}.strategy small{color:var(--muted);font-size:10px;line-height:1.5}
-.tableWrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:11px}
-th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-size:10px;color:var(--muted);font-weight:700}
-.empty{color:var(--muted);font-size:12px;padding:15px 0;line-height:1.7}
-.notice{color:var(--muted);font-size:10px;line-height:1.65}
-.allocationRow{display:grid;grid-template-columns:35px 1fr auto;gap:10px;align-items:center;margin:14px 0;font-size:11px}
-.allocationBar{height:5px;background:#29364a;border-radius:8px;overflow:hidden;margin-top:7px}.allocationBar div{height:100%;background:var(--green)}
-input[type=checkbox]{accent-color:var(--green);width:auto}
-footer{font-size:10px;color:#687992;padding:18px 0;text-align:center}
-.toast{position:fixed;right:16px;bottom:16px;z-index:99;background:#152337;border:1px solid #3b516d;border-radius:12px;padding:14px 18px;max-width:330px;font-size:12px;box-shadow:0 12px 35px #0008;animation:fadeUp .25s ease}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes glow{0%,100%{box-shadow:0 0 0 #37e6ad00}50%{box-shadow:0 0 22px #37e6ad12}}
-@media(max-width:1000px){.layout{grid-template-columns:70px minmax(0,1fr)}.sidebar{padding:15px 8px}.navbtn{justify-content:center;font-size:0;padding:13px}.navbtn .ico{font-size:17px}.navlabel,.sidebarBottom{display:none}.cards4{grid-template-columns:repeat(2,minmax(0,1fr))}.twoCol{grid-template-columns:1fr}}
-@media(max-width:600px){header{height:60px;padding:0 13px}.brand{font-size:17px}.headerRight .pill{display:none}.layout{display:block;padding-bottom:70px}.sidebar{position:fixed;bottom:0;left:0;right:0;height:62px;z-index:20;background:#0b1220f5;border-top:1px solid var(--line);border-right:0;display:flex;flex-direction:row;justify-content:space-around;padding:6px 3px;backdrop-filter:blur(15px)}.navbtn{flex:1;display:flex;flex-direction:column;gap:3px;padding:5px 0;font-size:9px;text-align:center;justify-content:center}.navbtn .ico{font-size:16px}.layout{min-height:0}main{padding:14px 11px}.pageTitle{font-size:21px}.cards4{gap:8px}.metricValue{font-size:19px}.card{padding:13px}.threeCol{grid-template-columns:1fr}.strategyGrid{grid-template-columns:1fr 1fr}#chart{height:280px}.signalGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.signalStat{padding:8px}.signalStat b{font-size:11px}.toprow{margin-bottom:15px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 65% 0%,#142340,#080c14 52%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}button,input,select{font:inherit}button{cursor:pointer;transition:.18s}button:hover{filter:brightness(1.15)}header{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#080c14ed;position:sticky;top:0;z-index:20;backdrop-filter:blur(15px)}.brand{font-weight:900;font-size:19px}.brand span{color:var(--green)}.logo{display:inline-grid;place-items:center;background:var(--green);color:#07120e;border-radius:9px;width:30px;height:30px;margin-right:8px}.headerRight{display:flex;gap:8px;align-items:center}.pill{border:1px solid var(--line);border-radius:25px;padding:6px 9px;font-size:10px;color:var(--muted)}.layout{display:grid;grid-template-columns:190px minmax(0,1fr);max-width:1600px;margin:auto;min-height:calc(100vh - 64px)}.sidebar{border-right:1px solid var(--line);padding:14px 10px;display:flex;flex-direction:column;gap:5px}.navlabel{color:#65758f;font-size:10px;font-weight:800;letter-spacing:1.4px;padding:14px 9px 6px}.navbtn{background:transparent;color:#a6b5cc;border:1px solid transparent;text-align:left;padding:11px;border-radius:9px;font-size:12px;display:flex;gap:9px;align-items:center}.navbtn.active{color:var(--green);background:#37e6ad12;border-color:#37e6ad30}.navbtn .ico{width:18px;text-align:center}.sidebarBottom{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:10px;line-height:1.7;color:var(--muted)}main{padding:20px;min-width:0}.page{display:none;animation:fade .25s}.page.active{display:block}.pageTitle{font-size:24px;font-weight:850;letter-spacing:-.7px;margin:0}.sub{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.65}.toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:17px}.btn{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:var(--panel2);color:var(--text);font-size:11px;font-weight:700}.btn.primary{background:var(--green);color:#06130f;border-color:var(--green)}.btn.danger{color:var(--red);border-color:#ff6f8350;background:#ff6f8314}.btn.full{width:100%}.card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#121d2eeb,#0d1523f5);padding:15px;min-width:0;margin-bottom:13px}.cards4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:13px}.metricLabel{font-size:10px;color:var(--muted)}.metricValue{font-size:22px;font-weight:800;margin:9px 0 6px;overflow-wrap:anywhere}.metricFoot{font-size:10px;color:var(--muted)}.green{color:var(--green)!important}.red{color:var(--red)!important}.blue{color:var(--blue)!important}.twoCol{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(260px,1fr);gap:13px}.threeCol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.sectionHead h2{font-size:13px;margin:0}.chartTop{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}select,input,textarea{background:#0a1220;color:var(--text);border:1px solid #2b3a54;border-radius:8px;padding:9px;outline:none;max-width:100%;font-size:12px}select:focus,input:focus,textarea:focus{border-color:var(--green)}.field{margin-bottom:11px}.field label{display:block;color:var(--muted);font-size:10px;margin-bottom:5px}.field input,.field select,.field textarea{width:100%}#chartWrap{position:relative;min-width:0}#chart{width:100%;height:360px}#drawLayer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;overflow:visible}.drawItem{pointer-events:stroke;cursor:pointer}.tfrow,.toolbar{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}.tf,.toolbtn{background:#0a1220;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:7px 9px;font-size:10px}.tf.active,.toolbtn.active{color:var(--green);border-color:var(--green);background:#37e6ad12}.watchrow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid #243148a8}.watchrow:last-child{border:0}.coinname{font-weight:750;font-size:11px}.coinmeta{font-size:10px;color:var(--muted);margin-top:4px}.coinprice{text-align:right;font-weight:750;font-size:11px}.smallbtn{font-size:10px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:#1a263a;color:var(--text);margin-top:5px}.signalBadge{display:inline-block;border:1px solid #eac7784c;color:var(--gold);background:#eac77810;padding:6px 8px;border-radius:7px;font-size:9px;font-weight:800}.signalHero{background:linear-gradient(135deg,#162b35,#111b2b 65%,#1b2439);border:1px solid #2d564f;border-radius:12px;padding:15px;margin-bottom:12px}.signalName{font-size:21px;font-weight:900;margin:10px 0 4px}.signalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0}.signalStat{background:#07111c80;border:1px solid #2d4353;border-radius:8px;padding:9px;min-width:0}.signalStat span{display:block;color:var(--muted);font-size:9px;margin-bottom:5px}.signalStat b{font-size:11px;overflow-wrap:anywhere}.progress{height:5px;background:#29364a;border-radius:10px;overflow:hidden;margin:8px 0}.progress div{height:100%;background:linear-gradient(90deg,var(--blue),var(--green))}.strategyGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.strategy{border:1px solid var(--line);background:#0b1321;border-radius:10px;padding:11px;text-align:left;color:var(--text)}.strategy.active{border-color:var(--green);background:#37e6ad0d}.strategy b{display:block;font-size:11px;margin-bottom:5px}.strategy small{color:var(--muted);font-size:9px;line-height:1.5}.tableWrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:10px}th,td{text-align:left;padding:10px 7px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-size:9px}.empty{color:var(--muted);font-size:11px;padding:13px 0;line-height:1.7}.notice{color:var(--muted);font-size:9px;line-height:1.7}.allocationRow{display:grid;grid-template-columns:32px 1fr auto;gap:9px;align-items:center;margin:12px 0;font-size:10px}.allocationBar{height:5px;background:#29364a;border-radius:8px;overflow:hidden;margin-top:6px}.allocationBar div{height:100%;background:var(--green)}.newsItem{padding:13px 0;border-bottom:1px solid var(--line)}.newsItem:last-child{border:0}.newsItem a{color:var(--text);text-decoration:none;font-size:12px;font-weight:750;line-height:1.5}.newsItem a:hover{color:var(--green)}.newsMeta{font-size:9px;color:var(--muted);margin-top:6px}.toast{position:fixed;right:14px;bottom:15px;z-index:99;background:#152337;border:1px solid #3b516d;border-radius:10px;padding:12px 15px;max-width:320px;font-size:11px;box-shadow:0 12px 35px #0008}.toast[hidden]{display:none}footer{font-size:9px;color:#687992;padding:16px;text-align:center}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}@media(max-width:1000px){.layout{grid-template-columns:65px minmax(0,1fr)}.sidebar{padding:12px 5px}.navbtn{justify-content:center;font-size:0;padding:12px 2px}.navbtn .ico{font-size:16px}.navlabel,.sidebarBottom{display:none}.cards4{grid-template-columns:repeat(2,minmax(0,1fr))}.twoCol{grid-template-columns:1fr}}@media(max-width:600px){header{height:57px;padding:0 10px}.brand{font-size:16px}.headerRight .pill{display:none}.layout{display:block;padding-bottom:65px;min-height:0}.sidebar{position:fixed;bottom:0;left:0;right:0;height:61px;z-index:20;background:#0b1220f5;border-top:1px solid var(--line);border-right:0;display:flex;flex-direction:row;justify-content:space-around;padding:4px 2px}.navbtn{flex:1;display:flex;flex-direction:column;gap:3px;padding:4px 0;font-size:8px;text-align:center;justify-content:center}.navbtn .ico{font-size:15px}main{padding:12px 9px}.pageTitle{font-size:21px}.cards4{gap:7px}.metricValue{font-size:18px}.card{padding:12px}.threeCol{grid-template-columns:1fr}.strategyGrid{grid-template-columns:1fr 1fr}#chart{height:290px}.signalGrid{gap:5px}.signalStat{padding:7px}.signalStat b{font-size:10px}.toprow{margin-bottom:13px}.toolbar button{padding:7px 6px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<header>
- <div class="brand"><span class="logoMark">T</span>TradeLab <span>PRO</span></div>
- <div class="headerRight"><span class="pill"><span class="liveDot"></span><span id="connection">CONNECTING</span></span><button class="btn" onclick="refreshAll()">↻ Refresh</button></div>
-</header>
-
+<header><div class="brand"><span class="logo">T</span>TradeLab <span>PRO</span></div><div class="headerRight"><span class="pill" id="connection">CONNECTING</span><button class="btn" onclick="refreshAll()">↻ Refresh</button></div></header>
 <div class="layout">
 <aside class="sidebar">
- <div class="navlabel">WORKSPACE</div>
- <button class="navbtn active" data-page="overview" onclick="go('overview')"><span class="ico">▦</span>Overview</button>
- <button class="navbtn" data-page="markets" onclick="go('markets')"><span class="ico">⌁</span>Markets</button>
- <button class="navbtn" data-page="analysis" onclick="go('analysis')"><span class="ico">⌕</span>Analysis</button>
- <button class="navbtn" data-page="trade" onclick="go('trade')"><span class="ico">⇄</span>Paper Trade</button>
- <button class="navbtn" data-page="portfolio" onclick="go('portfolio')"><span class="ico">◫</span>Portfolio</button>
- <button class="navbtn" data-page="tools" onclick="go('tools')"><span class="ico">⚙</span>Tools</button>
- <div class="sidebarBottom">TRADING MODE<br><b style="color:var(--green)">Paper Trading</b><br>No real orders are placed.</div>
+<div class="navlabel">WORKSPACE</div>
+<button class="navbtn active" data-page="overview" onclick="go('overview')"><span class="ico">▦</span>Overview</button>
+<button class="navbtn" data-page="markets" onclick="go('markets')"><span class="ico">⌁</span>Markets</button>
+<button class="navbtn" data-page="analysis" onclick="go('analysis')"><span class="ico">⌕</span>Analysis</button>
+<button class="navbtn" data-page="news" onclick="go('news')"><span class="ico">▤</span>Crypto News</button>
+<button class="navbtn" data-page="trade" onclick="go('trade')"><span class="ico">⇄</span>Paper Trade</button>
+<button class="navbtn" data-page="portfolio" onclick="go('portfolio')"><span class="ico">◫</span>Portfolio</button>
+<button class="navbtn" data-page="tools" onclick="go('tools')"><span class="ico">⚙</span>Tools</button>
+<div class="sidebarBottom">TRADING MODE<br><b style="color:var(--green)">Paper Trading</b><br>No real orders are placed.</div>
 </aside>
-
 <main>
 <section class="page active" id="page-overview">
- <div class="toprow"><div><h1 class="pageTitle">Market Overview</h1><div class="sub">Your crypto research workspace. Track price, risk and strategy signals.</div></div><span class="signalBadge">DEMO ACCOUNT</span></div>
- <div class="cards4">
-  <div class="card"><div class="metricLabel">TOTAL EQUITY</div><div class="metricValue" id="equity">$10,000.00</div><div class="metricFoot">Virtual account value</div></div>
-  <div class="card"><div class="metricLabel">TOTAL P&L</div><div class="metricValue" id="pnl">$0.00</div><div class="metricFoot" id="return">0.00% return</div></div>
-  <div class="card"><div class="metricLabel">AVAILABLE CASH</div><div class="metricValue" id="cash">$10,000</div><div class="metricFoot">Ready to paper trade</div></div>
-  <div class="card"><div class="metricLabel">OPEN POSITIONS</div><div class="metricValue" id="openCount">0</div><div class="metricFoot">Active virtual holdings</div></div>
- </div>
- <div class="twoCol">
-  <div class="card chartCard">
-   <div class="chartTop"><div><div class="sectionHead" style="margin:0"><h2>Market Chart</h2><span class="pill">LIVE DATA WHEN AVAILABLE</span></div><div class="sub" id="overviewQuote">BTC / USDT</div></div>
-    <select id="overviewAsset" onchange="syncAsset(this.value)" aria-label="Chart coin"><option value="BTCUSDT">BTC</option><option value="ETHUSDT">ETH</option><option value="SOLUSDT">SOL</option><option value="BNBUSDT">BNB</option></select>
-   </div>
-   <div class="tfrow" style="margin:10px 0"><button class="tf active" data-tf="15m" onclick="setTf('15m')">15m</button><button class="tf" data-tf="1h" onclick="setTf('1h')">1H</button><button class="tf" data-tf="4h" onclick="setTf('4h')">4H</button><button class="tf" data-tf="1d" onclick="setTf('1d')">1D</button><button class="tf" data-tf="1w" onclick="setTf('1w')">1W</button></div>
-   <div id="chart"></div><div id="chartStatus" class="chartStats">Loading historical candles...</div>
-  </div>
-  <div class="card"><div class="sectionHead"><h2>Market Watch</h2><button class="btn" onclick="go('markets')">All markets →</button></div><div id="watchOverview"></div></div>
- </div>
- <div class="twoCol">
-  <div class="card"><div class="sectionHead"><h2>Strategy Scanner</h2><button class="btn" onclick="go('analysis')">Open analysis →</button></div><div id="overviewSignal"></div></div>
-  <div class="card"><div class="sectionHead"><h2>Portfolio Allocation</h2><button class="btn" onclick="go('portfolio')">Details →</button></div><div id="allocation"></div></div>
- </div>
- <div class="card"><div class="sectionHead"><h2>Recent Activity</h2><button class="btn" onclick="go('portfolio')">View history →</button></div><div id="recentTrades"></div></div>
+<div class="toprow"><div><h1 class="pageTitle">Market Overview</h1><div class="sub">Crypto research, market data and paper trading.</div></div><span class="signalBadge">DEMO ACCOUNT</span></div>
+<div class="cards4">
+<div class="card"><div class="metricLabel">TOTAL EQUITY</div><div class="metricValue" id="equity">$10,000</div><div class="metricFoot">Virtual account value</div></div>
+<div class="card"><div class="metricLabel">TOTAL P&L</div><div class="metricValue" id="pnl">$0</div><div class="metricFoot" id="return">0% return</div></div>
+<div class="card"><div class="metricLabel">AVAILABLE CASH</div><div class="metricValue" id="cash">$10,000</div><div class="metricFoot">Virtual cash</div></div>
+<div class="card"><div class="metricLabel">OPEN POSITIONS</div><div class="metricValue" id="openCount">0</div><div class="metricFoot">Active virtual holdings</div></div>
+</div>
+<div class="twoCol"><div class="card"><div class="sectionHead"><h2>Market Chart</h2><button class="btn" onclick="go('analysis')">Full chart →</button></div><div class="chartTop"><span class="sub" id="overviewQuote">BTC / USDT</span><select id="overviewAsset" onchange="syncAsset(this.value)"><option value="BTCUSDT">BTC</option><option value="ETHUSDT">ETH</option><option value="SOLUSDT">SOL</option><option value="BNBUSDT">BNB</option></select></div><div id="miniChart"><div id="chart"></div></div><div class="sub" id="chartStatus">Loading candles...</div></div>
+<div class="card"><div class="sectionHead"><h2>Market Watch</h2><button class="btn" onclick="go('markets')">All →</button></div><div id="watchOverview"></div><div class="sectionHead" style="margin-top:15px"><h2>Latest News</h2><button class="btn" onclick="go('news')">Read →</button></div><div id="miniNews"></div></div></div>
+<div class="twoCol"><div class="card"><div class="sectionHead"><h2>Strategy Scanner</h2><button class="btn" onclick="go('analysis')">Analyze →</button></div><div id="overviewSignal" class="empty">Waiting for candle data.</div></div><div class="card"><div class="sectionHead"><h2>Portfolio Allocation</h2><button class="btn" onclick="go('portfolio')">Details →</button></div><div id="allocation"></div></div></div>
+<div class="card"><div class="sectionHead"><h2>Recent Activity</h2><button class="btn" onclick="go('portfolio')">History →</button></div><div id="recentTrades"></div></div>
 </section>
 
 <section class="page" id="page-markets">
- <div class="toprow"><div><h1 class="pageTitle">Markets</h1><div class="sub">Explore available pairs and add coins to your watchlist.</div></div><button class="btn primary" onclick="loadPrices()">Refresh market</button></div>
- <div class="card"><input id="marketSearch" placeholder="Search coins..." oninput="renderMarkets()" style="width:100%;margin:0 0 10px"><div id="marketRows"></div><div class="notice" id="priceStatus">Fetching public market data...</div></div>
+<div class="toprow"><div><h1 class="pageTitle">Markets</h1><div class="sub">Track quotes and choose an asset to paper trade.</div></div><button class="btn primary" onclick="loadPrices()">Refresh prices</button></div>
+<div class="card"><input id="marketSearch" placeholder="Search coins..." oninput="renderMarkets()" style="width:100%;margin-bottom:10px"><div id="marketRows"></div><div class="notice" id="priceStatus">Loading public market data...</div></div>
 </section>
 
 <section class="page" id="page-analysis">
- <div class="toprow"><div><h1 class="pageTitle">Trade Intelligence</h1><div class="sub">Rule-based technical analysis. Review the setup and risk before paper trading.</div></div><span class="signalBadge">NO PROFIT GUARANTEE</span></div>
- <div class="twoCol">
-  <div class="card">
-   <div class="sectionHead"><h2>Analysis Setup</h2><span class="pill">RULE-BASED</span></div>
-   <div class="field"><label>MARKET</label><select id="analysisAsset" onchange="syncAnalysisAsset()"><option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option><option value="SOLUSDT">SOL / USDT</option><option value="BNBUSDT">BNB / USDT</option></select></div>
-   <div class="field"><label>STRATEGY</label><div class="strategyGrid">
-    <button class="strategy active" data-strategy="SMC" onclick="chooseStrategy('SMC')"><b>SMC</b><small>Structure, swing breaks and liquidity proxies</small></button>
-    <button class="strategy" data-strategy="EMA" onclick="chooseStrategy('EMA')"><b>EMA Trend</b><small>Fast and slow moving average trend</small></button>
-    <button class="strategy" data-strategy="RSI" onclick="chooseStrategy('RSI')"><b>RSI Momentum</b><small>Momentum and extreme readings</small></button>
-    <button class="strategy" data-strategy="BREAKOUT" onclick="chooseStrategy('BREAKOUT')"><b>Breakout</b><small>Recent range high/low confirmation</small></button>
-    <button class="strategy" data-strategy="EMC" onclick="chooseStrategy('EMC')"><b>EMC / Confluence</b><small>EMA, momentum and trend agreement</small></button>
-    <button class="strategy" data-strategy="SR" onclick="chooseStrategy('SR')"><b>Support / Resistance</b><small>Recent price range levels</small></button>
-   </div></div>
-   <button class="btn primary full" onclick="analyze()">Run market analysis</button>
-   <p class="notice">EMC is treated here as a custom educational confluence model, not a universally standardized strategy. SMC detection uses simplified price-structure proxies, not verified institutional order flow.</p>
-  </div>
-  <div class="card"><div class="sectionHead"><h2>Analysis Result</h2><span class="pill" id="analysisTime">WAITING</span></div><div id="analysisResult"><div class="empty">Choose a market and strategy, then run analysis. Results require available candle data.</div></div></div>
- </div>
- <div class="card"><div class="sectionHead"><h2>Technical Indicators</h2><span class="pill" id="indicatorPair">BTC / USDT</span></div>
-  <div class="cards4" style="margin:0">
-   <div class="stat"><div class="metricLabel">RSI (14)</div><div class="metricValue" id="rsi">--</div><div class="metricFoot" id="rsiNote">Awaiting data</div></div>
-   <div class="stat"><div class="metricLabel">MACD</div><div class="metricValue" id="macd">--</div><div class="metricFoot" id="macdNote">Awaiting data</div></div>
-   <div class="stat"><div class="metricLabel">SMA 20</div><div class="metricValue" id="sma20">--</div><div class="metricFoot">Short-term average</div></div>
-   <div class="stat"><div class="metricLabel">SMA 50</div><div class="metricValue" id="sma50">--</div><div class="metricFoot">Longer-term average</div></div>
-  </div>
- </div>
+<div class="toprow"><div><h1 class="pageTitle">Advanced Chart & Analysis</h1><div class="sub">Customize charts, indicators, strategy rules and drawing tools.</div></div><span class="signalBadge">EDUCATIONAL MODEL</span></div>
+<div class="card">
+<div class="chartTop"><div class="toolbar">
+<button class="toolbtn active" data-draw="cursor" onclick="setDraw('cursor')">Cursor</button>
+<button class="toolbtn" data-draw="trend" onclick="setDraw('trend')">Trendline</button>
+<button class="toolbtn" data-draw="hline" onclick="setDraw('hline')">Horizontal</button>
+<button class="toolbtn" data-draw="vline" onclick="setDraw('vline')">Vertical</button>
+<button class="toolbtn" data-draw="ray" onclick="setDraw('ray')">Ray</button>
+<button class="toolbtn" data-draw="rect" onclick="setDraw('rect')">Rectangle</button>
+<button class="toolbtn" data-draw="fib" onclick="setDraw('fib')">Fibonacci</button>
+<button class="toolbtn" data-draw="text" onclick="setDraw('text')">Text</button>
+<button class="toolbtn" onclick="undoDrawing()">Undo</button>
+<button class="toolbtn" onclick="clearDrawings()">Clear</button>
+</div></div>
+<div class="chartTop"><div style="display:flex;gap:7px;flex-wrap:wrap"><select id="chartAsset" onchange="syncAsset(this.value)"><option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option><option value="SOLUSDT">SOL / USDT</option><option value="BNBUSDT">BNB / USDT</option></select><select id="chartType" onchange="changeChartType()"><option value="candles">Candlesticks</option><option value="line">Line</option><option value="area">Area</option></select><select id="chartTheme" onchange="changeChartTheme()"><option value="dark">Dark theme</option><option value="light">Light theme</option></select></div><div class="tfrow"><button class="tf" data-tf="1m" onclick="setTf('1m')">1m</button><button class="tf" data-tf="5m" onclick="setTf('5m')">5m</button><button class="tf active" data-tf="15m" onclick="setTf('15m')">15m</button><button class="tf" data-tf="1h" onclick="setTf('1h')">1H</button><button class="tf" data-tf="4h" onclick="setTf('4h')">4H</button><button class="tf" data-tf="1d" onclick="setTf('1d')">1D</button><button class="tf" data-tf="1w" onclick="setTf('1w')">1W</button></div></div>
+<div id="chartWrap"><div id="chart"></div><svg id="drawLayer"></svg></div><div class="sub" id="analysisChartStatus">Loading candles...</div>
+<div class="toolbar"><label class="toolbtn"><input id="showEma20" type="checkbox" checked onchange="toggleIndicators()"> EMA 20</label><label class="toolbtn"><input id="showEma50" type="checkbox" checked onchange="toggleIndicators()"> EMA 50</label><label class="toolbtn"><input id="showVolume" type="checkbox" checked disabled> Volume (not plotted)</label></div>
+<p class="notice">Drawing: select a tool, then tap/click chart positions. Drawings are approximate screen overlays and saved in this browser; resizing or changing symbol/timeframe may alter their alignment. Tap Cursor to return to chart navigation.</p>
+</div>
+<div class="twoCol">
+<div class="card"><div class="sectionHead"><h2>Strategy Settings</h2><span class="pill">CUSTOMIZABLE</span></div>
+<div class="field"><label>STRATEGY</label><div class="strategyGrid">
+<button class="strategy active" data-strategy="SMC" onclick="chooseStrategy('SMC')"><b>SMC</b><small>Simplified swing structure</small></button>
+<button class="strategy" data-strategy="EMA" onclick="chooseStrategy('EMA')"><b>EMA Trend</b><small>Fast/slow EMA relationship</small></button>
+<button class="strategy" data-strategy="RSI" onclick="chooseStrategy('RSI')"><b>RSI Momentum</b><small>Overbought/oversold levels</small></button>
+<button class="strategy" data-strategy="BREAKOUT" onclick="chooseStrategy('BREAKOUT')"><b>Breakout</b><small>Previous range break</small></button>
+<button class="strategy" data-strategy="EMC" onclick="chooseStrategy('EMC')"><b>EMC / Confluence</b><small>EMA, RSI and MACD agreement</small></button>
+<button class="strategy" data-strategy="SR" onclick="chooseStrategy('SR')"><b>Support / Resistance</b><small>Recent range levels</small></button>
+</div></div>
+<div class="threeCol">
+<div class="field"><label>FAST EMA</label><input id="fastPeriod" type="number" min="2" max="100" value="9" onchange="settingsChanged()"></div>
+<div class="field"><label>SLOW EMA</label><input id="slowPeriod" type="number" min="3" max="200" value="21" onchange="settingsChanged()"></div>
+<div class="field"><label>RSI PERIOD</label><input id="rsiPeriod" type="number" min="2" max="50" value="14" onchange="settingsChanged()"></div>
+<div class="field"><label>RSI LOW</label><input id="rsiLow" type="number" min="5" max="49" value="30" onchange="settingsChanged()"></div>
+<div class="field"><label>RSI HIGH</label><input id="rsiHigh" type="number" min="51" max="95" value="70" onchange="settingsChanged()"></div>
+<div class="field"><label>RANGE LOOKBACK</label><input id="lookback" type="number" min="5" max="100" value="20" onchange="settingsChanged()"></div>
+<div class="field"><label>RISK / REWARD</label><select id="rrSetting" onchange="settingsChanged()"><option value="1">1:1</option><option value="1.5">1:1.5</option><option value="2" selected>1:2</option><option value="3">1:3</option></select></div>
+</div>
+<button class="btn primary full" onclick="analyze()">Run analysis with these settings</button>
+<p class="notice">Changes affect this educational rule model. Settings are not optimized or proven profitable. EMC is a custom confluence model; SMC is only a simplified price-structure proxy.</p>
+</div>
+<div class="card"><div class="sectionHead"><h2>Analysis Result</h2><span class="pill" id="analysisTime">WAITING</span></div><div id="analysisResult" class="empty">Waiting for candle data.</div></div>
+</div>
+<div class="card"><div class="sectionHead"><h2>Technical Indicators</h2><span class="pill" id="indicatorPair">BTC / USDT</span></div><div class="cards4" style="margin:0"><div><div class="metricLabel">RSI</div><div class="metricValue" id="rsi">--</div><div class="metricFoot" id="rsiNote">Awaiting data</div></div><div><div class="metricLabel">MACD</div><div class="metricValue" id="macd">--</div><div class="metricFoot" id="macdNote">Awaiting data</div></div><div><div class="metricLabel">EMA 20</div><div class="metricValue" id="ema20">--</div></div><div><div class="metricLabel">EMA 50</div><div class="metricValue" id="ema50">--</div></div></div></div>
+</section>
+
+<section class="page" id="page-news">
+<div class="toprow"><div><h1 class="pageTitle">Crypto News</h1><div class="sub">Headlines from external publishers. Open the source to read the full story.</div></div><button class="btn primary" onclick="loadNews()">Refresh news</button></div>
+<div class="card"><div class="chartTop"><select id="newsFilter" onchange="renderNews()"><option value="all">All crypto news</option><option value="BTC">Bitcoin</option><option value="ETH">Ethereum</option><option value="SOL">Solana</option><option value="market">Market & regulation</option></select><span class="pill" id="newsStatus">NEWS FEED</span></div><div id="newsRows"><div class="empty">Loading headlines...</div></div><p class="notice">News availability depends on the external feed and browser connectivity. Headlines are not verified by TradeLab and do not constitute trading advice.</p></div>
 </section>
 
 <section class="page" id="page-trade">
- <div class="toprow"><div><h1 class="pageTitle">Paper Trading</h1><div class="sub">Practice trade execution with virtual money.</div></div><span class="signalBadge">SIMULATION ONLY</span></div>
- <div class="twoCol">
-  <div class="card"><div class="sectionHead"><h2>Place Virtual Trade</h2><span class="pill">NO REAL ORDERS</span></div>
-   <div class="field"><label>ASSET</label><select id="tradeAsset" onchange="estimateTrade()"><option value="BTC">BTC — Bitcoin</option><option value="ETH">ETH — Ethereum</option><option value="SOL">SOL — Solana</option><option value="BNB">BNB</option></select></div>
-   <div class="field"><label>TRADE SIDE</label><select id="tradeSide" onchange="estimateTrade()"><option value="buy">Buy / Long</option><option value="sell">Sell / Reduce position</option></select></div>
-   <div class="field"><label>AMOUNT (USD)</label><input type="number" id="tradeAmount" min="1" step="any" value="100" oninput="estimateTrade()"></div>
-   <div class="signalGrid"><div class="signalStat"><span>Market price</span><b id="tradePrice">--</b></div><div class="signalStat"><span>Estimated quantity</span><b id="tradeQty">--</b></div><div class="signalStat"><span>Available cash</span><b id="tradeCash">--</b></div></div>
-   <button class="btn primary full" onclick="executeTrade()">Confirm paper trade</button><p id="tradeMessage" class="sub" aria-live="polite"></p>
-  </div>
-  <div class="card"><div class="sectionHead"><h2>Trade Risk Planner</h2></div>
-   <div class="field"><label>ENTRY PRICE</label><input type="number" id="riskEntry" placeholder="Entry price" step="any"></div>
-   <div class="field"><label>STOP LOSS</label><input type="number" id="riskStop" placeholder="Stop-loss price" step="any"></div>
-   <div class="field"><label>TARGET PRICE</label><input type="number" id="riskTarget" placeholder="Target price" step="any"></div>
-   <div class="field"><label>ACCOUNT RISK (%)</label><input type="number" id="riskPct" value="1" min=".1" max="5" step=".1"></div>
-   <button class="btn full" onclick="calculateRisk()">Calculate risk and reward</button><div id="riskResult" class="sub" style="margin-top:12px">Enter prices to calculate position sizing.</div>
-  </div>
- </div>
+<div class="toprow"><div><h1 class="pageTitle">Paper Trading</h1><div class="sub">Practice with virtual money. No real orders are sent.</div></div><span class="signalBadge">SIMULATION ONLY</span></div>
+<div class="twoCol"><div class="card"><div class="sectionHead"><h2>Place Virtual Trade</h2><span class="pill">NO REAL ORDERS</span></div>
+<div class="field"><label>ASSET</label><select id="tradeAsset" onchange="estimateTrade()"><option value="BTC">BTC — Bitcoin</option><option value="ETH">ETH — Ethereum</option><option value="SOL">SOL — Solana</option><option value="BNB">BNB</option></select></div>
+<div class="field"><label>TRADE SIDE</label><select id="tradeSide" onchange="estimateTrade()"><option value="buy">Buy / Long</option><option value="sell">Sell / Reduce position</option></select></div>
+<div class="field"><label>AMOUNT (USD)</label><input type="number" id="tradeAmount" min="1" step="any" value="100" oninput="estimateTrade()"></div>
+<div class="signalGrid"><div class="signalStat"><span>Market price</span><b id="tradePrice">--</b></div><div class="signalStat"><span>Quantity</span><b id="tradeQty">--</b></div><div class="signalStat"><span>Available cash</span><b id="tradeCash">--</b></div></div>
+<button class="btn primary full" onclick="executeTrade()">Confirm paper trade</button><p id="tradeMessage" class="sub" aria-live="polite"></p></div>
+<div class="card"><div class="sectionHead"><h2>Risk Planner</h2></div><div class="field"><label>ENTRY PRICE</label><input type="number" id="riskEntry" placeholder="Entry price" step="any"></div><div class="field"><label>STOP LOSS</label><input type="number" id="riskStop" placeholder="Stop-loss" step="any"></div><div class="field"><label>TARGET PRICE</label><input type="number" id="riskTarget" placeholder="Target" step="any"></div><div class="field"><label>ACCOUNT RISK (%)</label><input type="number" id="riskPct" value="1" min=".1" max="5" step=".1"></div><button class="btn full" onclick="calculateRisk()">Calculate risk and reward</button><div id="riskResult" class="sub" style="margin-top:12px">Enter prices to calculate position sizing.</div></div></div>
 </section>
 
 <section class="page" id="page-portfolio">
- <div class="toprow"><div><h1 class="pageTitle">Portfolio & History</h1><div class="sub">Review virtual holdings, P&L and completed trades.</div></div><button class="btn primary" onclick="exportCSV()">Export CSV ↓</button></div>
- <div class="cards4">
-  <div class="card"><div class="metricLabel">EQUITY</div><div class="metricValue" id="portEquity">$10,000</div></div>
-  <div class="card"><div class="metricLabel">VIRTUAL CASH</div><div class="metricValue" id="portCash">$10,000</div></div>
-  <div class="card"><div class="metricLabel">REALIZED P&L</div><div class="metricValue" id="portRealized">$0</div></div>
-  <div class="card"><div class="metricLabel">UNREALIZED P&L</div><div class="metricValue" id="portUnrealized">$0</div></div>
- </div>
- <div class="card" style="margin-bottom:14px"><div class="sectionHead"><h2>Open Positions</h2></div><div id="positions"></div></div>
- <div class="card"><div class="sectionHead"><h2>Trade History</h2><button class="btn" onclick="exportCSV()">Download CSV</button></div><div id="history"></div></div>
- <div class="card" style="margin-top:14px"><h2>Account Controls</h2><p class="notice">Resetting permanently clears saved virtual positions and trade history in this browser.</p><button class="btn danger" onclick="resetAccount()">Reset paper account</button></div>
+<div class="toprow"><div><h1 class="pageTitle">Portfolio & History</h1><div class="sub">Review holdings, P&L and completed virtual trades.</div></div><button class="btn primary" onclick="exportCSV()">Export CSV ↓</button></div>
+<div class="cards4"><div class="card"><div class="metricLabel">EQUITY</div><div class="metricValue" id="portEquity">$10,000</div></div><div class="card"><div class="metricLabel">VIRTUAL CASH</div><div class="metricValue" id="portCash">$10,000</div></div><div class="card"><div class="metricLabel">REALIZED P&L</div><div class="metricValue" id="portRealized">$0</div></div><div class="card"><div class="metricLabel">UNREALIZED P&L</div><div class="metricValue" id="portUnrealized">$0</div></div></div>
+<div class="card"><div class="sectionHead"><h2>Open Positions</h2></div><div id="positions"></div></div><div class="card"><div class="sectionHead"><h2>Trade History</h2><button class="btn" onclick="exportCSV()">Download CSV</button></div><div id="history"></div></div><div class="card"><h2 style="font-size:13px">Account Controls</h2><p class="notice">Resetting clears virtual positions and trade history saved in this browser.</p><button class="btn danger" onclick="resetAccount()">Reset paper account</button></div>
 </section>
 
 <section class="page" id="page-tools">
- <div class="toprow"><div><h1 class="pageTitle">Watchlist & Alerts</h1><div class="sub">Personal market monitoring tools saved in this browser.</div></div></div>
- <div class="twoCol">
-  <div class="card"><div class="sectionHead"><h2>Watchlist</h2></div><div id="watchTools"></div></div>
-  <div class="card"><div class="sectionHead"><h2>Create Price Alert</h2></div>
-   <div class="field"><label>COIN</label><select id="alertAsset"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="SOL">SOL</option><option value="BNB">BNB</option></select></div>
-   <div class="field"><label>CONDITION</label><select id="alertCondition"><option value="above">Price goes above</option><option value="below">Price goes below</option></select></div>
-   <div class="field"><label>TARGET USD</label><input type="number" id="alertTarget" placeholder="Target price" min=".000001" step="any"></div>
-   <button class="btn primary full" onclick="addAlert()">Create alert</button><button class="btn full" style="margin-top:8px" onclick="requestNotifications()">Enable browser notifications</button>
-   <div id="alerts" style="margin-top:12px"></div>
-   <p class="notice">Price alerts only run while this page is open. Browser notification permission is optional.</p>
-  </div>
- </div>
+<div class="toprow"><div><h1 class="pageTitle">Tools & Watchlist</h1><div class="sub">Price alerts, watchlist and browser preferences.</div></div></div>
+<div class="twoCol"><div class="card"><div class="sectionHead"><h2>Watchlist</h2></div><div id="watchTools"></div></div><div class="card"><div class="sectionHead"><h2>Create Price Alert</h2></div><div class="field"><label>COIN</label><select id="alertAsset"><option>BTC</option><option>ETH</option><option>SOL</option><option>BNB</option></select></div><div class="field"><label>CONDITION</label><select id="alertCondition"><option value="above">Price goes above</option><option value="below">Price goes below</option></select></div><div class="field"><label>TARGET USD</label><input type="number" id="alertTarget" placeholder="Target price" min=".000001" step="any"></div><button class="btn primary full" onclick="addAlert()">Create alert</button><button class="btn full" style="margin-top:8px" onclick="requestNotifications()">Enable browser notifications</button><div id="alerts" style="margin-top:12px"></div><p class="notice">Alerts work only while this page is open. Browser notifications are optional.</p></div></div>
+<div class="card"><h2 style="font-size:13px">Saved Preferences</h2><p class="sub">Your strategy settings and drawings are saved locally in this browser. Clearing browser site data may delete them.</p><button class="btn" onclick="savePreferences();toast('Preferences saved in this browser')">Save preferences now</button></div>
 </section>
-
 <footer>TradeLab Pro · Educational analytics and simulated trading · Crypto markets are volatile.</footer>
-</main>
-</div>
-<div id="toast" hidden class="toast"></div>
-
+</main></div>
+<div id="toast" class="toast" hidden></div>
 <script>
-const START=10000;
-const assets={BTC:{name:"Bitcoin",price:67000},ETH:{name:"Ethereum",price:2500},SOL:{name:"Solana",price:150},BNB:{name:"BNB",price:600}};
-let prices={},live=false;
-let account={cash:START,holdings:{},realized:0,history:[]};
-let watchlist=["BTC","ETH"],alerts=[],candles=[];
-let chart=null,candleSeries=null,ma20Series=null,ma50Series=null,chartReady=false;
-let currentTf="15m",currentSymbol="BTCUSDT",chartRequest=0,selectedStrategy="SMC";
-let lastAlertChecks={};
-
+const START=10000,assets={BTC:{name:"Bitcoin",price:67000},ETH:{name:"Ethereum",price:2500},SOL:{name:"Solana",price:150},BNB:{name:"BNB",price:600}};
+let prices={},live=false,account={cash:START,holdings:{},realized:0,history:[]},watchlist=["BTC","ETH"],alerts=[],candles=[];
+let chart=null,candleSeries=null,lineSeries=null,ema20Series=null,ema50Series=null,chartReady=false,currentTf="15m",currentSymbol="BTCUSDT",chartRequest=0,selectedStrategy="SMC",drawMode="cursor",drawings=[],drawStart=null,newsItems=[],lastNews=[];
+const $=id=>document.getElementById(id);
 function fmt(n,d=2){return Number(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d})}
-function money(n){return (n<0?"-$":"$")+fmt(Math.abs(n))}
+function money(n){n=Number(n)||0;return(n<0?"-$":"$")+fmt(Math.abs(n))}
 function price(a){return prices[a]||assets[a].price}
 function qty(a){return Number(account.holdings[a]?.qty)||0}
 function cost(a){return Number(account.holdings[a]?.cost)||0}
 function value(a){return qty(a)*price(a)}
 function uPnl(a){return value(a)-cost(a)}
-function totals(){let equity=account.cash,invested=0,unreal=0;Object.keys(assets).forEach(a=>{equity+=value(a);invested+=cost(a);unreal+=uPnl(a)});return {equity,invested,unreal,realized:account.realized,total:account.realized+unreal}}
-function toast(msg){const e=document.getElementById("toast");e.textContent=msg;e.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>e.hidden=true,3000)}
-function save(){try{localStorage.setItem("tradelab_pro_v3",JSON.stringify({account,watchlist,alerts}))}catch(e){}}
-function loadSaved(){
- try{
-  let s=JSON.parse(localStorage.getItem("tradelab_pro_v3")||"null");
-  if(s){if(s.account&&typeof s.account.cash==="number")account=s.account;if(Array.isArray(s.watchlist))watchlist=s.watchlist.filter(a=>assets[a]);if(Array.isArray(s.alerts))alerts=s.alerts;return}
-  s=JSON.parse(localStorage.getItem("tradelab_pro")||"null");
-  if(s){if(s.account)account=s.account;if(Array.isArray(s.watchlist))watchlist=s.watchlist;if(Array.isArray(s.alerts))alerts=s.alerts;return}
-  s=JSON.parse(localStorage.getItem("tradelab_v2")||"null");
-  if(s&&typeof s.cash==="number")account={cash:s.cash,holdings:s.holdings||{},realized:Number(s.realized)||0,history:Array.isArray(s.history)?s.history:[]};
- }catch(e){}
-}
-function go(page){
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));
- document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
- renderAll();if(page==="analysis")analyze();if(page==="overview")setTimeout(resizeChart,40);
- window.scrollTo({top:0,behavior:"smooth"});
-}
-function syncAsset(symbol){
- currentSymbol=symbol;
- ["overviewAsset","analysisAsset","chartAsset"].forEach(id=>{const e=document.getElementById(id);if(e&&e.value!==symbol)e.value=symbol});
- document.getElementById("overviewQuote").textContent=symbol.replace("USDT"," / USDT");
- loadChart();
-}
-function syncAnalysisAsset(){syncAsset(document.getElementById("analysisAsset").value);analyze()}
-function setTf(tf){currentTf=tf;document.querySelectorAll(".tf").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));loadChart()}
-function chooseStrategy(s){selectedStrategy=s;document.querySelectorAll(".strategy").forEach(b=>b.classList.toggle("active",b.dataset.strategy===s));analyze()}
-function setMetric(id,n){const e=document.getElementById(id);e.textContent=money(n);e.className="metricValue "+(n>0?"green":n<0?"red":"")}
-function renderAccount(){
- const t=totals(),ret=(t.equity-START)/START*100;
- document.getElementById("equity").textContent=money(t.equity);setMetric("pnl",t.total);
- document.getElementById("return").textContent=(ret>=0?"+":"")+ret.toFixed(2)+"% total return";
- document.getElementById("return").className="metricFoot "+(ret>=0?"green":"red");
- document.getElementById("cash").textContent=money(account.cash);
- document.getElementById("openCount").textContent=Object.keys(assets).filter(a=>qty(a)>0).length;
- document.getElementById("portEquity").textContent=money(t.equity);document.getElementById("portCash").textContent=money(account.cash);
- setMetric("portRealized",t.realized);setMetric("portUnrealized",t.unreal);
-}
-function renderAllocation(){
- const t=totals(),rows=Object.keys(assets).filter(a=>qty(a)>0);
- document.getElementById("allocation").innerHTML=rows.length?rows.map(a=>{let pct=t.equity>0?value(a)/t.equity*100:0;return `<div class="allocationRow"><b>${a}</b><div><div>${assets[a].name}</div><div class="allocationBar"><div style="width:${Math.max(0,Math.min(100,pct))}%"></div></div></div><b>${pct.toFixed(1)}%</b></div>`}).join(""):"<div class='empty'>No holdings yet. Start with a simulated trade.</div>";
-}
-function renderMarkets(){
- const q=(document.getElementById("marketSearch")?.value||"").toLowerCase();
- const rows=Object.keys(assets).filter(a=>(a+" "+assets[a].name).toLowerCase().includes(q));
- document.getElementById("marketRows").innerHTML=rows.map(a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${live?"Exchange quote":"Reference price"}</div></div><div class="coinprice">${money(price(a))}<br><button class="smallbtn" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"★ Watching":"☆ Watch"}</button> <button class="smallbtn" onclick="selectTrade('${a}')">Trade</button></div></div>`).join("")||"<div class='empty'>No coin matches that search.</div>";
-}
-function renderWatch(){
- const make=(a,controls)=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${live?"Exchange quote":"Reference price"}</div></div><div class="coinprice">${money(price(a))}<br>${controls?`<button class="smallbtn" onclick="toggleWatch('${a}')">Remove</button>`:`<span class="coinmeta">Watchlist</span>`}</div></div>`;
- document.getElementById("watchOverview").innerHTML=(watchlist.length?watchlist.map(a=>make(a,false)).join(""):"<div class='empty'>Add coins from Markets.</div>");
- document.getElementById("watchTools").innerHTML=Object.keys(assets).map(a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${money(price(a))}</div></div><button class="btn ${watchlist.includes(a)?"":"primary"}" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"Remove":"Add"}</button></div>`).join("");
-}
-function toggleWatch(a){watchlist=watchlist.includes(a)?watchlist.filter(x=>x!==a):[...watchlist,a];save();renderWatch();renderMarkets();toast(watchlist.includes(a)?a+" added to watchlist":a+" removed from watchlist")}
-function renderPositions(){
- const rows=Object.keys(assets).filter(a=>qty(a)>0);
- document.getElementById("positions").innerHTML=rows.length?"<div class='tableWrap'><table><thead><tr><th>ASSET</th><th>QUANTITY</th><th>AVG COST</th><th>VALUE</th><th>UNREALIZED P&L</th></tr></thead><tbody>"+rows.map(a=>`<tr><td><b>${a}</b></td><td>${qty(a).toFixed(7)}</td><td>${money(cost(a)/qty(a))}</td><td>${money(value(a))}</td><td class="${uPnl(a)>=0?'green':'red'}">${money(uPnl(a))}</td></tr>`).join("")+"</tbody></table></div>":"<div class='empty'>No open positions. Place a paper trade to start building a portfolio.</div>";
-}
-function renderHistory(){
- const rows=account.history.slice(0,100);
- document.getElementById("history").innerHTML=rows.length?"<div class='tableWrap'><table><thead><tr><th>SIDE</th><th>ASSET</th><th>AMOUNT</th><th>PRICE</th><th>TIME</th></tr></thead><tbody>"+rows.map(t=>`<tr><td class="${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()}</td><td>${t.asset}</td><td>${money(t.amount)}</td><td>${money(t.price)}</td><td>${t.time}</td></tr>`).join("")+"</tbody></table></div>":"<div class='empty'>Your completed paper trades will appear here.</div>";
- document.getElementById("recentTrades").innerHTML=rows.length?rows.slice(0,4).map(t=>`<div class="watchrow"><div><div class="coinname ${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()} ${t.asset}</div><div class="coinmeta">${t.time}</div></div><b>${money(t.amount)}</b></div>`).join(""):"<div class='empty'>No trades recorded yet.</div>";
-}
-function selectTrade(a){document.getElementById("tradeAsset").value=a;go("trade");estimateTrade()}
-function estimateTrade(){
- const a=document.getElementById("tradeAsset").value,amt=Number(document.getElementById("tradeAmount").value);
- document.getElementById("tradePrice").textContent=money(price(a));document.getElementById("tradeCash").textContent=money(account.cash);
- document.getElementById("tradeQty").textContent=amt>0?(amt/price(a)).toFixed(8):"--";
-}
-function executeTrade(){
- const a=document.getElementById("tradeAsset").value,side=document.getElementById("tradeSide").value,amt=Number(document.getElementById("tradeAmount").value),p=price(a),msg=document.getElementById("tradeMessage");
- if(!Number.isFinite(amt)||amt<=0){msg.textContent="Enter a valid amount.";return}
- if(side==="buy"){
-  if(amt>account.cash){msg.textContent="Insufficient virtual cash.";return}
-  const old=account.holdings[a]||{qty:0,cost:0},q=amt/p;account.cash-=amt;account.holdings[a]={qty:old.qty+q,cost:old.cost+amt};
- }else{
-  const old=account.holdings[a]||{qty:0,cost:0},q=amt/p;
-  if(q>old.qty+1e-12){msg.textContent="Not enough "+a+" to sell.";return}
-  const sold=Math.min(q,old.qty),allocated=old.cost*(sold/old.qty);account.realized+=sold*p-allocated;account.cash+=sold*p;
-  const left=old.qty-sold;account.holdings[a]=left<1e-12?{qty:0,cost:0}:{qty:left,cost:old.cost-allocated};
- }
- account.history.unshift({side,asset:a,amount:amt,price:p,time:new Date().toLocaleString()});save();renderAll();estimateTrade();
- msg.textContent="Paper trade completed: "+side.toUpperCase()+" "+a+" for "+money(amt);toast("Paper trade recorded");
-}
-function calculateRisk(){
- const entry=Number(document.getElementById("riskEntry").value),stop=Number(document.getElementById("riskStop").value),target=Number(document.getElementById("riskTarget").value),pct=Number(document.getElementById("riskPct").value),out=document.getElementById("riskResult");
- const valid=[entry,stop,target,pct].every(Number.isFinite)&&entry>0&&stop>0&&target>0&&pct>0&&pct<=5;
- if(!valid){out.textContent="Enter valid positive prices and account risk between 0.1% and 5%.";return}
- const risk=Math.abs(entry-stop),reward=Math.abs(target-entry);
- if(risk===0){out.textContent="Entry and stop loss must differ.";return}
- const rr=reward/risk,t=totals(),riskCash=t.equity*pct/100,qtyRisk=riskCash/risk,notional=qtyRisk*entry;
- out.innerHTML=`Risk per unit: <b>${money(risk)}</b><br>Reward per unit: <b>${money(reward)}</b><br>Risk / reward: <b>1 : ${rr.toFixed(2)}</b><br>Estimated quantity at risk limit: <b>${qtyRisk.toFixed(7)}</b><br>Approximate position notional: <b>${money(notional)}</b><br>Account risk budget: <b>${money(riskCash)}</b><p class="notice">Sizing assumes a long trade when target is above entry and a short trade when target is below entry. Fees, slippage and gaps are excluded.</p>`;
-}
-function exportCSV(){
- const rows=[["Side","Asset","Amount USD","Price USD","Time"],...account.history.map(t=>[t.side,t.asset,t.amount,t.price,t.time])];
- const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
- const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="tradelab-history.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
+function totals(){let equity=account.cash,unreal=0;Object.keys(assets).forEach(a=>{equity+=value(a);unreal+=uPnl(a)});return{equity,unreal,realized:account.realized,total:account.realized+unreal}}
+function toast(msg){let e=$("toast");e.textContent=msg;e.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>e.hidden=true,3000)}
+function save(){try{localStorage.setItem("tradelab_pro_v4",JSON.stringify({account,watchlist,alerts,drawings,settings:getSettings(),chartType:$("chartType")?.value||"candles",chartTheme:$("chartTheme")?.value||"dark"}))}catch(e){}}
+function getSettings(){return{fast:$("fastPeriod")?.value||9,slow:$("slowPeriod")?.value||21,rsi:$("rsiPeriod")?.value||14,low:$("rsiLow")?.value||30,high:$("rsiHigh")?.value||70,lookback:$("lookback")?.value||20,rr:$("rrSetting")?.value||2,strategy:selectedStrategy,tf:currentTf,symbol:currentSymbol}}
+function savePreferences(){save()}
+function loadSaved(){try{let s=JSON.parse(localStorage.getItem("tradelab_pro_v4")||"null");if(!s)s=JSON.parse(localStorage.getItem("tradelab_pro_v3")||"null");if(!s)s=JSON.parse(localStorage.getItem("tradelab_pro")||"null");if(s){if(s.account&&typeof s.account.cash==="number")account=s.account;if(Array.isArray(s.watchlist))watchlist=s.watchlist.filter(a=>assets[a]);if(Array.isArray(s.alerts))alerts=s.alerts;if(Array.isArray(s.drawings))drawings=s.drawings;if(s.settings){let map={fastPeriod:"fast",slowPeriod:"slow",rsiPeriod:"rsi",rsiLow:"low",rsiHigh:"high",lookback:"lookback",rrSetting:"rr"};Object.keys(map).forEach(id=>{if($(id)&&s.settings[map[id]]!==undefined)$(id).value=s.settings[map[id]]});if(s.settings.strategy)selectedStrategy=s.settings.strategy;if(s.settings.tf)currentTf=s.settings.tf;if(s.settings.symbol)currentSymbol=s.settings.symbol}if($("chartType")&&s.chartType)$("chartType").value=s.chartType;if($("chartTheme")&&s.chartTheme)$("chartTheme").value=s.chartTheme;return}let old=JSON.parse(localStorage.getItem("tradelab_v2")||"null");if(old&&typeof old.cash==="number")account={cash:old.cash,holdings:old.holdings||{},realized:Number(old.realized)||0,history:Array.isArray(old.history)?old.history:[]}}catch(e){}}
+function go(page){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));renderAll();if(page==="analysis"){setTimeout(()=>{resizeChart();drawAll();analyze()},60)}if(page==="overview")setTimeout(resizeChart,60);if(page==="news"&&!newsItems.length)loadNews();window.scrollTo({top:0,behavior:"smooth"})}
+function syncAsset(symbol){currentSymbol=symbol;["overviewAsset","chartAsset"].forEach(id=>{if($(id)&&$(id).value!==symbol)$(id).value=symbol});$("overviewQuote").textContent=symbol.replace("USDT"," / USDT");loadChart()}
+function setTf(tf){currentTf=tf;document.querySelectorAll(".tf[data-tf]").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));save();loadChart()}
+function chooseStrategy(s){selectedStrategy=s;document.querySelectorAll(".strategy").forEach(b=>b.classList.toggle("active",b.dataset.strategy===s));save();analyze()}
+function settingsChanged(){save();analyze();updateIndicators(candles)}
+function setMetric(id,n){let e=$(id);e.textContent=money(n);e.className="metricValue "+(n>0?"green":n<0?"red":"")}
+function renderAccount(){let t=totals(),ret=(t.equity-START)/START*100;$("equity").textContent=money(t.equity);setMetric("pnl",t.total);$("return").textContent=(ret>=0?"+":"")+ret.toFixed(2)+"% total return";$("return").className="metricFoot "+(ret>=0?"green":"red");$("cash").textContent=money(account.cash);$("openCount").textContent=Object.keys(assets).filter(a=>qty(a)>0).length;$("portEquity").textContent=money(t.equity);$("portCash").textContent=money(account.cash);setMetric("portRealized",t.realized);setMetric("portUnrealized",t.unreal)}
+function renderAllocation(){let t=totals(),rows=Object.keys(assets).filter(a=>qty(a)>0);$("allocation").innerHTML=rows.length?rows.map(a=>{let pct=t.equity>0?value(a)/t.equity*100:0;return`<div class="allocationRow"><b>${a}</b><div>${assets[a].name}<div class="allocationBar"><div style="width:${Math.max(0,Math.min(100,pct))}%"></div></div></div><b>${pct.toFixed(1)}%</b></div>`}).join(""):"<div class='empty'>No holdings yet. Start with a simulated trade.</div>"}
+function renderMarkets(){let q=($("marketSearch")?.value||"").toLowerCase(),rows=Object.keys(assets).filter(a=>(a+" "+assets[a].name).toLowerCase().includes(q));$("marketRows").innerHTML=rows.map(a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${live?"Exchange quote":"Reference price"}</div></div><div class="coinprice">${money(price(a))}<br><button class="smallbtn" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"★ Watching":"☆ Watch"}</button> <button class="smallbtn" onclick="selectTrade('${a}')">Trade</button></div></div>`).join("")||"<div class='empty'>No coin matches.</div>"}
+function renderWatch(){const make=a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${live?"Live exchange quote":"Reference price"}</div></div><div class="coinprice">${money(price(a))}<br><button class="smallbtn" onclick="selectTrade('${a}')">Trade</button></div></div>`;$("watchOverview").innerHTML=watchlist.length?watchlist.map(make).join(""):"<div class='empty'>Add coins from Markets.</div>";$("watchTools").innerHTML=Object.keys(assets).map(a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${money(price(a))}</div></div><button class="btn ${watchlist.includes(a)?"":"primary"}" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"Remove":"Add"}</button></div>`).join("")}
+function toggleWatch(a){watchlist=watchlist.includes(a)?watchlist.filter(x=>x!==a):[...watchlist,a];save();renderWatch();renderMarkets();toast(watchlist.includes(a)?a+" added":"Removed "+a)}
+function renderPositions(){let rows=Object.keys(assets).filter(a=>qty(a)>0);$("positions").innerHTML=rows.length?"<div class='tableWrap'><table><thead><tr><th>ASSET</th><th>QUANTITY</th><th>AVG COST</th><th>VALUE</th><th>UNREALIZED P&L</th></tr></thead><tbody>"+rows.map(a=>`<tr><td><b>${a}</b></td><td>${qty(a).toFixed(7)}</td><td>${money(cost(a)/qty(a))}</td><td>${money(value(a))}</td><td class="${uPnl(a)>=0?'green':'red'}">${money(uPnl(a))}</td></tr>`).join("")+"</tbody></table></div>":"<div class='empty'>No open positions.</div>"}
+function renderHistory(){let rows=account.history.slice(0,100);$("history").innerHTML=rows.length?"<div class='tableWrap'><table><thead><tr><th>SIDE</th><th>ASSET</th><th>AMOUNT</th><th>PRICE</th><th>TIME</th></tr></thead><tbody>"+rows.map(t=>`<tr><td class="${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()}</td><td>${t.asset}</td><td>${money(t.amount)}</td><td>${money(t.price)}</td><td>${t.time}</td></tr>`).join("")+"</tbody></table></div>":"<div class='empty'>No trades recorded yet.</div>";$("recentTrades").innerHTML=rows.length?rows.slice(0,4).map(t=>`<div class="watchrow"><div><div class="coinname ${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()} ${t.asset}</div><div class="coinmeta">${t.time}</div></div><b>${money(t.amount)}</b></div>`).join(""):"<div class='empty'>No recent activity.</div>"}
+function selectTrade(a){$("tradeAsset").value=a;go("trade");estimateTrade()}
+function estimateTrade(){let a=$("tradeAsset").value,amt=Number($("tradeAmount").value);$("tradePrice").textContent=money(price(a));$("tradeCash").textContent=money(account.cash);$("tradeQty").textContent=amt>0?(amt/price(a)).toFixed(8):"--"}
+function executeTrade(){let a=$("tradeAsset").value,side=$("tradeSide").value,amt=Number($("tradeAmount").value),p=price(a),msg=$("tradeMessage");if(!Number.isFinite(amt)||amt<=0){msg.textContent="Enter a valid amount.";return}if(side==="buy"){if(amt>account.cash){msg.textContent="Insufficient virtual cash.";return}let old=account.holdings[a]||{qty:0,cost:0},q=amt/p;account.cash-=amt;account.holdings[a]={qty:old.qty+q,cost:old.cost+amt}}else{let old=account.holdings[a]||{qty:0,cost:0},q=amt/p;if(q>old.qty+1e-12){msg.textContent="Not enough "+a+" to sell.";return}let sold=Math.min(q,old.qty),allocated=old.cost*(sold/old.qty);account.realized+=sold*p-allocated;account.cash+=sold*p;let left=old.qty-sold;account.holdings[a]=left<1e-12?{qty:0,cost:0}:{qty:left,cost:old.cost-allocated}}account.history.unshift({side,asset:a,amount:amt,price:p,time:new Date().toLocaleString()});save();renderAll();estimateTrade();msg.textContent="Paper trade completed: "+side.toUpperCase()+" "+a+" for "+money(amt);toast("Paper trade recorded")}
+function calculateRisk(){let entry=Number($("riskEntry").value),stop=Number($("riskStop").value),target=Number($("riskTarget").value),pct=Number($("riskPct").value),out=$("riskResult");if(![entry,stop,target,pct].every(Number.isFinite)||entry<=0||stop<=0||target<=0||pct<=0||pct>5){out.textContent="Enter positive prices and risk between 0.1% and 5%.";return}let risk=Math.abs(entry-stop),reward=Math.abs(target-entry);if(!risk){out.textContent="Entry and stop must differ.";return}let riskCash=totals().equity*pct/100,q=riskCash/risk;out.innerHTML=`Risk per unit: <b>${money(risk)}</b><br>Reward per unit: <b>${money(reward)}</b><br>Risk/reward: <b>1 : ${(reward/risk).toFixed(2)}</b><br>Estimated quantity: <b>${q.toFixed(7)}</b><br>Approximate notional: <b>${money(q*entry)}</b><br>Risk budget: <b>${money(riskCash)}</b><p class="notice">Fees, slippage and price gaps are excluded.</p>`}
+function exportCSV(){let rows=[["Side","Asset","Amount USD","Price USD","Time"],...account.history.map(t=>[t.side,t.asset,t.amount,t.price,t.time])],csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n"),blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="tradelab-history.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 function resetAccount(){if(!confirm("Reset virtual cash to $10,000 and delete all paper positions and trade history?"))return;account={cash:START,holdings:{},realized:0,history:[]};save();renderAll();toast("Paper account reset")}
-function addAlert(){
- const a=document.getElementById("alertAsset").value,condition=document.getElementById("alertCondition").value,target=Number(document.getElementById("alertTarget").value);
- if(!Number.isFinite(target)||target<=0){toast("Enter a valid target price.");return}
- alerts.push({id:Date.now().toString()+Math.random().toString(16).slice(2),asset:a,condition,target,triggered:false});
- save();renderAlerts();document.getElementById("alertTarget").value="";toast("Price alert created");
-}
-function renderAlerts(){
- document.getElementById("alerts").innerHTML=alerts.length?alerts.map(a=>`<div class="watchrow"><div><div class="coinname">${a.asset} ${a.condition} ${money(a.target)}</div><div class="coinmeta">${a.triggered?"Triggered":"Waiting"} · Current ${money(price(a.asset))}</div></div><button class="btn" onclick="removeAlert('${a.id}')">Delete</button></div>`).join(""):"<div class='empty'>No alerts configured.</div>";
-}
+function addAlert(){let a=$("alertAsset").value,condition=$("alertCondition").value,target=Number($("alertTarget").value);if(!Number.isFinite(target)||target<=0){toast("Enter a valid target price.");return}alerts.push({id:Date.now().toString(),asset:a,condition,target,triggered:false});save();renderAlerts();$("alertTarget").value="";toast("Price alert created")}
+function renderAlerts(){$("alerts").innerHTML=alerts.length?alerts.map(a=>`<div class="watchrow"><div><div class="coinname">${a.asset} ${a.condition} ${money(a.target)}</div><div class="coinmeta">${a.triggered?"Triggered":"Waiting"} · Current ${money(price(a.asset))}</div></div><button class="btn" onclick="removeAlert('${a.id}')">Delete</button></div>`).join(""):"<div class='empty'>No alerts configured.</div>"}
 function removeAlert(id){alerts=alerts.filter(a=>a.id!==id);save();renderAlerts()}
-async function requestNotifications(){
- if(!("Notification"in window)){toast("Browser notifications are unavailable.");return}
- try{let p=await Notification.requestPermission();toast("Notification permission: "+p)}catch(e){toast("Notification permission could not be requested")}
-}
-function checkAlerts(){
- let changed=false;
- alerts.forEach(a=>{if(a.triggered)return;let p=price(a.asset),hit=a.condition==="above"?p>=a.target:p<=a.target;if(hit){a.triggered=true;changed=true;const msg=a.asset+" price alert: "+money(p);if("Notification"in window&&Notification.permission==="granted"){try{new Notification("TradeLab Pro",{body:msg})}catch(e){toast(msg)}}else toast(msg)}});
- if(changed){save();renderAlerts()}
-}
+async function requestNotifications(){if(!("Notification"in window)){toast("Notifications unavailable.");return}try{toast("Notification permission: "+await Notification.requestPermission())}catch(e){toast("Permission request failed.")}}
+function checkAlerts(){let changed=false;alerts.forEach(a=>{if(a.triggered)return;let p=price(a.asset),hit=a.condition==="above"?p>=a.target:p<=a.target;if(hit){a.triggered=true;changed=true;let msg=a.asset+" alert: "+money(p);if("Notification"in window&&Notification.permission==="granted"){try{new Notification("TradeLab Pro",{body:msg})}catch(e){toast(msg)}}else toast(msg)}});if(changed){save();renderAlerts()}}
 function renderAll(){renderAccount();renderAllocation();renderMarkets();renderWatch();renderPositions();renderHistory();renderAlerts();estimateTrade()}
-async function loadPrices(){
- document.getElementById("connection").textContent="FETCHING";
- try{
-  const syms=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"];
-  const data=await Promise.all(syms.map(s=>fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()})));
-  ["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(data[i].price));live=true;
-  document.getElementById("connection").textContent="MARKET ONLINE";document.getElementById("priceStatus").textContent="Exchange prices loaded successfully.";
- }catch(e){document.getElementById("connection").textContent="FALLBACK MODE";document.getElementById("priceStatus").textContent="Live API unavailable. Reference prices are shown; signals need candle data."}
- renderAll();checkAlerts();
-}
-function refreshAll(){loadPrices();loadChart();toast("Refreshing market data")}
-function initChart(){
- const host=document.getElementById("chart");
- if(!window.LightweightCharts){document.getElementById("chartStatus").textContent="Chart library failed to load. Check internet and refresh.";return false}
- try{
-  chart=LightweightCharts.createChart(host,{width:Math.max(280,host.clientWidth),height:host.clientHeight||280,layout:{background:{type:"solid",color:"#0f1725"},textColor:"#91a3bd",fontFamily:"Arial",fontSize:11},grid:{vertLines:{color:"#1b293e"},horzLines:{color:"#1b293e"}},rightPriceScale:{borderColor:"#26364d"},timeScale:{borderColor:"#26364d",timeVisible:true},crosshair:{mode:LightweightCharts.CrosshairMode.Normal}});
-  candleSeries=chart.addCandlestickSeries({upColor:"#37e6ad",downColor:"#ff6f83",borderUpColor:"#37e6ad",borderDownColor:"#ff6f83",wickUpColor:"#37e6ad",wickDownColor:"#ff6f83"});
-  ma20Series=chart.addLineSeries({color:"#7da9ff",lineWidth:2,priceLineVisible:false});ma50Series=chart.addLineSeries({color:"#eac778",lineWidth:2,priceLineVisible:false});
-  chartReady=true;
-  if(window.ResizeObserver){new ResizeObserver(resizeChart).observe(host)}else window.addEventListener("resize",resizeChart);
-  return true;
- }catch(e){document.getElementById("chartStatus").textContent="Chart initialization failed.";return false}
-}
-function resizeChart(){if(chart&&document.getElementById("chart").clientWidth>0)chart.applyOptions({width:document.getElementById("chart").clientWidth,height:document.getElementById("chart").clientHeight||280})}
-function sma(values,p){let out=[],sum=0;for(let i=0;i<values.length;i++){sum+=values[i];if(i>=p)sum-=values[i-p];if(i>=p-1)out.push({index:i,value:sum/p})}return out}
-function ema(values,p){let out=[];if(values.length<p)return out;let sum=0;for(let i=0;i<p;i++)sum+=values[i];let prev=sum/p;out[p-1]=prev;const k=2/(p+1);for(let i=p;i<values.length;i++){prev=values[i]*k+prev*(1-k);out[i]=prev}return out}
-function calcRSI(v,p=14){
- if(v.length<=p)return null;let g=0,l=0;
- for(let i=1;i<=p;i++){let d=v[i]-v[i-1];if(d>0)g+=d;else l-=d}
- let ag=g/p,al=l/p;
- for(let i=p+1;i<v.length;i++){let d=v[i]-v[i-1];ag=(ag*(p-1)+Math.max(d,0))/p;al=(al*(p-1)+Math.max(-d,0))/p}
- return al===0?100:100-100/(1+ag/al);
-}
-function macdData(v){const a=ema(v,12),b=ema(v,26),line=v.map((_,i)=>a[i]!==undefined&&b[i]!==undefined?a[i]-b[i]:null),valid=line.filter(x=>x!==null),sig=ema(valid,9);return {line:valid,signal:sig,now:valid.at(-1),signalNow:sig.at(-1)}}
-function updateIndicators(cs){
- const closes=cs.map(c=>c.close),r=calcRSI(closes),m=macdData(closes),s20=sma(closes,20),s50=sma(closes,50);
- document.getElementById("rsi").textContent=r===null?"--":r.toFixed(1);
- document.getElementById("rsiNote").textContent=r===null?"Not enough data":r>70?"High momentum":r<30?"Low momentum":"Mid-range";
- document.getElementById("macd").textContent=Number.isFinite(m.now)?m.now.toFixed(3):"--";
- document.getElementById("macdNote").textContent=Number.isFinite(m.now)&&Number.isFinite(m.signalNow)?m.now>m.signalNow?"Above signal line":"Below signal line":"Not enough data";
- document.getElementById("sma20").textContent=s20.length?money(s20.at(-1).value):"--";
- document.getElementById("sma50").textContent=s50.length?money(s50.at(-1).value):"--";
- if(chartReady){ma20Series.setData(s20.map(x=>({time:cs[x.index].time,value:x.value})));ma50Series.setData(s50.map(x=>({time:cs[x.index].time,value:x.value})))}
-}
-async function loadChart(){
- const req=++chartRequest,symbol=currentSymbol,tf=currentTf;
- document.getElementById("chartStatus").textContent="Loading candles...";
- if(!chartReady&&!initChart())return;
- try{
-  const r=await fetch("https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(tf)+"&limit=200");
-  if(!r.ok)throw Error("Exchange returned HTTP "+r.status);
-  const raw=await r.json();if(!Array.isArray(raw)||raw.length<30)throw Error("Not enough candle data");
-  if(req!==chartRequest)return;
-  candles=raw.map(k=>({time:Math.floor(+k[0]/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4]}));
-  candleSeries.setData(candles);updateIndicators(candles);chart.timeScale().fitContent();
-  const last=candles.at(-1),change=(last.close-last.open)/last.open*100;
-  document.getElementById("chartStatus").textContent="Last candle close "+money(last.close)+" · "+tf+" · "+candles.length+" candles";
-  document.getElementById("overviewQuote").textContent=symbol.replace("USDT"," / USDT")+" · "+money(last.close);
-  const a=symbol.replace("USDT","");prices[a]=last.close;live=true;
-  document.getElementById("indicatorPair").textContent=symbol.replace("USDT"," / USDT");
-  document.getElementById("connection").textContent="MARKET ONLINE";
-  renderAll();
-  if(document.getElementById("page-analysis").classList.contains("active"))analyze();
-  resizeChart();
- }catch(e){if(req!==chartRequest)return;document.getElementById("chartStatus").textContent="Candles unavailable: "+e.message+". Check internet or refresh."}
-}
-function analyze(){
- if(candles.length<55){document.getElementById("analysisResult").innerHTML="<div class='empty'>Waiting for at least 55 market candles. Check internet and refresh the chart.</div>";document.getElementById("analysisTime").textContent="NO DATA";document.getElementById("overviewSignal").innerHTML="<div class='empty'>Strategy scanner is waiting for market data.</div>";return}
- const c=candles,cl=c.map(x=>x.close),last=c.at(-1),prev=c.at(-2),rsi=calcRSI(cl),e9=ema(cl,9),e21=ema(cl,21),e50=ema(cl,50);
- const high=Math.max(...c.slice(-20,-1).map(x=>x.high)),low=Math.min(...c.slice(-20,-1).map(x=>x.low));
- const recentHigh=Math.max(...c.slice(-8,-1).map(x=>x.high)),recentLow=Math.min(...c.slice(-8,-1).map(x=>x.low));
- const m=macdData(cl);
- let score=0,why=[],direction="WAIT",label="No clear setup";
- const bull=last.close>e21.at(-1)&&e9.at(-1)>e21.at(-1),bear=last.close<e21.at(-1)&&e9.at(-1)<e21.at(-1);
- if(selectedStrategy==="EMA"){score=bull?2:bear?-2:0;why.push("EMA 9 and EMA 21 relationship", "Price vs EMA 21")}
- else if(selectedStrategy==="RSI"){score=rsi<30?2:rsi>70?-2:rsi>50?1:rsi<50?-1:0;why.push("RSI(14): "+rsi.toFixed(1),"Momentum threshold model")}
- else if(selectedStrategy==="BREAKOUT"){score=last.close>high?2:last.close<low?-2:0;why.push("Close vs previous 19-candle range","Breakout needs confirmation")}
- else if(selectedStrategy==="SMC"){score=last.close>recentHigh?2:last.close<recentLow?-2:0;why.push("Simplified swing-high/low break","Not actual order-book or institutional-flow data")}
- else if(selectedStrategy==="SR"){score=last.close<=low*1.01?1:last.close>=high*.99?-1:0;why.push("Recent range support/resistance","Levels are approximate")}
- else{score=(bull?1:bear?-1:0)+(rsi>50&&rsi<70?1:rsi<50&&rsi>30?-1:0)+(m.now>m.signalNow?1:-1);why.push("EMA trend","RSI momentum","MACD/signal relationship")}
- direction=score>=2?"LONG BIAS":score<=-2?"SHORT BIAS":"WAIT";
- label=direction==="LONG BIAS"?"Bullish conditions detected":direction==="SHORT BIAS"?"Bearish conditions detected":"Mixed / weak confirmation";
- const confidence=Math.min(85,Math.max(25,40+Math.abs(score)*9));
- const entry=last.close,stop=direction==="LONG BIAS"?Math.min(recentLow,entry*.99):direction==="SHORT BIAS"?Math.max(recentHigh,entry*1.01):entry;
- const risk=Math.abs(entry-stop),target=direction==="LONG BIAS"?entry+2*risk:direction==="SHORT BIAS"?entry-2*risk:entry;
- const rr=risk>0?Math.abs(target-entry)/risk:0;
- document.getElementById("analysisTime").textContent=new Date().toLocaleTimeString();
- document.getElementById("analysisResult").innerHTML=`<div class="signalHero"><span class="signalBadge">${selectedStrategy} · ${currentTf}</span><div class="signalName">${direction}</div><div class="sub">${label}</div><div class="metricFoot" style="margin-top:12px">Rule confluence score — not a probability of winning</div><div class="progress"><div style="width:${confidence}%"></div></div><div class="row"><small>Relative signal strength</small><b>${confidence}/100</b></div></div>
- <div class="signalGrid"><div class="signalStat"><span>Reference entry</span><b>${money(entry)}</b></div><div class="signalStat"><span>Illustrative stop</span><b>${money(stop)}</b></div><div class="signalStat"><span>Illustrative target</span><b>${money(target)}</b></div></div>
- <div class="row"><span class="muted">Risk/reward model</span><b>1 : ${rr.toFixed(2)}</b></div><div style="margin-top:13px">${why.map(x=>`<div class="watchrow"><span class="sub">${x}</span><span class="pill">CHECK</span></div>`).join("")}</div>
- <p class="notice">This is a simplified rule-based screen, not a verified trade recommendation. Entry, stop and target are illustrative. No 99% win rate is claimed. Backtest and paper-trade before considering real use.</p>
- <button class="btn primary full" onclick="useAnalysis()">Use prices in risk planner</button>`;
- document.getElementById("overviewSignal").innerHTML=`<div class="row"><div><div class="coinname">${selectedStrategy} · ${currentSymbol.replace("USDT","")}</div><div class="sub">${label}</div></div><span class="signalBadge">${direction}</span></div><div class="progress"><div style="width:${confidence}%"></div></div><div class="sub">Rule confluence ${confidence}/100 · Not a win probability</div>`;
-}
-function useAnalysis(){
- if(!candles.length){toast("No candle data yet.");return}
- const last=candles.at(-1),cl=candles.map(x=>x.close),hi=Math.max(...candles.slice(-8,-1).map(x=>x.high)),lo=Math.min(...candles.slice(-8,-1).map(x=>x.low));
- const isLong=last.close>ema(cl,9).at(-1),stop=isLong?Math.min(lo,last.close*.99):Math.max(hi,last.close*1.01),risk=Math.abs(last.close-stop);
- document.getElementById("riskEntry").value=last.close.toFixed(6);document.getElementById("riskStop").value=stop.toFixed(6);document.getElementById("riskTarget").value=(last.close+(isLong?2:-2)*risk).toFixed(6);
- go("trade");calculateRisk();
-}
-function refreshAll(){loadPrices();loadChart();toast("Refreshing market data")}
-loadSaved();renderAll();loadPrices();loadChart();
-setInterval(()=>{if(live)checkAlerts()},30000);
+async function loadPrices(){$("connection").textContent="FETCHING";try{let syms=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"],data=await Promise.all(syms.map(s=>fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s).then(r=>{if(!r.ok)throw Error();return r.json()})));["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(data[i].price));live=true;$("connection").textContent="MARKET ONLINE";$("priceStatus").textContent="Live exchange quotes loaded."}catch(e){$("connection").textContent="FALLBACK MODE";$("priceStatus").textContent="Live API unavailable; reference prices may be shown."}renderAll();checkAlerts()}
+function refreshAll(){loadPrices();loadChart();loadNews();toast("Refreshing market data")}
+function initChart(){let host=$("chart");if(!window.LightweightCharts){$("chartStatus").textContent="Chart library failed to load. Check internet.";return false}try{chart=LightweightCharts.createChart(host,{width:Math.max(280,host.clientWidth),height:host.clientHeight||290,layout:{background:{type:"solid",color:"#0f1725"},textColor:"#91a3bd",fontFamily:"Arial",fontSize:11},grid:{vertLines:{color:"#1b293e"},horzLines:{color:"#1b293e"}},rightPriceScale:{borderColor:"#26364d"},timeScale:{borderColor:"#26364d",timeVisible:true},crosshair:{mode:LightweightCharts.CrosshairMode.Normal}});candleSeries=chart.addCandlestickSeries({upColor:"#37e6ad",downColor:"#ff6f83",borderUpColor:"#37e6ad",borderDownColor:"#ff6f83",wickUpColor:"#37e6ad",wickDownColor:"#ff6f83"});lineSeries=chart.addLineSeries({color:"#37e6ad",lineWidth:2,visible:false,priceLineVisible:false});ema20Series=chart.addLineSeries({color:"#7da9ff",lineWidth:2,priceLineVisible:false});ema50Series=chart.addLineSeries({color:"#eac778",lineWidth:2,priceLineVisible:false});chartReady=true;new ResizeObserver(()=>{resizeChart();drawAll()}).observe(host);host.addEventListener("pointerdown",chartPointerDown);host.addEventListener("pointermove",chartPointerMove);return true}catch(e){$("chartStatus").textContent="Chart initialization failed.";return false}}
+function resizeChart(){if(chart&&$("chart").clientWidth>0)chart.applyOptions({width:$("chart").clientWidth,height:$("chart").clientHeight||290})}
+function sma(v,p){let out=[],sum=0;for(let i=0;i<v.length;i++){sum+=v[i];if(i>=p)sum-=v[i-p];if(i>=p-1)out.push({index:i,value:sum/p})}return out}
+function ema(v,p){let out=[];if(v.length<p)return out;let sum=0;for(let i=0;i<p;i++)sum+=v[i];let prev=sum/p;out[p-1]=prev;let k=2/(p+1);for(let i=p;i<v.length;i++){prev=v[i]*k+prev*(1-k);out[i]=prev}return out}
+function calcRSI(v,p=14){if(v.length<=p)return null;let g=0,l=0;for(let i=1;i<=p;i++){let d=v[i]-v[i-1];if(d>0)g+=d;else l-=d}let ag=g/p,al=l/p;for(let i=p+1;i<v.length;i++){let d=v[i]-v[i-1];ag=(ag*(p-1)+Math.max(d,0))/p;al=(al*(p-1)+Math.max(-d,0))/p}return al===0?100:100-100/(1+ag/al)}
+function macdData(v){let a=ema(v,12),b=ema(v,26),line=v.map((_,i)=>a[i]!==undefined&&b[i]!==undefined?a[i]-b[i]:null).filter(x=>x!==null),sig=ema(line,9);return{now:line.at(-1),signalNow:sig.at(-1)}}
+function updateIndicators(cs){if(!cs.length)return;let closes=cs.map(c=>c.close),r=calcRSI(closes,Number($("rsiPeriod").value)||14),e20=ema(closes,20),e50=ema(closes,50),m=macdData(closes);$("rsi").textContent=r===null?"--":r.toFixed(1);$("rsiNote").textContent=r===null?"Not enough data":r>Number($("rsiHigh").value)?"Above high threshold":r<Number($("rsiLow").value)?"Below low threshold":"Mid-range";$("macd").textContent=Number.isFinite(m.now)?m.now.toFixed(3):"--";$("macdNote").textContent=Number.isFinite(m.now)&&Number.isFinite(m.signalNow)?m.now>m.signalNow?"Above signal line":"Below signal line":"Not enough data";$("ema20").textContent=e20.at(-1)?money(e20.at(-1)):"--";$("ema50").textContent=e50.at(-1)?money(e50.at(-1)):"--";if(chartReady){ema20Series.setData(e20.map((v,i)=>v===undefined?null:{time:cs[i].time,value:v}).filter(Boolean));ema50Series.setData(e50.map((v,i)=>v===undefined?null:{time:cs[i].time,value:v}).filter(Boolean));toggleIndicators()}}
+function toggleIndicators(){if(!chartReady)return;ema20Series.applyOptions({visible:$("showEma20").checked});ema50Series.applyOptions({visible:$("showEma50").checked})}
+function changeChartType(){if(!chartReady)return;let t=$("chartType").value;candleSeries.applyOptions({visible:t==="candles"});lineSeries.applyOptions({visible:t!=="candles"});if(t==="area"){lineSeries.applyOptions({lineType:0,topColor:"#37e6ad40",bottomColor:"#37e6ad00",lineWidth:2})}else lineSeries.applyOptions({color:"#37e6ad",lineWidth:2});if(candles.length)lineSeries.setData(candles.map(c=>({time:c.time,value:c.close})));save()}
+function changeChartTheme(){if(!chartReady)return;let light=$("chartTheme").value==="light";chart.applyOptions({layout:{background:{type:"solid",color:light?"#f7f9fc":"#0f1725"},textColor:light?"#26364d":"#91a3bd"},grid:{vertLines:{color:light?"#e5eaf1":"#1b293e"},horzLines:{color:light?"#e5eaf1":"#1b293e"}},rightPriceScale:{borderColor:light?"#cbd5e1":"#26364d"},timeScale:{borderColor:light?"#cbd5e1":"#26364d"}});save()}
+async function loadChart(){let req=++chartRequest,symbol=currentSymbol,tf=currentTf;$("chartStatus").textContent="Loading candles...";$("analysisChartStatus").textContent="Loading candles...";if(!chartReady&&!initChart())return;try{let r=await fetch("https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(tf)+"&limit=200");if(!r.ok)throw Error("Exchange HTTP "+r.status);let raw=await r.json();if(!Array.isArray(raw)||raw.length<30)throw Error("Not enough candles");if(req!==chartRequest)return;candles=raw.map(k=>({time:Math.floor(+k[0]/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4]}));candleSeries.setData(candles);updateIndicators(candles);changeChartType();chart.timeScale().fitContent();let last=candles.at(-1),a=symbol.replace("USDT","");prices[a]=last.close;live=true;$("chartStatus").textContent="Last close "+money(last.close)+" · "+tf+" · "+candles.length+" candles";$("analysisChartStatus").textContent="Loaded "+candles.length+" candles · "+symbol+" · "+tf;$("overviewQuote").textContent=symbol.replace("USDT"," / USDT")+" · "+money(last.close);$("indicatorPair").textContent=symbol.replace("USDT"," / USDT");$("connection").textContent="MARKET ONLINE";renderAll();drawAll();analyze();resizeChart()}catch(e){if(req!==chartRequest)return;$("chartStatus").textContent="Candles unavailable: "+e.message;$("analysisChartStatus").textContent="Candles unavailable. Check connection and refresh."}}
+function analyze(){if(!candles||candles.length<55){$("analysisResult").innerHTML="<div class='empty'>Waiting for at least 55 candles. Check internet and refresh.</div>";$("analysisTime").textContent="NO DATA";$("overviewSignal").innerHTML="<div class='empty'>Scanner is waiting for data.</div>";return}let c=candles,cl=c.map(x=>x.close),last=c.at(-1),fast=Math.max(2,Number($("fastPeriod").value)||9),slow=Math.max(fast+1,Number($("slowPeriod").value)||21),rp=Math.max(2,Number($("rsiPeriod").value)||14),lb=Math.max(5,Math.min(100,Number($("lookback").value)||20)),rr=Number($("rrSetting").value)||2,rsi=calcRSI(cl,rp),ef=ema(cl,fast),es=ema(cl,slow),e50=ema(cl,50),high=Math.max(...c.slice(-lb-1,-1).map(x=>x.high)),low=Math.min(...c.slice(-lb-1,-1).map(x=>x.low)),rh=Math.max(...c.slice(-8,-1).map(x=>x.high)),rl=Math.min(...c.slice(-8,-1).map(x=>x.low)),m=macdData(cl),bull=last.close>es.at(-1)&&ef.at(-1)>es.at(-1),bear=last.close<es.at(-1)&&ef.at(-1)<es.at(-1);let score=0,why=[];if(selectedStrategy==="EMA"){score=bull?2:bear?-2:0;why=["Fast EMA vs slow EMA","Price vs slow EMA"]}else if(selectedStrategy==="RSI"){score=rsi<Number($("rsiLow").value)?2:rsi>Number($("rsiHigh").value)?-2:rsi>50?1:-1;why=["RSI("+rp+") = "+rsi.toFixed(1),"Custom RSI thresholds"]}else if(selectedStrategy==="BREAKOUT"){score=last.close>high?2:last.close<low?-2:0;why=["Close vs previous "+lb+" candle range","Breakout needs confirmation"]}else if(selectedStrategy==="SMC"){score=last.close>rh?2:last.close<rl?-2:0;why=["Simplified swing high/low break","No order-book data used"]}else if(selectedStrategy==="SR"){score=last.close<=low*1.01?1:last.close>=high*.99?-1:0;why=["Recent range support/resistance","Approximate levels"]}else{score=(bull?1:bear?-1:0)+(rsi>50&&rsi<Number($("rsiHigh").value)?1:rsi<50&&rsi>Number($("rsiLow").value)?-1:0)+(Number.isFinite(m.now)&&Number.isFinite(m.signalNow)&&m.now>m.signalNow?1:-1);why=["EMA trend","RSI momentum","MACD/signal relationship"]}let direction=score>=2?"LONG BIAS":score<=-2?"SHORT BIAS":"WAIT",label=direction==="LONG BIAS"?"Bullish conditions detected":direction==="SHORT BIAS"?"Bearish conditions detected":"Mixed / weak confirmation",strength=Math.min(90,Math.max(20,40+Math.abs(score)*10)),entry=last.close,stop=direction==="LONG BIAS"?Math.min(rl,entry*.99):direction==="SHORT BIAS"?Math.max(rh,entry*1.01):entry,risk=Math.abs(entry-stop),target=direction==="LONG BIAS"?entry+rr*risk:direction==="SHORT BIAS"?entry-rr*risk:entry;let stopTime=Number(c.at(-1).time);if(candleSeries){candleSeries.setMarkers([{time:stopTime,position:direction==="LONG BIAS"?"belowBar":direction==="SHORT BIAS"?"aboveBar":"inBar",color:direction==="LONG BIAS"?"#37e6ad":direction==="SHORT BIAS"?"#ff6f83":"#eac778",shape:direction==="LONG BIAS"?"arrowUp":direction==="SHORT BIAS"?"arrowDown":"circle",text:direction}])}$("analysisTime").textContent=new Date().toLocaleTimeString();$("analysisResult").innerHTML=`<div class="signalHero"><span class="signalBadge">${selectedStrategy} · ${currentTf}</span><div class="signalName">${direction}</div><div class="sub">${label}</div><div class="metricFoot" style="margin-top:10px">Rule strength, not a probability of winning</div><div class="progress"><div style="width:${strength}%"></div></div><small>${strength}/100 relative score</small></div><div class="signalGrid"><div class="signalStat"><span>Reference entry</span><b>${money(entry)}</b></div><div class="signalStat"><span>Illustrative stop</span><b>${money(stop)}</b></div><div class="signalStat"><span>Illustrative target</span><b>${money(target)}</b></div></div><div class="sub">Configured risk/reward: 1:${rr} · RSI: ${rsi.toFixed(1)}</div>${why.map(x=>`<div class="watchrow"><span class="sub">${x}</span><span class="pill">RULE</span></div>`).join("")}<p class="notice">Simplified educational model, not a verified recommendation. No 99% win rate is claimed. Backtest and paper-trade before considering real use.</p><button class="btn primary full" onclick="useAnalysis(${entry},${stop},${target})">Use levels in risk planner</button>`;$("overviewSignal").innerHTML=`<div class="watchrow"><div><div class="coinname">${selectedStrategy} · ${currentSymbol.replace("USDT","")}</div><div class="sub">${label}</div></div><span class="signalBadge">${direction}</span></div><div class="progress"><div style="width:${strength}%"></div></div><div class="sub">Rule strength ${strength}/100 · Not a win probability</div>`;save()}
+function useAnalysis(entry,stop,target){$("riskEntry").value=entry;$("riskStop").value=stop;$("riskTarget").value=target;go("trade");calculateRisk()}
+function setDraw(mode){drawMode=mode;drawStart=null;document.querySelectorAll("[data-draw]").forEach(b=>b.classList.toggle("active",b.dataset.draw===mode));$("chart").style.cursor=mode==="cursor"?"crosshair":"crosshair";toast(mode==="cursor"?"Chart navigation selected":"Select two points for "+mode+"; text uses one point")}
+function chartPointerDown(e){if(drawMode==="cursor"||!chartReady||!candles.length||!$("page-analysis").classList.contains("active"))return;let r=$("chart").getBoundingClientRect(),p={x:e.clientX-r.left,y:e.clientY-r.top};if(drawMode==="text"){let label=prompt("Enter chart note:");if(label){drawings.push({type:"text",a:p,b:p,label,color:"#eac778"});save();drawAll()}return}if(!drawStart){drawStart=p;toast("Now select the second point");return}drawings.push({type:drawMode,a:drawStart,b:p,color:drawMode==="fib"?"#7da9ff":"#37e6ad"});drawStart=null;save();drawAll()}
+function chartPointerMove(e){if(!drawStart||drawMode==="cursor")return}
+function drawAll(){let svg=$("drawLayer"),wrap=$("chartWrap");if(!svg||!wrap)return;let w=$("chart").clientWidth,h=$("chart").clientHeight;svg.setAttribute("viewBox",`0 0 ${w} ${h}`);svg.setAttribute("width",w);svg.setAttribute("height",h);const line=(x1,y1,x2,y2,color,dash="")=>`<line class="drawItem" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="1.6" ${dash?`stroke-dasharray="${dash}"`:""}/>`;let out="";drawings.forEach((d,i)=>{let a=d.a,b=d.b||d.a,col=d.color||"#37e6ad";if(d.type==="trend")out+=line(a.x,a.y,b.x,b.y,col);else if(d.type==="ray"){let dx=b.x-a.x,dy=b.y-a.y,scale=dx===0?0:(w-a.x)/dx;out+=line(a.x,a.y,a.x+dx*scale,a.y+dy*scale,col)}else if(d.type==="hline")out+=line(0,a.y,w,a.y,col);else if(d.type==="vline")out+=line(a.x,0,a.x,h,col);else if(d.type==="rect")out+=`<rect class="drawItem" x="${Math.min(a.x,b.x)}" y="${Math.min(a.y,b.y)}" width="${Math.abs(b.x-a.x)}" height="${Math.abs(b.y-a.y)}" fill="${col}" fill-opacity=".08" stroke="${col}" stroke-width="1.5"/>`;else if(d.type==="fib"){let y1=a.y,y2=b.y;out+=line(a.x,y1,b.x,y1,col,"4 4");[.236,.382,.5,.618,.786,1].forEach(level=>{let y=y1+(y2-y1)*level;out+=line(a.x,y,b.x,y,col,"3 3")+`<text x="${b.x+3}" y="${y-3}" fill="${col}" font-size="10">${Math.round(level*100)}%</text>`})}else if(d.type==="text")out+=`<text x="${a.x}" y="${a.y}" fill="${col}" font-size="12" stroke="#080c14" stroke-width=".4">${esc(d.label||"Note")}</text>`});svg.innerHTML=out}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function undoDrawing(){drawings.pop();save();drawAll()}
+function clearDrawings(){if(!drawings.length)return;if(confirm("Clear all chart drawings?")){drawings=[];save();drawAll()}}
+async function loadNews(){ $("newsStatus").textContent="FETCHING";$("newsRows").innerHTML="<div class='empty'>Fetching latest headlines...</div>";try{let r=await fetch("https://min-api.cryptocompare.com/data/v2/news/?lang=EN");if(!r.ok)throw Error("News feed unavailable");let j=await r.json();if(!Array.isArray(j.Data))throw Error("No headlines returned");newsItems=j.Data.slice(0,60).map(n=>({title:n.title,url:n.url,source:n.source||n.source_info?.name||"Publisher",time:n.published_on?new Date(n.published_on*1000).toLocaleString():"Recent",body:n.body||"",categories:n.categories||""}));$("newsStatus").textContent="UPDATED "+new Date().toLocaleTimeString();renderNews()}catch(e){$("newsStatus").textContent="FEED UNAVAILABLE";$("newsRows").innerHTML=`<div class="empty">Could not load live news in this browser. Try again later or check the internet connection.<br><br><a style="color:var(--green)" href="https://www.coindesk.com/" target="_blank" rel="noopener">CoinDesk</a> · <a style="color:var(--green)" href="https://cointelegraph.com/" target="_blank" rel="noopener">Cointelegraph</a> · <a style="color:var(--green)" href="https://www.theblock.co/" target="_blank" rel="noopener">The Block</a></div>`}renderMiniNews()}
+function renderNews(){let f=$("newsFilter")?.value||"all",rows=newsItems.filter(n=>{let text=(n.title+" "+n.body+" "+n.categories).toLowerCase();if(f==="all")return true;if(f==="market")return /market|regulat|sec |etf|econom|policy|exchange|law/.test(text);return text.includes(f.toLowerCase())||(f==="BTC"&&/bitcoin/.test(text))||(f==="ETH"&&/ethereum/.test(text))});$("newsRows").innerHTML=rows.length?rows.map(n=>`<article class="newsItem"><a href="${esc(n.url)}" target="_blank" rel="noopener noreferrer">${esc(n.title||"Crypto news headline")}</a><div class="newsMeta">${esc(n.source)} · ${esc(n.time)}</div>${n.body?`<div class="sub">${esc(n.body.slice(0,170))}${n.body.length>170?"…":""}</div>`:""}</article>`).join(""):"<div class='empty'>No headlines match this filter.</div>"}
+function renderMiniNews(){$("miniNews").innerHTML=newsItems.length?newsItems.slice(0,3).map(n=>`<div class="newsItem"><a href="${esc(n.url)}" target="_blank" rel="noopener noreferrer">${esc(n.title)}</a><div class="newsMeta">${esc(n.source)} · ${esc(n.time)}</div></div>`).join(""):"<div class='empty'>Open Crypto News to load headlines.</div>"}
+loadSaved();document.querySelectorAll(".strategy").forEach(b=>b.classList.toggle("active",b.dataset.strategy===selectedStrategy));document.querySelectorAll(".tf[data-tf]").forEach(b=>b.classList.toggle("active",b.dataset.tf===currentTf));renderAll();loadPrices();loadChart();loadNews();setInterval(()=>{if(live)checkAlerts()},30000);setInterval(()=>{if(document.visibilityState==="visible")loadPrices()},60000);
 </script>
 </body>
 </html>
