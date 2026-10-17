@@ -4,419 +4,470 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TradeLab Crypto Pro</title>
+<meta name="theme-color" content="#080c14">
+<title>TradeLab Pro | Crypto Intelligence</title>
 <script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js"></script>
 <style>
-:root{--bg:#080d18;--panel:#111a2d;--line:#26334d;--muted:#93a4bf;--green:#46e0b0;--red:#ff7185;--blue:#79aaff}
+:root{--bg:#080c14;--panel:#0f1725;--panel2:#131e30;--line:#243148;--muted:#8b9bb5;--text:#edf3ff;--green:#37e6ad;--red:#ff6f83;--blue:#7da9ff;--gold:#eac778}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#edf2ff;font-family:Arial,sans-serif}
-header{padding:18px;background:#10182a;border-bottom:1px solid var(--line)}
-.logo{font-size:24px;font-weight:bold;color:var(--green)}
-header p,small,.muted,.notice{color:var(--muted)}
-header p{font-size:12px}
-main{max-width:1100px;margin:auto;padding:14px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:15px;margin-bottom:14px;min-width:0}
-h2{font-size:17px;margin:0 0 14px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.balance{font-size:28px;font-weight:bold;margin:9px 0 16px;overflow-wrap:anywhere}
-.green{color:var(--green)}.red{color:var(--red)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.stat{background:#0b1324;padding:12px;border-radius:9px;min-width:0}
-.stat strong{display:block;font-size:17px;margin-top:7px;overflow-wrap:anywhere}
-nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px;padding-bottom:3px}
-button{background:var(--green);color:#07130f;font-weight:bold;border:0;border-radius:8px;padding:11px 13px;cursor:pointer}
-nav button,.secondary,.tf{background:#26334d;color:#eaf0ff}
-nav button{white-space:nowrap}
-nav button.active,.tf.active{background:var(--green);color:#07130f}
-input,select{width:100%;background:#0a1120;color:white;border:1px solid #34415a;border-radius:8px;padding:12px;margin:7px 0 13px}
-label{font-size:13px;color:var(--muted)}
-.actions{display:flex;gap:8px}.actions button{flex:1}
-.full{width:100%}.sell{background:var(--red)}
-.coin{padding:12px 0;border-bottom:1px solid var(--line)}
-.coin:last-child{border:0}
-.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:8px 0 14px}
-.fill{height:100%;background:var(--green)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-td,th{text-align:left;padding:10px 5px;border-bottom:1px solid var(--line);white-space:nowrap}
-.notice{font-size:12px;line-height:1.5}
-[hidden]{display:none!important}
-.tfrow{display:flex;gap:5px;flex-wrap:wrap}
-.tf{padding:8px 10px;font-size:12px}
-#chart{height:330px;width:100%}
-#chartStatus{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
-.tag{font-size:11px;color:var(--muted)}
-.pill{font-size:11px;padding:4px 7px;border-radius:6px;background:#26334d}
-@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}main{padding:20px}}
-@media(max-width:420px){#chart{height:270px}.balance{font-size:25px}.card{padding:12px}}
+body{margin:0;background:radial-gradient(ellipse at 65% 0%,#142340 0%,#080c14 52%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer;transition:transform .18s,background .2s,border-color .2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.13)}
+button:active{transform:scale(.97)}
+header{height:68px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#080c14dd;position:sticky;top:0;z-index:10;backdrop-filter:blur(16px)}
+.brand{font-weight:900;font-size:20px;letter-spacing:-.7px}.brand span{color:var(--green)}
+.logoMark{display:inline-grid;place-items:center;background:var(--green);color:#07120e;border-radius:9px;width:32px;height:32px;margin-right:9px;font-weight:900}
+.headerRight{display:flex;gap:10px;align-items:center}
+.pill{border:1px solid var(--line);border-radius:30px;padding:7px 11px;font-size:11px;color:var(--muted)}
+.liveDot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;box-shadow:0 0 12px var(--green);animation:pulse 1.8s infinite}
+.layout{display:grid;grid-template-columns:205px minmax(0,1fr);max-width:1600px;margin:auto;min-height:calc(100vh - 68px)}
+.sidebar{border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:6px}
+.navlabel{color:#65758f;font-size:10px;font-weight:800;letter-spacing:1.4px;padding:15px 10px 7px}
+.navbtn{background:transparent;color:#a6b5cc;border:1px solid transparent;text-align:left;padding:12px;border-radius:10px;font-size:13px;display:flex;gap:10px;align-items:center}
+.navbtn.active{color:var(--green);background:#37e6ad12;border-color:#37e6ad30}
+.navbtn .ico{width:18px;text-align:center}
+.sidebarBottom{margin-top:auto;border:1px solid var(--line);border-radius:12px;padding:13px;font-size:11px;line-height:1.6;color:var(--muted)}
+main{padding:22px;min-width:0}
+.page{display:none;animation:fadeUp .3s ease}.page.active{display:block}
+.pageTitle{font-size:24px;font-weight:850;letter-spacing:-.8px;margin:0}
+.sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.btn{border:1px solid var(--line);border-radius:9px;padding:10px 13px;background:var(--panel2);color:var(--text);font-size:12px;font-weight:700}
+.btn.primary{background:var(--green);color:#06130f;border-color:var(--green)}
+.btn.danger{background:#ff6f8316;color:var(--red);border-color:#ff6f8340}
+.btn.full{width:100%}
+.card{border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#121d2eeb,#0d1523f5);padding:17px;min-width:0;box-shadow:0 8px 28px #00000013;transition:border-color .2s,transform .2s}
+.card:hover{border-color:#3a506e}
+.cards4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:15px}
+.metricLabel{font-size:11px;color:var(--muted)}.metricValue{font-size:23px;font-weight:800;margin:10px 0 7px;letter-spacing:-.6px;overflow-wrap:anywhere}
+.metricFoot{font-size:11px;color:var(--muted)}
+.green{color:var(--green)!important}.red{color:var(--red)!important}.blue{color:var(--blue)!important}
+.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.sectionHead h2{font-size:14px;margin:0;font-weight:800}
+.twoCol{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,1fr);gap:14px;margin-bottom:14px}
+.threeCol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.chartCard{min-width:0}
+.chartTop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+select,input{background:#0a1220;color:var(--text);border:1px solid #2b3a54;border-radius:9px;padding:10px;outline:none;max-width:100%}
+input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px #37e6ad16}
+select{font-size:12px}
+#chart{width:100%;height:340px}
+.tfrow{display:flex;gap:4px;flex-wrap:wrap}
+.tf{background:transparent;color:var(--muted);border:1px solid transparent;border-radius:6px;padding:7px 9px;font-size:11px}
+.tf.active{background:#37e6ad19;color:var(--green);border-color:#37e6ad35}
+.chartStats{font-size:11px;color:var(--muted);line-height:1.8;overflow-wrap:anywhere}
+.watchrow{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #243148a8}
+.watchrow:last-child{border:0}
+.coinname{font-weight:750;font-size:12px}.coinmeta{font-size:10px;color:var(--muted);margin-top:5px}
+.coinprice{text-align:right;font-weight:750;font-size:12px}
+.smallbtn{font-size:10px;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:#1a263a;color:var(--text);margin-top:6px}
+.signalBadge{display:inline-block;border:1px solid #eac7784c;color:var(--gold);background:#eac77810;padding:6px 9px;border-radius:7px;font-size:10px;font-weight:800;letter-spacing:.5px}
+.signalHero{background:linear-gradient(135deg,#162b35,#111b2b 65%,#1b2439);border:1px solid #2d564f;border-radius:14px;padding:18px;margin-bottom:13px}
+.signalName{font-size:22px;font-weight:900;margin:10px 0 5px}
+.signalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+.signalStat{background:#07111c80;border:1px solid #2d4353;border-radius:9px;padding:10px;min-width:0}
+.signalStat span{display:block;color:var(--muted);font-size:10px;margin-bottom:6px}
+.signalStat b{font-size:13px;overflow-wrap:anywhere}
+.progress{height:5px;background:#29364a;border-radius:10px;overflow:hidden;margin:8px 0}
+.progress div{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .6s}
+.field{margin-bottom:12px}.field label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
+.field input,.field select{width:100%}
+.strategyGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.strategy{border:1px solid var(--line);background:#0b1321;border-radius:12px;padding:13px;text-align:left;color:var(--text)}
+.strategy.active{border-color:var(--green);background:#37e6ad0d;box-shadow:inset 0 0 0 1px #37e6ad18}
+.strategy b{display:block;font-size:12px;margin-bottom:6px}.strategy small{color:var(--muted);font-size:10px;line-height:1.5}
+.tableWrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:10px;color:var(--muted);font-weight:700}
+.empty{color:var(--muted);font-size:12px;padding:15px 0;line-height:1.7}
+.notice{color:var(--muted);font-size:10px;line-height:1.65}
+.allocationRow{display:grid;grid-template-columns:35px 1fr auto;gap:10px;align-items:center;margin:14px 0;font-size:11px}
+.allocationBar{height:5px;background:#29364a;border-radius:8px;overflow:hidden;margin-top:7px}.allocationBar div{height:100%;background:var(--green)}
+input[type=checkbox]{accent-color:var(--green);width:auto}
+footer{font-size:10px;color:#687992;padding:18px 0;text-align:center}
+.toast{position:fixed;right:16px;bottom:16px;z-index:99;background:#152337;border:1px solid #3b516d;border-radius:12px;padding:14px 18px;max-width:330px;font-size:12px;box-shadow:0 12px 35px #0008;animation:fadeUp .25s ease}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 #37e6ad00}50%{box-shadow:0 0 22px #37e6ad12}}
+@media(max-width:1000px){.layout{grid-template-columns:70px minmax(0,1fr)}.sidebar{padding:15px 8px}.navbtn{justify-content:center;font-size:0;padding:13px}.navbtn .ico{font-size:17px}.navlabel,.sidebarBottom{display:none}.cards4{grid-template-columns:repeat(2,minmax(0,1fr))}.twoCol{grid-template-columns:1fr}}
+@media(max-width:600px){header{height:60px;padding:0 13px}.brand{font-size:17px}.headerRight .pill{display:none}.layout{display:block;padding-bottom:70px}.sidebar{position:fixed;bottom:0;left:0;right:0;height:62px;z-index:20;background:#0b1220f5;border-top:1px solid var(--line);border-right:0;display:flex;flex-direction:row;justify-content:space-around;padding:6px 3px;backdrop-filter:blur(15px)}.navbtn{flex:1;display:flex;flex-direction:column;gap:3px;padding:5px 0;font-size:9px;text-align:center;justify-content:center}.navbtn .ico{font-size:16px}.layout{min-height:0}main{padding:14px 11px}.pageTitle{font-size:21px}.cards4{gap:8px}.metricValue{font-size:19px}.card{padding:13px}.threeCol{grid-template-columns:1fr}.strategyGrid{grid-template-columns:1fr 1fr}#chart{height:280px}.signalGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.signalStat{padding:8px}.signalStat b{font-size:11px}.toprow{margin-bottom:15px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header>
- <div class="logo">TradeLab Crypto <span class="pill">PRO</span></div>
- <p>Research · Technical Analysis · Paper Trading</p>
+ <div class="brand"><span class="logoMark">T</span>TradeLab <span>PRO</span></div>
+ <div class="headerRight"><span class="pill"><span class="liveDot"></span><span id="connection">CONNECTING</span></span><button class="btn" onclick="refreshAll()">↻ Refresh</button></div>
 </header>
+
+<div class="layout">
+<aside class="sidebar">
+ <div class="navlabel">WORKSPACE</div>
+ <button class="navbtn active" data-page="overview" onclick="go('overview')"><span class="ico">▦</span>Overview</button>
+ <button class="navbtn" data-page="markets" onclick="go('markets')"><span class="ico">⌁</span>Markets</button>
+ <button class="navbtn" data-page="analysis" onclick="go('analysis')"><span class="ico">⌕</span>Analysis</button>
+ <button class="navbtn" data-page="trade" onclick="go('trade')"><span class="ico">⇄</span>Paper Trade</button>
+ <button class="navbtn" data-page="portfolio" onclick="go('portfolio')"><span class="ico">◫</span>Portfolio</button>
+ <button class="navbtn" data-page="tools" onclick="go('tools')"><span class="ico">⚙</span>Tools</button>
+ <div class="sidebarBottom">TRADING MODE<br><b style="color:var(--green)">Paper Trading</b><br>No real orders are placed.</div>
+</aside>
+
 <main>
- <div class="card">
-  <div class="muted">TOTAL PORTFOLIO VALUE</div>
-  <div class="balance" id="portfolio">$10,000.00</div>
-  <div class="grid">
-   <div class="stat"><span class="muted">Virtual Cash</span><strong id="cash">$10,000</strong></div>
-   <div class="stat"><span class="muted">Unrealized P&L</span><strong id="unrealized">$0</strong></div>
-   <div class="stat"><span class="muted">Realized P&L</span><strong id="realized">$0</strong></div>
-   <div class="stat"><span class="muted">Total P&L</span><strong id="totalPnl">$0</strong></div>
+<section class="page active" id="page-overview">
+ <div class="toprow"><div><h1 class="pageTitle">Market Overview</h1><div class="sub">Your crypto research workspace. Track price, risk and strategy signals.</div></div><span class="signalBadge">DEMO ACCOUNT</span></div>
+ <div class="cards4">
+  <div class="card"><div class="metricLabel">TOTAL EQUITY</div><div class="metricValue" id="equity">$10,000.00</div><div class="metricFoot">Virtual account value</div></div>
+  <div class="card"><div class="metricLabel">TOTAL P&L</div><div class="metricValue" id="pnl">$0.00</div><div class="metricFoot" id="return">0.00% return</div></div>
+  <div class="card"><div class="metricLabel">AVAILABLE CASH</div><div class="metricValue" id="cash">$10,000</div><div class="metricFoot">Ready to paper trade</div></div>
+  <div class="card"><div class="metricLabel">OPEN POSITIONS</div><div class="metricValue" id="openCount">0</div><div class="metricFoot">Active virtual holdings</div></div>
+ </div>
+ <div class="twoCol">
+  <div class="card chartCard">
+   <div class="chartTop"><div><div class="sectionHead" style="margin:0"><h2>Market Chart</h2><span class="pill">LIVE DATA WHEN AVAILABLE</span></div><div class="sub" id="overviewQuote">BTC / USDT</div></div>
+    <select id="overviewAsset" onchange="syncAsset(this.value)" aria-label="Chart coin"><option value="BTCUSDT">BTC</option><option value="ETHUSDT">ETH</option><option value="SOLUSDT">SOL</option><option value="BNBUSDT">BNB</option></select>
+   </div>
+   <div class="tfrow" style="margin:10px 0"><button class="tf active" data-tf="15m" onclick="setTf('15m')">15m</button><button class="tf" data-tf="1h" onclick="setTf('1h')">1H</button><button class="tf" data-tf="4h" onclick="setTf('4h')">4H</button><button class="tf" data-tf="1d" onclick="setTf('1d')">1D</button><button class="tf" data-tf="1w" onclick="setTf('1w')">1W</button></div>
+   <div id="chart"></div><div id="chartStatus" class="chartStats">Loading historical candles...</div>
+  </div>
+  <div class="card"><div class="sectionHead"><h2>Market Watch</h2><button class="btn" onclick="go('markets')">All markets →</button></div><div id="watchOverview"></div></div>
+ </div>
+ <div class="twoCol">
+  <div class="card"><div class="sectionHead"><h2>Strategy Scanner</h2><button class="btn" onclick="go('analysis')">Open analysis →</button></div><div id="overviewSignal"></div></div>
+  <div class="card"><div class="sectionHead"><h2>Portfolio Allocation</h2><button class="btn" onclick="go('portfolio')">Details →</button></div><div id="allocation"></div></div>
+ </div>
+ <div class="card"><div class="sectionHead"><h2>Recent Activity</h2><button class="btn" onclick="go('portfolio')">View history →</button></div><div id="recentTrades"></div></div>
+</section>
+
+<section class="page" id="page-markets">
+ <div class="toprow"><div><h1 class="pageTitle">Markets</h1><div class="sub">Explore available pairs and add coins to your watchlist.</div></div><button class="btn primary" onclick="loadPrices()">Refresh market</button></div>
+ <div class="card"><input id="marketSearch" placeholder="Search coins..." oninput="renderMarkets()" style="width:100%;margin:0 0 10px"><div id="marketRows"></div><div class="notice" id="priceStatus">Fetching public market data...</div></div>
+</section>
+
+<section class="page" id="page-analysis">
+ <div class="toprow"><div><h1 class="pageTitle">Trade Intelligence</h1><div class="sub">Rule-based technical analysis. Review the setup and risk before paper trading.</div></div><span class="signalBadge">NO PROFIT GUARANTEE</span></div>
+ <div class="twoCol">
+  <div class="card">
+   <div class="sectionHead"><h2>Analysis Setup</h2><span class="pill">RULE-BASED</span></div>
+   <div class="field"><label>MARKET</label><select id="analysisAsset" onchange="syncAnalysisAsset()"><option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option><option value="SOLUSDT">SOL / USDT</option><option value="BNBUSDT">BNB / USDT</option></select></div>
+   <div class="field"><label>STRATEGY</label><div class="strategyGrid">
+    <button class="strategy active" data-strategy="SMC" onclick="chooseStrategy('SMC')"><b>SMC</b><small>Structure, swing breaks and liquidity proxies</small></button>
+    <button class="strategy" data-strategy="EMA" onclick="chooseStrategy('EMA')"><b>EMA Trend</b><small>Fast and slow moving average trend</small></button>
+    <button class="strategy" data-strategy="RSI" onclick="chooseStrategy('RSI')"><b>RSI Momentum</b><small>Momentum and extreme readings</small></button>
+    <button class="strategy" data-strategy="BREAKOUT" onclick="chooseStrategy('BREAKOUT')"><b>Breakout</b><small>Recent range high/low confirmation</small></button>
+    <button class="strategy" data-strategy="EMC" onclick="chooseStrategy('EMC')"><b>EMC / Confluence</b><small>EMA, momentum and trend agreement</small></button>
+    <button class="strategy" data-strategy="SR" onclick="chooseStrategy('SR')"><b>Support / Resistance</b><small>Recent price range levels</small></button>
+   </div></div>
+   <button class="btn primary full" onclick="analyze()">Run market analysis</button>
+   <p class="notice">EMC is treated here as a custom educational confluence model, not a universally standardized strategy. SMC detection uses simplified price-structure proxies, not verified institutional order flow.</p>
+  </div>
+  <div class="card"><div class="sectionHead"><h2>Analysis Result</h2><span class="pill" id="analysisTime">WAITING</span></div><div id="analysisResult"><div class="empty">Choose a market and strategy, then run analysis. Results require available candle data.</div></div></div>
+ </div>
+ <div class="card"><div class="sectionHead"><h2>Technical Indicators</h2><span class="pill" id="indicatorPair">BTC / USDT</span></div>
+  <div class="cards4" style="margin:0">
+   <div class="stat"><div class="metricLabel">RSI (14)</div><div class="metricValue" id="rsi">--</div><div class="metricFoot" id="rsiNote">Awaiting data</div></div>
+   <div class="stat"><div class="metricLabel">MACD</div><div class="metricValue" id="macd">--</div><div class="metricFoot" id="macdNote">Awaiting data</div></div>
+   <div class="stat"><div class="metricLabel">SMA 20</div><div class="metricValue" id="sma20">--</div><div class="metricFoot">Short-term average</div></div>
+   <div class="stat"><div class="metricLabel">SMA 50</div><div class="metricValue" id="sma50">--</div><div class="metricFoot">Longer-term average</div></div>
   </div>
  </div>
+</section>
 
- <nav>
-  <button class="active" data-tab="dashboard" onclick="show('dashboard')">Dashboard</button>
-  <button data-tab="market" onclick="show('market')">Market</button>
-  <button data-tab="trade" onclick="show('trade')">Trade</button>
-  <button data-tab="positions" onclick="show('positions')">Positions</button>
-  <button data-tab="history" onclick="show('history')">History</button>
-  <button data-tab="tools" onclick="show('tools')">Pro Tools</button>
- </nav>
+<section class="page" id="page-trade">
+ <div class="toprow"><div><h1 class="pageTitle">Paper Trading</h1><div class="sub">Practice trade execution with virtual money.</div></div><span class="signalBadge">SIMULATION ONLY</span></div>
+ <div class="twoCol">
+  <div class="card"><div class="sectionHead"><h2>Place Virtual Trade</h2><span class="pill">NO REAL ORDERS</span></div>
+   <div class="field"><label>ASSET</label><select id="tradeAsset" onchange="estimateTrade()"><option value="BTC">BTC — Bitcoin</option><option value="ETH">ETH — Ethereum</option><option value="SOL">SOL — Solana</option><option value="BNB">BNB</option></select></div>
+   <div class="field"><label>TRADE SIDE</label><select id="tradeSide" onchange="estimateTrade()"><option value="buy">Buy / Long</option><option value="sell">Sell / Reduce position</option></select></div>
+   <div class="field"><label>AMOUNT (USD)</label><input type="number" id="tradeAmount" min="1" step="any" value="100" oninput="estimateTrade()"></div>
+   <div class="signalGrid"><div class="signalStat"><span>Market price</span><b id="tradePrice">--</b></div><div class="signalStat"><span>Estimated quantity</span><b id="tradeQty">--</b></div><div class="signalStat"><span>Available cash</span><b id="tradeCash">--</b></div></div>
+   <button class="btn primary full" onclick="executeTrade()">Confirm paper trade</button><p id="tradeMessage" class="sub" aria-live="polite"></p>
+  </div>
+  <div class="card"><div class="sectionHead"><h2>Trade Risk Planner</h2></div>
+   <div class="field"><label>ENTRY PRICE</label><input type="number" id="riskEntry" placeholder="Entry price" step="any"></div>
+   <div class="field"><label>STOP LOSS</label><input type="number" id="riskStop" placeholder="Stop-loss price" step="any"></div>
+   <div class="field"><label>TARGET PRICE</label><input type="number" id="riskTarget" placeholder="Target price" step="any"></div>
+   <div class="field"><label>ACCOUNT RISK (%)</label><input type="number" id="riskPct" value="1" min=".1" max="5" step=".1"></div>
+   <button class="btn full" onclick="calculateRisk()">Calculate risk and reward</button><div id="riskResult" class="sub" style="margin-top:12px">Enter prices to calculate position sizing.</div>
+  </div>
+ </div>
+</section>
 
- <section id="dashboard">
-  <div class="card">
-   <h2>Portfolio Overview</h2>
-   <div class="row"><span class="muted">Starting balance</span><b>$10,000.00</b></div>
-   <div class="row" style="margin-top:13px"><span class="muted">Net return</span><b id="return">0.00%</b></div>
-   <div class="row" style="margin-top:13px"><span class="muted">Invested cost</span><b id="invested">$0</b></div>
-  </div>
-  <div class="card"><h2>Portfolio Allocation</h2><div id="allocation"></div></div>
-  <div class="card"><h2>Watchlist</h2><div id="watchDash"></div><button class="secondary full" onclick="show('tools')">Manage watchlist and alerts</button></div>
-  <div class="card"><h2>Market Snapshot</h2><div id="snapshot"></div><button class="secondary full" onclick="loadPrices()">Refresh prices</button><p class="notice" id="priceStatus">Loading prices...</p></div>
- </section>
+<section class="page" id="page-portfolio">
+ <div class="toprow"><div><h1 class="pageTitle">Portfolio & History</h1><div class="sub">Review virtual holdings, P&L and completed trades.</div></div><button class="btn primary" onclick="exportCSV()">Export CSV ↓</button></div>
+ <div class="cards4">
+  <div class="card"><div class="metricLabel">EQUITY</div><div class="metricValue" id="portEquity">$10,000</div></div>
+  <div class="card"><div class="metricLabel">VIRTUAL CASH</div><div class="metricValue" id="portCash">$10,000</div></div>
+  <div class="card"><div class="metricLabel">REALIZED P&L</div><div class="metricValue" id="portRealized">$0</div></div>
+  <div class="card"><div class="metricLabel">UNREALIZED P&L</div><div class="metricValue" id="portUnrealized">$0</div></div>
+ </div>
+ <div class="card" style="margin-bottom:14px"><div class="sectionHead"><h2>Open Positions</h2></div><div id="positions"></div></div>
+ <div class="card"><div class="sectionHead"><h2>Trade History</h2><button class="btn" onclick="exportCSV()">Download CSV</button></div><div id="history"></div></div>
+ <div class="card" style="margin-top:14px"><h2>Account Controls</h2><p class="notice">Resetting permanently clears saved virtual positions and trade history in this browser.</p><button class="btn danger" onclick="resetAccount()">Reset paper account</button></div>
+</section>
 
- <section id="market" hidden>
-  <div class="card"><h2>Crypto Market</h2>
-   <input id="coinSearch" placeholder="Search BTC, Ethereum, Solana..." oninput="renderCoins()">
-   <div id="coins"></div>
-   <button class="secondary full" onclick="loadPrices()">Refresh market</button>
+<section class="page" id="page-tools">
+ <div class="toprow"><div><h1 class="pageTitle">Watchlist & Alerts</h1><div class="sub">Personal market monitoring tools saved in this browser.</div></div></div>
+ <div class="twoCol">
+  <div class="card"><div class="sectionHead"><h2>Watchlist</h2></div><div id="watchTools"></div></div>
+  <div class="card"><div class="sectionHead"><h2>Create Price Alert</h2></div>
+   <div class="field"><label>COIN</label><select id="alertAsset"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="SOL">SOL</option><option value="BNB">BNB</option></select></div>
+   <div class="field"><label>CONDITION</label><select id="alertCondition"><option value="above">Price goes above</option><option value="below">Price goes below</option></select></div>
+   <div class="field"><label>TARGET USD</label><input type="number" id="alertTarget" placeholder="Target price" min=".000001" step="any"></div>
+   <button class="btn primary full" onclick="addAlert()">Create alert</button><button class="btn full" style="margin-top:8px" onclick="requestNotifications()">Enable browser notifications</button>
+   <div id="alerts" style="margin-top:12px"></div>
+   <p class="notice">Price alerts only run while this page is open. Browser notification permission is optional.</p>
   </div>
- </section>
+ </div>
+</section>
 
- <section id="trade" hidden>
-  <div class="card"><h2>Paper Trading</h2>
-   <label>Cryptocurrency</label>
-   <select id="asset" onchange="estimate()">
-    <option value="BTC">Bitcoin (BTC)</option><option value="ETH">Ethereum (ETH)</option><option value="SOL">Solana (SOL)</option><option value="BNB">BNB</option>
-   </select>
-   <label>Amount in USD</label>
-   <input id="amount" type="number" min="1" step="any" value="100" oninput="estimate()">
-   <p class="muted" id="estimate">Estimated quantity: --</p>
-   <div class="actions"><button onclick="executeTrade('buy')">Buy</button><button class="sell" onclick="executeTrade('sell')">Sell</button></div>
-   <p id="message" aria-live="polite"></p>
-   <p class="notice">Simulated trades only. No real orders or money are used.</p>
-  </div>
- </section>
-
- <section id="positions" hidden><div class="card"><h2>Open Positions</h2><div id="positionsList"></div></div></section>
- <section id="history" hidden>
-  <div class="card"><h2>Trade History</h2><div id="historyList"></div>
-   <button class="full" onclick="exportCSV()">Export history as CSV</button>
-   <button class="secondary full" style="margin-top:8px" onclick="resetAccount()">Reset paper account</button>
-  </div>
- </section>
-
- <section id="tools" hidden>
-  <div class="card">
-   <h2>Watchlist</h2>
-   <p class="notice">Choose coins to keep them on your personal watchlist.</p>
-   <div id="watchManage"></div>
-  </div>
-  <div class="card">
-   <h2>Price Alerts</h2>
-   <label>Coin</label>
-   <select id="alertAsset"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="SOL">SOL</option><option value="BNB">BNB</option></select>
-   <label>Alert condition</label>
-   <select id="alertCondition"><option value="above">Price goes above</option><option value="below">Price goes below</option></select>
-   <label>Target price (USD)</label>
-   <input id="alertTarget" type="number" min="0.000001" step="any" placeholder="e.g. 70000">
-   <button class="full" onclick="addAlert()">Create price alert</button>
-   <div id="alertsList" style="margin-top:12px"></div>
-   <p class="notice">Alerts are checked while this page is open. Browser notification permission may be required. This is not a guaranteed 24/7 alert service.</p>
-  </div>
-  <div class="card">
-   <h2>Technical Indicators</h2>
-   <label>Chart coin</label>
-   <select id="chartAsset" onchange="loadChart()"><option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option><option value="SOLUSDT">SOL / USDT</option><option value="BNBUSDT">BNB / USDT</option></select>
-   <label>Timeframe</label>
-   <div class="tfrow" style="margin:8px 0 14px">
-    <button class="tf active" data-tf="15m" onclick="chooseTf('15m')">15m</button>
-    <button class="tf" data-tf="1h" onclick="chooseTf('1h')">1H</button>
-    <button class="tf" data-tf="4h" onclick="chooseTf('4h')">4H</button>
-    <button class="tf" data-tf="1d" onclick="chooseTf('1d')">1D</button>
-    <button class="tf" data-tf="1w" onclick="chooseTf('1w')">1W</button>
-   </div>
-   <div id="indicatorControls" class="row" style="justify-content:flex-start;flex-wrap:wrap">
-    <label><input type="checkbox" id="showMA" checked style="width:auto;margin:0 4px" onchange="loadChart()"> Moving Average (20)</label>
-    <label><input type="checkbox" id="showMA50" style="width:auto;margin:0 4px" onchange="loadChart()"> Moving Average (50)</label>
-   </div>
-   <div id="ohlc" class="muted" style="margin:12px 0">Loading chart data...</div>
-   <div id="chart"></div>
-   <div id="chartStatus" style="margin:10px 0">Loading chart...</div>
-   <div class="grid">
-    <div class="stat"><span class="muted">RSI (14)</span><strong id="rsi">--</strong><small id="rsiNote">Waiting for candles</small></div>
-    <div class="stat"><span class="muted">MACD (12,26,9)</span><strong id="macd">--</strong><small id="macdNote">Waiting for candles</small></div>
-    <div class="stat"><span class="muted">SMA 20</span><strong id="sma20">--</strong></div>
-    <div class="stat"><span class="muted">SMA 50</span><strong id="sma50">--</strong></div>
-   </div>
-   <p class="notice">Indicators are calculated from fetched candle closes. RSI/MACD are educational signals, not predictions or financial advice.</p>
-  </div>
- </section>
+<footer>TradeLab Pro · Educational analytics and simulated trading · Crypto markets are volatile.</footer>
 </main>
+</div>
+<div id="toast" hidden class="toast"></div>
 
 <script>
 const START=10000;
 const assets={BTC:{name:"Bitcoin",price:67000},ETH:{name:"Ethereum",price:2500},SOL:{name:"Solana",price:150},BNB:{name:"BNB",price:600}};
 let prices={},live=false;
 let account={cash:START,holdings:{},realized:0,history:[]};
-let watchlist=["BTC","ETH"],alerts=[];
-let chart=null,candleSeries=null,ma20Series=null,ma50Series=null,chartReady=false,currentTf="15m",chartRequest=0,resizeObserver=null;
+let watchlist=["BTC","ETH"],alerts=[],candles=[];
+let chart=null,candleSeries=null,ma20Series=null,ma50Series=null,chartReady=false;
+let currentTf="15m",currentSymbol="BTCUSDT",chartRequest=0,selectedStrategy="SMC";
 let lastAlertChecks={};
 
-function loadSaved(){
- try{
-  const s=JSON.parse(localStorage.getItem("tradelab_pro"));
-  if(s){
-   if(s.account&&typeof s.account.cash==="number")account=s.account;
-   if(Array.isArray(s.watchlist))watchlist=s.watchlist.filter(a=>assets[a]);
-   if(Array.isArray(s.alerts))alerts=s.alerts;
-   return;
-  }
-  const old=JSON.parse(localStorage.getItem("tradelab_v2")||"null");
-  if(old&&typeof old.cash==="number")account={cash:old.cash,holdings:old.holdings||{},realized:Number(old.realized)||0,history:Array.isArray(old.history)?old.history:[]};
- }catch(e){}
-}
-function save(){
- try{localStorage.setItem("tradelab_pro",JSON.stringify({account,watchlist,alerts}))}catch(e){}
- try{localStorage.setItem("tradelab_v2",JSON.stringify(account))}catch(e){}
-}
+function fmt(n,d=2){return Number(n).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d})}
+function money(n){return (n<0?"-$":"$")+fmt(Math.abs(n))}
 function price(a){return prices[a]||assets[a].price}
 function qty(a){return Number(account.holdings[a]?.qty)||0}
 function cost(a){return Number(account.holdings[a]?.cost)||0}
-function marketValue(a){return qty(a)*price(a)}
-function unrealized(a){return marketValue(a)-cost(a)}
-function money(n){return (n<0?"-$":"$")+Math.abs(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function totals(){
- let value=account.cash,invested=0,unreal=0;
- Object.keys(assets).forEach(a=>{value+=marketValue(a);invested+=cost(a);unreal+=unrealized(a)});
- return {value,invested,unreal,realized:account.realized,total:account.realized+unreal};
+function value(a){return qty(a)*price(a)}
+function uPnl(a){return value(a)-cost(a)}
+function totals(){let equity=account.cash,invested=0,unreal=0;Object.keys(assets).forEach(a=>{equity+=value(a);invested+=cost(a);unreal+=uPnl(a)});return {equity,invested,unreal,realized:account.realized,total:account.realized+unreal}}
+function toast(msg){const e=document.getElementById("toast");e.textContent=msg;e.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>e.hidden=true,3000)}
+function save(){try{localStorage.setItem("tradelab_pro_v3",JSON.stringify({account,watchlist,alerts}))}catch(e){}}
+function loadSaved(){
+ try{
+  let s=JSON.parse(localStorage.getItem("tradelab_pro_v3")||"null");
+  if(s){if(s.account&&typeof s.account.cash==="number")account=s.account;if(Array.isArray(s.watchlist))watchlist=s.watchlist.filter(a=>assets[a]);if(Array.isArray(s.alerts))alerts=s.alerts;return}
+  s=JSON.parse(localStorage.getItem("tradelab_pro")||"null");
+  if(s){if(s.account)account=s.account;if(Array.isArray(s.watchlist))watchlist=s.watchlist;if(Array.isArray(s.alerts))alerts=s.alerts;return}
+  s=JSON.parse(localStorage.getItem("tradelab_v2")||"null");
+  if(s&&typeof s.cash==="number")account={cash:s.cash,holdings:s.holdings||{},realized:Number(s.realized)||0,history:Array.isArray(s.history)?s.history:[]};
+ }catch(e){}
 }
-function setPnl(id,n){
- const el=document.getElementById(id);el.textContent=money(n);el.className=n>0?"green":n<0?"red":"";
+function go(page){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));
+ document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ renderAll();if(page==="analysis")analyze();if(page==="overview")setTimeout(resizeChart,40);
+ window.scrollTo({top:0,behavior:"smooth"});
 }
-function show(id){
- ["dashboard","market","trade","positions","history","tools"].forEach(s=>document.getElementById(s).hidden=s!==id);
- document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
- renderAll();
- if(id==="tools")setTimeout(resizeChart,50);
+function syncAsset(symbol){
+ currentSymbol=symbol;
+ ["overviewAsset","analysisAsset","chartAsset"].forEach(id=>{const e=document.getElementById(id);if(e&&e.value!==symbol)e.value=symbol});
+ document.getElementById("overviewQuote").textContent=symbol.replace("USDT"," / USDT");
+ loadChart();
 }
-function estimate(){
- const a=document.getElementById("asset").value,amount=Number(document.getElementById("amount").value);
- document.getElementById("estimate").textContent="Estimated quantity: "+(amount>0?(amount/price(a)).toFixed(8):"--")+" "+a;
-}
-function executeTrade(side){
- const a=document.getElementById("asset").value,amount=Number(document.getElementById("amount").value),p=price(a),msg=document.getElementById("message");
- if(!Number.isFinite(amount)||amount<=0){msg.textContent="Enter a valid amount.";return}
- if(side==="buy"){
-  if(amount>account.cash){msg.textContent="Insufficient virtual cash.";return}
-  const q=amount/p,old=account.holdings[a]||{qty:0,cost:0};
-  account.cash-=amount;account.holdings[a]={qty:old.qty+q,cost:old.cost+amount};
- }else{
-  const old=account.holdings[a]||{qty:0,cost:0},q=amount/p;
-  if(q>old.qty+1e-12){msg.textContent="Not enough "+a+" to sell.";return}
-  const sold=Math.min(q,old.qty),allocated=old.cost*(sold/old.qty);
-  account.realized+=sold*p-allocated;account.cash+=sold*p;
-  const left=old.qty-sold;
-  account.holdings[a]=left<1e-12?{qty:0,cost:0}:{qty:left,cost:old.cost-allocated};
- }
- account.history.unshift({side,asset:a,amount,price:p,time:new Date().toLocaleString()});
- save();renderAll();msg.textContent=side.toUpperCase()+" simulated: "+money(amount)+" of "+a;
-}
+function syncAnalysisAsset(){syncAsset(document.getElementById("analysisAsset").value);analyze()}
+function setTf(tf){currentTf=tf;document.querySelectorAll(".tf").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));loadChart()}
+function chooseStrategy(s){selectedStrategy=s;document.querySelectorAll(".strategy").forEach(b=>b.classList.toggle("active",b.dataset.strategy===s));analyze()}
+function setMetric(id,n){const e=document.getElementById(id);e.textContent=money(n);e.className="metricValue "+(n>0?"green":n<0?"red":"")}
 function renderAccount(){
- const t=totals();document.getElementById("portfolio").textContent=money(t.value);document.getElementById("cash").textContent=money(account.cash);
- setPnl("unrealized",t.unreal);setPnl("realized",t.realized);setPnl("totalPnl",t.total);
- const r=(t.value-START)/START*100,e=document.getElementById("return");
- e.textContent=(r>0?"+":"")+r.toFixed(2)+"%";e.className=r>0?"green":r<0?"red":"";
- document.getElementById("invested").textContent=money(t.invested);
+ const t=totals(),ret=(t.equity-START)/START*100;
+ document.getElementById("equity").textContent=money(t.equity);setMetric("pnl",t.total);
+ document.getElementById("return").textContent=(ret>=0?"+":"")+ret.toFixed(2)+"% total return";
+ document.getElementById("return").className="metricFoot "+(ret>=0?"green":"red");
+ document.getElementById("cash").textContent=money(account.cash);
+ document.getElementById("openCount").textContent=Object.keys(assets).filter(a=>qty(a)>0).length;
+ document.getElementById("portEquity").textContent=money(t.equity);document.getElementById("portCash").textContent=money(account.cash);
+ setMetric("portRealized",t.realized);setMetric("portUnrealized",t.unreal);
 }
 function renderAllocation(){
  const t=totals(),rows=Object.keys(assets).filter(a=>qty(a)>0);
- document.getElementById("allocation").innerHTML=rows.length?rows.map(a=>{
-  const pct=t.value>0?marketValue(a)/t.value*100:0;
-  return `<div class="row"><b>${a}</b><span>${money(marketValue(a))} (${pct.toFixed(1)}%)</span></div><div class="bar"><div class="fill" style="width:${Math.min(100,pct)}%"></div></div>`;
- }).join(""):"<p class='muted'>Your allocation will appear here after a paper buy.</p>";
+ document.getElementById("allocation").innerHTML=rows.length?rows.map(a=>{let pct=t.equity>0?value(a)/t.equity*100:0;return `<div class="allocationRow"><b>${a}</b><div><div>${assets[a].name}</div><div class="allocationBar"><div style="width:${Math.max(0,Math.min(100,pct))}%"></div></div></div><b>${pct.toFixed(1)}%</b></div>`}).join(""):"<div class='empty'>No holdings yet. Start with a simulated trade.</div>";
 }
-function renderCoins(){
- const q=(document.getElementById("coinSearch")?.value||"").toLowerCase();
+function renderMarkets(){
+ const q=(document.getElementById("marketSearch")?.value||"").toLowerCase();
  const rows=Object.keys(assets).filter(a=>(a+" "+assets[a].name).toLowerCase().includes(q));
- document.getElementById("coins").innerHTML=rows.length?rows.map(a=>`<div class="coin row"><div><b>${assets[a].name} (${a})</b><br><small>${live?"Market quote":"Reference price"}</small></div><b>${money(price(a))}</b><button onclick="selectAsset('${a}')">Trade</button></div>`).join(""):"<p class='muted'>No matching coin.</p>";
- document.getElementById("snapshot").innerHTML=Object.keys(assets).map(a=>`<div class="coin row"><b>${a}</b><b>${money(price(a))}</b></div>`).join("");
+ document.getElementById("marketRows").innerHTML=rows.map(a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${live?"Exchange quote":"Reference price"}</div></div><div class="coinprice">${money(price(a))}<br><button class="smallbtn" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"★ Watching":"☆ Watch"}</button> <button class="smallbtn" onclick="selectTrade('${a}')">Trade</button></div></div>`).join("")||"<div class='empty'>No coin matches that search.</div>";
 }
-function selectAsset(a){document.getElementById("asset").value=a;show("trade");estimate()}
+function renderWatch(){
+ const make=(a,controls)=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${live?"Exchange quote":"Reference price"}</div></div><div class="coinprice">${money(price(a))}<br>${controls?`<button class="smallbtn" onclick="toggleWatch('${a}')">Remove</button>`:`<span class="coinmeta">Watchlist</span>`}</div></div>`;
+ document.getElementById("watchOverview").innerHTML=(watchlist.length?watchlist.map(a=>make(a,false)).join(""):"<div class='empty'>Add coins from Markets.</div>");
+ document.getElementById("watchTools").innerHTML=Object.keys(assets).map(a=>`<div class="watchrow"><div><div class="coinname">${a} · ${assets[a].name}</div><div class="coinmeta">${money(price(a))}</div></div><button class="btn ${watchlist.includes(a)?"":"primary"}" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"Remove":"Add"}</button></div>`).join("");
+}
+function toggleWatch(a){watchlist=watchlist.includes(a)?watchlist.filter(x=>x!==a):[...watchlist,a];save();renderWatch();renderMarkets();toast(watchlist.includes(a)?a+" added to watchlist":a+" removed from watchlist")}
 function renderPositions(){
  const rows=Object.keys(assets).filter(a=>qty(a)>0);
- document.getElementById("positionsList").innerHTML=rows.length?rows.map(a=>`<div class="coin"><div class="row"><b>${assets[a].name} (${a})</b><b>${money(marketValue(a))}</b></div><p class="muted">Quantity: ${qty(a).toFixed(8)}</p><div class="row"><span class="muted">Cost</span><span>${money(cost(a))}</span></div><div class="row"><span class="muted">Unrealized P&L</span><b class="${unrealized(a)>=0?'green':'red'}">${money(unrealized(a))}</b></div><div class="row"><span class="muted">Average buy price</span><span>${money(cost(a)/qty(a))}</span></div></div>`).join(""):"<p class='muted'>No open positions.</p>";
+ document.getElementById("positions").innerHTML=rows.length?"<div class='tableWrap'><table><thead><tr><th>ASSET</th><th>QUANTITY</th><th>AVG COST</th><th>VALUE</th><th>UNREALIZED P&L</th></tr></thead><tbody>"+rows.map(a=>`<tr><td><b>${a}</b></td><td>${qty(a).toFixed(7)}</td><td>${money(cost(a)/qty(a))}</td><td>${money(value(a))}</td><td class="${uPnl(a)>=0?'green':'red'}">${money(uPnl(a))}</td></tr>`).join("")+"</tbody></table></div>":"<div class='empty'>No open positions. Place a paper trade to start building a portfolio.</div>";
 }
 function renderHistory(){
- document.getElementById("historyList").innerHTML=account.history.length?"<div style='overflow-x:auto'><table><thead><tr><th>Trade</th><th>Amount</th><th>Price</th></tr></thead><tbody>"+account.history.map(t=>`<tr><td><b class="${t.side==='buy'?'green':'red'}">${String(t.side).toUpperCase()} ${t.asset}</b><br><small>${t.time}</small></td><td>${money(t.amount)}</td><td>${money(t.price)}</td></tr>`).join("")+"</tbody></table></div>":"<p class='muted'>No trades yet.</p>";
+ const rows=account.history.slice(0,100);
+ document.getElementById("history").innerHTML=rows.length?"<div class='tableWrap'><table><thead><tr><th>SIDE</th><th>ASSET</th><th>AMOUNT</th><th>PRICE</th><th>TIME</th></tr></thead><tbody>"+rows.map(t=>`<tr><td class="${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()}</td><td>${t.asset}</td><td>${money(t.amount)}</td><td>${money(t.price)}</td><td>${t.time}</td></tr>`).join("")+"</tbody></table></div>":"<div class='empty'>Your completed paper trades will appear here.</div>";
+ document.getElementById("recentTrades").innerHTML=rows.length?rows.slice(0,4).map(t=>`<div class="watchrow"><div><div class="coinname ${t.side==="buy"?"green":"red"}">${t.side.toUpperCase()} ${t.asset}</div><div class="coinmeta">${t.time}</div></div><b>${money(t.amount)}</b></div>`).join(""):"<div class='empty'>No trades recorded yet.</div>";
 }
-function renderWatchlist(){
- const html=watchlist.map(a=>`<div class="coin row"><div><b>${a}</b><br><small>${assets[a].name}</small></div><b>${money(price(a))}</b><button class="secondary" onclick="toggleWatch('${a}')">Remove</button></div>`).join("")||"<p class='muted'>No coins in watchlist.</p>";
- document.getElementById("watchDash").innerHTML=html;
- document.getElementById("watchManage").innerHTML=Object.keys(assets).map(a=>`<div class="coin row"><div><b>${a}</b> <small>${assets[a].name}</small><br>${money(price(a))}</div><button class="${watchlist.includes(a)?'secondary':''}" onclick="toggleWatch('${a}')">${watchlist.includes(a)?"Remove":"Add to watchlist"}</button></div>`).join("");
+function selectTrade(a){document.getElementById("tradeAsset").value=a;go("trade");estimateTrade()}
+function estimateTrade(){
+ const a=document.getElementById("tradeAsset").value,amt=Number(document.getElementById("tradeAmount").value);
+ document.getElementById("tradePrice").textContent=money(price(a));document.getElementById("tradeCash").textContent=money(account.cash);
+ document.getElementById("tradeQty").textContent=amt>0?(amt/price(a)).toFixed(8):"--";
 }
-function toggleWatch(a){
- watchlist=watchlist.includes(a)?watchlist.filter(x=>x!==a):[...watchlist,a];save();renderWatchlist();
+function executeTrade(){
+ const a=document.getElementById("tradeAsset").value,side=document.getElementById("tradeSide").value,amt=Number(document.getElementById("tradeAmount").value),p=price(a),msg=document.getElementById("tradeMessage");
+ if(!Number.isFinite(amt)||amt<=0){msg.textContent="Enter a valid amount.";return}
+ if(side==="buy"){
+  if(amt>account.cash){msg.textContent="Insufficient virtual cash.";return}
+  const old=account.holdings[a]||{qty:0,cost:0},q=amt/p;account.cash-=amt;account.holdings[a]={qty:old.qty+q,cost:old.cost+amt};
+ }else{
+  const old=account.holdings[a]||{qty:0,cost:0},q=amt/p;
+  if(q>old.qty+1e-12){msg.textContent="Not enough "+a+" to sell.";return}
+  const sold=Math.min(q,old.qty),allocated=old.cost*(sold/old.qty);account.realized+=sold*p-allocated;account.cash+=sold*p;
+  const left=old.qty-sold;account.holdings[a]=left<1e-12?{qty:0,cost:0}:{qty:left,cost:old.cost-allocated};
+ }
+ account.history.unshift({side,asset:a,amount:amt,price:p,time:new Date().toLocaleString()});save();renderAll();estimateTrade();
+ msg.textContent="Paper trade completed: "+side.toUpperCase()+" "+a+" for "+money(amt);toast("Paper trade recorded");
+}
+function calculateRisk(){
+ const entry=Number(document.getElementById("riskEntry").value),stop=Number(document.getElementById("riskStop").value),target=Number(document.getElementById("riskTarget").value),pct=Number(document.getElementById("riskPct").value),out=document.getElementById("riskResult");
+ const valid=[entry,stop,target,pct].every(Number.isFinite)&&entry>0&&stop>0&&target>0&&pct>0&&pct<=5;
+ if(!valid){out.textContent="Enter valid positive prices and account risk between 0.1% and 5%.";return}
+ const risk=Math.abs(entry-stop),reward=Math.abs(target-entry);
+ if(risk===0){out.textContent="Entry and stop loss must differ.";return}
+ const rr=reward/risk,t=totals(),riskCash=t.equity*pct/100,qtyRisk=riskCash/risk,notional=qtyRisk*entry;
+ out.innerHTML=`Risk per unit: <b>${money(risk)}</b><br>Reward per unit: <b>${money(reward)}</b><br>Risk / reward: <b>1 : ${rr.toFixed(2)}</b><br>Estimated quantity at risk limit: <b>${qtyRisk.toFixed(7)}</b><br>Approximate position notional: <b>${money(notional)}</b><br>Account risk budget: <b>${money(riskCash)}</b><p class="notice">Sizing assumes a long trade when target is above entry and a short trade when target is below entry. Fees, slippage and gaps are excluded.</p>`;
+}
+function exportCSV(){
+ const rows=[["Side","Asset","Amount USD","Price USD","Time"],...account.history.map(t=>[t.side,t.asset,t.amount,t.price,t.time])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="tradelab-history.csv";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function resetAccount(){if(!confirm("Reset virtual cash to $10,000 and delete all paper positions and trade history?"))return;account={cash:START,holdings:{},realized:0,history:[]};save();renderAll();toast("Paper account reset")}
+function addAlert(){
+ const a=document.getElementById("alertAsset").value,condition=document.getElementById("alertCondition").value,target=Number(document.getElementById("alertTarget").value);
+ if(!Number.isFinite(target)||target<=0){toast("Enter a valid target price.");return}
+ alerts.push({id:Date.now().toString()+Math.random().toString(16).slice(2),asset:a,condition,target,triggered:false});
+ save();renderAlerts();document.getElementById("alertTarget").value="";toast("Price alert created");
 }
 function renderAlerts(){
- document.getElementById("alertsList").innerHTML=alerts.length?alerts.map(a=>`<div class="coin row"><div><b>${a.asset} ${a.condition} ${money(a.target)}</b><br><small>${a.triggered?"Triggered":"Waiting"} · Current: ${money(price(a.asset))}</small></div><button class="secondary" onclick="removeAlert('${a.id}')">Delete</button></div>`).join(""):"<p class='muted'>No alerts set.</p>";
-}
-function addAlert(){
- const asset=document.getElementById("alertAsset").value,condition=document.getElementById("alertCondition").value,target=Number(document.getElementById("alertTarget").value);
- if(!Number.isFinite(target)||target<=0){alert("Enter a target price above zero.");return}
- alerts.push({id:Date.now().toString()+Math.random().toString(16).slice(2),asset,condition,target,triggered:false,created:Date.now()});
- save();renderAlerts();document.getElementById("alertTarget").value="";
+ document.getElementById("alerts").innerHTML=alerts.length?alerts.map(a=>`<div class="watchrow"><div><div class="coinname">${a.asset} ${a.condition} ${money(a.target)}</div><div class="coinmeta">${a.triggered?"Triggered":"Waiting"} · Current ${money(price(a.asset))}</div></div><button class="btn" onclick="removeAlert('${a.id}')">Delete</button></div>`).join(""):"<div class='empty'>No alerts configured.</div>";
 }
 function removeAlert(id){alerts=alerts.filter(a=>a.id!==id);save();renderAlerts()}
+async function requestNotifications(){
+ if(!("Notification"in window)){toast("Browser notifications are unavailable.");return}
+ try{let p=await Notification.requestPermission();toast("Notification permission: "+p)}catch(e){toast("Notification permission could not be requested")}
+}
 function checkAlerts(){
  let changed=false;
- alerts.forEach(a=>{
-  if(a.triggered)return;
-  const p=price(a.asset),hit=a.condition==="above"?p>=a.target:p<=a.target;
-  if(hit){
-   a.triggered=true;changed=true;
-   const msg=`TradeLab alert: ${a.asset} is ${a.condition} ${money(a.target)}. Current price: ${money(p)}.`;
-   if("Notification" in window&&Notification.permission==="granted"){try{new Notification("TradeLab Crypto",{body:msg})}catch(e){}}
-   else alert(msg);
-  }
- });
+ alerts.forEach(a=>{if(a.triggered)return;let p=price(a.asset),hit=a.condition==="above"?p>=a.target:p<=a.target;if(hit){a.triggered=true;changed=true;const msg=a.asset+" price alert: "+money(p);if("Notification"in window&&Notification.permission==="granted"){try{new Notification("TradeLab Pro",{body:msg})}catch(e){toast(msg)}}else toast(msg)}});
  if(changed){save();renderAlerts()}
 }
-async function requestNotifications(){
- if(!("Notification" in window)){alert("Browser notifications are not supported here.");return}
- try{const p=await Notification.requestPermission();alert("Notification permission: "+p)}catch(e){alert("Could not request notification permission.")}
-}
+function renderAll(){renderAccount();renderAllocation();renderMarkets();renderWatch();renderPositions();renderHistory();renderAlerts();estimateTrade()}
 async function loadPrices(){
- document.getElementById("priceStatus").textContent="Fetching market prices...";
+ document.getElementById("connection").textContent="FETCHING";
  try{
   const syms=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT"];
   const data=await Promise.all(syms.map(s=>fetch("https://api.binance.com/api/v3/ticker/price?symbol="+s).then(r=>{if(!r.ok)throw Error("HTTP "+r.status);return r.json()})));
-  ["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(data[i].price));
-  live=true;document.getElementById("priceStatus").textContent="Live market quotes loaded.";
- }catch(e){document.getElementById("priceStatus").textContent="Live prices unavailable. Showing reference prices."}
+  ["BTC","ETH","SOL","BNB"].forEach((a,i)=>prices[a]=Number(data[i].price));live=true;
+  document.getElementById("connection").textContent="MARKET ONLINE";document.getElementById("priceStatus").textContent="Exchange prices loaded successfully.";
+ }catch(e){document.getElementById("connection").textContent="FALLBACK MODE";document.getElementById("priceStatus").textContent="Live API unavailable. Reference prices are shown; signals need candle data."}
  renderAll();checkAlerts();
 }
-function exportCSV(){
- const rows=[["Side","Asset","Amount USD","Execution Price","Time"],...account.history.map(t=>[t.side,t.asset,t.amount,t.price,t.time])];
- const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");
- const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="tradelab-trade-history.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-}
-function resetAccount(){
- if(!confirm("Reset the virtual account to $10,000 and erase positions and history?"))return;
- account={cash:START,holdings:{},realized:0,history:[]};save();renderAll();
-}
-function renderAll(){
- renderAccount();renderAllocation();renderCoins();renderPositions();renderHistory();renderWatchlist();renderAlerts();estimate();
-}
-
+function refreshAll(){loadPrices();loadChart();toast("Refreshing market data")}
 function initChart(){
  const host=document.getElementById("chart");
- if(!window.LightweightCharts){document.getElementById("chartStatus").textContent="Chart library did not load. Check internet and refresh.";return false}
+ if(!window.LightweightCharts){document.getElementById("chartStatus").textContent="Chart library failed to load. Check internet and refresh.";return false}
  try{
-  chart=LightweightCharts.createChart(host,{
-   width:Math.max(300,host.clientWidth),height:host.clientHeight||300,
-   layout:{background:{type:"solid",color:"#111a2d"},textColor:"#aebbd0",fontFamily:"Arial",fontSize:11},
-   grid:{vertLines:{color:"#1e2a40"},horzLines:{color:"#1e2a40"}},
-   rightPriceScale:{borderColor:"#34415a"},
-   timeScale:{borderColor:"#34415a",timeVisible:true,secondsVisible:false},
-   crosshair:{mode:LightweightCharts.CrosshairMode.Normal},handleScroll:true,handleScale:true
-  });
-  candleSeries=chart.addCandlestickSeries({upColor:"#46e0b0",downColor:"#ff7185",borderUpColor:"#46e0b0",borderDownColor:"#ff7185",wickUpColor:"#46e0b0",wickDownColor:"#ff7185"});
-  ma20Series=chart.addLineSeries({color:"#79aaff",lineWidth:2,priceLineVisible:false,lastValueVisible:true});
-  ma50Series=chart.addLineSeries({color:"#e2bc65",lineWidth:2,priceLineVisible:false,lastValueVisible:true});
+  chart=LightweightCharts.createChart(host,{width:Math.max(280,host.clientWidth),height:host.clientHeight||280,layout:{background:{type:"solid",color:"#0f1725"},textColor:"#91a3bd",fontFamily:"Arial",fontSize:11},grid:{vertLines:{color:"#1b293e"},horzLines:{color:"#1b293e"}},rightPriceScale:{borderColor:"#26364d"},timeScale:{borderColor:"#26364d",timeVisible:true},crosshair:{mode:LightweightCharts.CrosshairMode.Normal}});
+  candleSeries=chart.addCandlestickSeries({upColor:"#37e6ad",downColor:"#ff6f83",borderUpColor:"#37e6ad",borderDownColor:"#ff6f83",wickUpColor:"#37e6ad",wickDownColor:"#ff6f83"});
+  ma20Series=chart.addLineSeries({color:"#7da9ff",lineWidth:2,priceLineVisible:false});ma50Series=chart.addLineSeries({color:"#eac778",lineWidth:2,priceLineVisible:false});
   chartReady=true;
-  if(window.ResizeObserver){resizeObserver=new ResizeObserver(resizeChart);resizeObserver.observe(host)}else window.addEventListener("resize",resizeChart);
+  if(window.ResizeObserver){new ResizeObserver(resizeChart).observe(host)}else window.addEventListener("resize",resizeChart);
   return true;
- }catch(e){document.getElementById("chartStatus").textContent="Chart initialization failed: "+e.message;return false}
+ }catch(e){document.getElementById("chartStatus").textContent="Chart initialization failed.";return false}
 }
-function resizeChart(){if(chart&&document.getElementById("chart").clientWidth>0)chart.applyOptions({width:document.getElementById("chart").clientWidth,height:document.getElementById("chart").clientHeight||300})}
-function chooseTf(tf){currentTf=tf;document.querySelectorAll(".tf").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));loadChart()}
-function sma(values,period){
- const out=[];let sum=0;
- for(let i=0;i<values.length;i++){
-  sum+=values[i];if(i>=period)sum-=values[i-period];
-  if(i>=period-1)out.push({index:i,value:sum/period});
- }
- return out;
+function resizeChart(){if(chart&&document.getElementById("chart").clientWidth>0)chart.applyOptions({width:document.getElementById("chart").clientWidth,height:document.getElementById("chart").clientHeight||280})}
+function sma(values,p){let out=[],sum=0;for(let i=0;i<values.length;i++){sum+=values[i];if(i>=p)sum-=values[i-p];if(i>=p-1)out.push({index:i,value:sum/p})}return out}
+function ema(values,p){let out=[];if(values.length<p)return out;let sum=0;for(let i=0;i<p;i++)sum+=values[i];let prev=sum/p;out[p-1]=prev;const k=2/(p+1);for(let i=p;i<values.length;i++){prev=values[i]*k+prev*(1-k);out[i]=prev}return out}
+function calcRSI(v,p=14){
+ if(v.length<=p)return null;let g=0,l=0;
+ for(let i=1;i<=p;i++){let d=v[i]-v[i-1];if(d>0)g+=d;else l-=d}
+ let ag=g/p,al=l/p;
+ for(let i=p+1;i<v.length;i++){let d=v[i]-v[i-1];ag=(ag*(p-1)+Math.max(d,0))/p;al=(al*(p-1)+Math.max(-d,0))/p}
+ return al===0?100:100-100/(1+ag/al);
 }
-function ema(values,period){
- const out=[];if(values.length<period)return out;
- let sum=0;for(let i=0;i<period;i++)sum+=values[i];
- let prev=sum/period;out[period-1]=prev;
- const k=2/(period+1);
- for(let i=period;i<values.length;i++){prev=values[i]*k+prev*(1-k);out[i]=prev}
- return out;
-}
-function calcRSI(values,period=14){
- if(values.length<=period)return null;
- let gain=0,loss=0;
- for(let i=1;i<=period;i++){const d=values[i]-values[i-1];if(d>0)gain+=d;else loss-=d}
- let avgG=gain/period,avgL=loss/period;
- for(let i=period+1;i<values.length;i++){const d=values[i]-values[i-1];avgG=(avgG*(period-1)+Math.max(d,0))/period;avgL=(avgL*(period-1)+Math.max(-d,0))/period}
- if(avgL===0)return 100;
- return 100-(100/(1+avgG/avgL));
-}
-function seriesPoints(items,candles){return items.map(x=>({time:candles[x.index].time,value:x.value}))}
-function renderIndicators(candles){
- const closes=candles.map(c=>c.close),rsi=calcRSI(closes);
- const e12=ema(closes,12),e26=ema(closes,26);
- let macdValue=null,signalValue=null;
- if(e26.length){
-  const macdLine=closes.map((_,i)=>e12[i]!==undefined&&e26[i]!==undefined?e12[i]-e26[i]:null);
-  const valid=macdLine.filter(v=>v!==null),sig=ema(valid,9);
-  if(valid.length&&sig.length){macdValue=valid[valid.length-1];signalValue=sig[sig.length-1]}
- }
- document.getElementById("rsi").textContent=rsi===null?"Need more data":rsi.toFixed(2);
- document.getElementById("rsiNote").textContent=rsi===null?"":rsi>=70?"Potentially overbought":rsi<=30?"Potentially oversold":"Middle range";
- document.getElementById("macd").textContent=macdValue===null||signalValue===null?"Need more data":macdValue.toFixed(3);
- document.getElementById("macdNote").textContent=macdValue===null||signalValue===null?"":macdValue>signalValue?"MACD above signal":"MACD below signal";
- const s20=sma(closes,20),s50=sma(closes,50);
- document.getElementById("sma20").textContent=s20.length?money(s20[s20.length-1].value):"--";
- document.getElementById("sma50").textContent=s50.length?money(s50[s50.length-1].value):"--";
- ma20Series.setData(document.getElementById("showMA").checked?seriesPoints(s20,candles):[]);
- ma50Series.setData(document.getElementById("showMA50").checked?seriesPoints(s50,candles):[]);
+function macdData(v){const a=ema(v,12),b=ema(v,26),line=v.map((_,i)=>a[i]!==undefined&&b[i]!==undefined?a[i]-b[i]:null),valid=line.filter(x=>x!==null),sig=ema(valid,9);return {line:valid,signal:sig,now:valid.at(-1),signalNow:sig.at(-1)}}
+function updateIndicators(cs){
+ const closes=cs.map(c=>c.close),r=calcRSI(closes),m=macdData(closes),s20=sma(closes,20),s50=sma(closes,50);
+ document.getElementById("rsi").textContent=r===null?"--":r.toFixed(1);
+ document.getElementById("rsiNote").textContent=r===null?"Not enough data":r>70?"High momentum":r<30?"Low momentum":"Mid-range";
+ document.getElementById("macd").textContent=Number.isFinite(m.now)?m.now.toFixed(3):"--";
+ document.getElementById("macdNote").textContent=Number.isFinite(m.now)&&Number.isFinite(m.signalNow)?m.now>m.signalNow?"Above signal line":"Below signal line":"Not enough data";
+ document.getElementById("sma20").textContent=s20.length?money(s20.at(-1).value):"--";
+ document.getElementById("sma50").textContent=s50.length?money(s50.at(-1).value):"--";
+ if(chartReady){ma20Series.setData(s20.map(x=>({time:cs[x.index].time,value:x.value})));ma50Series.setData(s50.map(x=>({time:cs[x.index].time,value:x.value})))}
 }
 async function loadChart(){
- const request=++chartRequest,symbol=document.getElementById("chartAsset").value;
- document.getElementById("chartStatus").textContent="Loading candle data...";
- document.getElementById("ohlc").textContent="Loading OHLC...";
+ const req=++chartRequest,symbol=currentSymbol,tf=currentTf;
+ document.getElementById("chartStatus").textContent="Loading candles...";
  if(!chartReady&&!initChart())return;
  try{
-  const url="https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(currentTf)+"&limit=200";
-  const r=await fetch(url);if(!r.ok)throw Error("Exchange API HTTP "+r.status);
-  const raw=await r.json();if(!Array.isArray(raw)||!raw.length)throw Error("No candle data");
-  if(request!==chartRequest)return;
-  const candles=raw.map(k=>({time:Math.floor(Number(k[0])/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4]}));
-  candleSeries.setData(candles);renderIndicators(candles);chart.timeScale().fitContent();
-  const last=candles[candles.length-1],delta=last.close-last.open,pct=last.open?delta/last.open*100:0;
-  document.getElementById("ohlc").innerHTML="<b>"+symbol.replace("USDT"," / USDT")+"</b> <span class='"+(delta>=0?"green":"red")+"'>"+last.close.toLocaleString("en-US",{maximumFractionDigits:8})+" ("+(pct>=0?"+":"")+pct.toFixed(2)+"%)</span><br><small>O "+last.open+" · H "+last.high+" · L "+last.low+" · C "+last.close+"</small>";
-  document.getElementById("chartStatus").textContent="Loaded "+candles.length+" candles · "+currentTf+" timeframe.";
-  const a=symbol.replace("USDT","");
-  if(assets[a]){prices[a]=last.close;live=true;renderAll()}
+  const r=await fetch("https://api.binance.com/api/v3/klines?symbol="+encodeURIComponent(symbol)+"&interval="+encodeURIComponent(tf)+"&limit=200");
+  if(!r.ok)throw Error("Exchange returned HTTP "+r.status);
+  const raw=await r.json();if(!Array.isArray(raw)||raw.length<30)throw Error("Not enough candle data");
+  if(req!==chartRequest)return;
+  candles=raw.map(k=>({time:Math.floor(+k[0]/1000),open:+k[1],high:+k[2],low:+k[3],close:+k[4]}));
+  candleSeries.setData(candles);updateIndicators(candles);chart.timeScale().fitContent();
+  const last=candles.at(-1),change=(last.close-last.open)/last.open*100;
+  document.getElementById("chartStatus").textContent="Last candle close "+money(last.close)+" · "+tf+" · "+candles.length+" candles";
+  document.getElementById("overviewQuote").textContent=symbol.replace("USDT"," / USDT")+" · "+money(last.close);
+  const a=symbol.replace("USDT","");prices[a]=last.close;live=true;
+  document.getElementById("indicatorPair").textContent=symbol.replace("USDT"," / USDT");
+  document.getElementById("connection").textContent="MARKET ONLINE";
+  renderAll();
+  if(document.getElementById("page-analysis").classList.contains("active"))analyze();
   resizeChart();
- }catch(e){
-  if(request!==chartRequest)return;
-  document.getElementById("chartStatus").textContent="Chart unavailable: "+e.message+". Check internet and try again.";
-  document.getElementById("ohlc").textContent="OHLC data unavailable.";
- }
+ }catch(e){if(req!==chartRequest)return;document.getElementById("chartStatus").textContent="Candles unavailable: "+e.message+". Check internet or refresh."}
 }
+function analyze(){
+ if(candles.length<55){document.getElementById("analysisResult").innerHTML="<div class='empty'>Waiting for at least 55 market candles. Check internet and refresh the chart.</div>";document.getElementById("analysisTime").textContent="NO DATA";document.getElementById("overviewSignal").innerHTML="<div class='empty'>Strategy scanner is waiting for market data.</div>";return}
+ const c=candles,cl=c.map(x=>x.close),last=c.at(-1),prev=c.at(-2),rsi=calcRSI(cl),e9=ema(cl,9),e21=ema(cl,21),e50=ema(cl,50);
+ const high=Math.max(...c.slice(-20,-1).map(x=>x.high)),low=Math.min(...c.slice(-20,-1).map(x=>x.low));
+ const recentHigh=Math.max(...c.slice(-8,-1).map(x=>x.high)),recentLow=Math.min(...c.slice(-8,-1).map(x=>x.low));
+ const m=macdData(cl);
+ let score=0,why=[],direction="WAIT",label="No clear setup";
+ const bull=last.close>e21.at(-1)&&e9.at(-1)>e21.at(-1),bear=last.close<e21.at(-1)&&e9.at(-1)<e21.at(-1);
+ if(selectedStrategy==="EMA"){score=bull?2:bear?-2:0;why.push("EMA 9 and EMA 21 relationship", "Price vs EMA 21")}
+ else if(selectedStrategy==="RSI"){score=rsi<30?2:rsi>70?-2:rsi>50?1:rsi<50?-1:0;why.push("RSI(14): "+rsi.toFixed(1),"Momentum threshold model")}
+ else if(selectedStrategy==="BREAKOUT"){score=last.close>high?2:last.close<low?-2:0;why.push("Close vs previous 19-candle range","Breakout needs confirmation")}
+ else if(selectedStrategy==="SMC"){score=last.close>recentHigh?2:last.close<recentLow?-2:0;why.push("Simplified swing-high/low break","Not actual order-book or institutional-flow data")}
+ else if(selectedStrategy==="SR"){score=last.close<=low*1.01?1:last.close>=high*.99?-1:0;why.push("Recent range support/resistance","Levels are approximate")}
+ else{score=(bull?1:bear?-1:0)+(rsi>50&&rsi<70?1:rsi<50&&rsi>30?-1:0)+(m.now>m.signalNow?1:-1);why.push("EMA trend","RSI momentum","MACD/signal relationship")}
+ direction=score>=2?"LONG BIAS":score<=-2?"SHORT BIAS":"WAIT";
+ label=direction==="LONG BIAS"?"Bullish conditions detected":direction==="SHORT BIAS"?"Bearish conditions detected":"Mixed / weak confirmation";
+ const confidence=Math.min(85,Math.max(25,40+Math.abs(score)*9));
+ const entry=last.close,stop=direction==="LONG BIAS"?Math.min(recentLow,entry*.99):direction==="SHORT BIAS"?Math.max(recentHigh,entry*1.01):entry;
+ const risk=Math.abs(entry-stop),target=direction==="LONG BIAS"?entry+2*risk:direction==="SHORT BIAS"?entry-2*risk:entry;
+ const rr=risk>0?Math.abs(target-entry)/risk:0;
+ document.getElementById("analysisTime").textContent=new Date().toLocaleTimeString();
+ document.getElementById("analysisResult").innerHTML=`<div class="signalHero"><span class="signalBadge">${selectedStrategy} · ${currentTf}</span><div class="signalName">${direction}</div><div class="sub">${label}</div><div class="metricFoot" style="margin-top:12px">Rule confluence score — not a probability of winning</div><div class="progress"><div style="width:${confidence}%"></div></div><div class="row"><small>Relative signal strength</small><b>${confidence}/100</b></div></div>
+ <div class="signalGrid"><div class="signalStat"><span>Reference entry</span><b>${money(entry)}</b></div><div class="signalStat"><span>Illustrative stop</span><b>${money(stop)}</b></div><div class="signalStat"><span>Illustrative target</span><b>${money(target)}</b></div></div>
+ <div class="row"><span class="muted">Risk/reward model</span><b>1 : ${rr.toFixed(2)}</b></div><div style="margin-top:13px">${why.map(x=>`<div class="watchrow"><span class="sub">${x}</span><span class="pill">CHECK</span></div>`).join("")}</div>
+ <p class="notice">This is a simplified rule-based screen, not a verified trade recommendation. Entry, stop and target are illustrative. No 99% win rate is claimed. Backtest and paper-trade before considering real use.</p>
+ <button class="btn primary full" onclick="useAnalysis()">Use prices in risk planner</button>`;
+ document.getElementById("overviewSignal").innerHTML=`<div class="row"><div><div class="coinname">${selectedStrategy} · ${currentSymbol.replace("USDT","")}</div><div class="sub">${label}</div></div><span class="signalBadge">${direction}</span></div><div class="progress"><div style="width:${confidence}%"></div></div><div class="sub">Rule confluence ${confidence}/100 · Not a win probability</div>`;
+}
+function useAnalysis(){
+ if(!candles.length){toast("No candle data yet.");return}
+ const last=candles.at(-1),cl=candles.map(x=>x.close),hi=Math.max(...candles.slice(-8,-1).map(x=>x.high)),lo=Math.min(...candles.slice(-8,-1).map(x=>x.low));
+ const isLong=last.close>ema(cl,9).at(-1),stop=isLong?Math.min(lo,last.close*.99):Math.max(hi,last.close*1.01),risk=Math.abs(last.close-stop);
+ document.getElementById("riskEntry").value=last.close.toFixed(6);document.getElementById("riskStop").value=stop.toFixed(6);document.getElementById("riskTarget").value=(last.close+(isLong?2:-2)*risk).toFixed(6);
+ go("trade");calculateRisk();
+}
+function refreshAll(){loadPrices();loadChart();toast("Refreshing market data")}
 loadSaved();renderAll();loadPrices();loadChart();
-setInterval(()=>{if(live){checkAlerts()}},30000);
+setInterval(()=>{if(live)checkAlerts()},30000);
 </script>
 </body>
 </html>
